@@ -1,0 +1,194 @@
+# Requirements: Personal Content Engine
+
+**Defined:** 2026-03-15
+**Core Value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
+
+## v1 Requirements (M1 — Working Engine)
+
+### Infrastructure
+
+- [ ] **INFRA-01**: SQLite database runs on Railway volume with WAL mode and integrity check on startup
+- [ ] **INFRA-02**: better-sqlite3 + Next.js 15 builds and deploys successfully on Railway
+- [ ] **INFRA-03**: node-cron jobs start via instrumentation.ts singleton and survive Railway redeploy
+- [ ] **INFRA-04**: Satori + sharp renders carousel images on Railway's Linux environment
+- [ ] **INFRA-05**: Upload-Post API can match analytics data back to posts by request ID
+- [ ] **INFRA-06**: Daily SQLite database backup to Cloudflare R2
+- [ ] **INFRA-07**: Circuit breaker pauses API calls after N consecutive failures and logs alert
+- [ ] **INFRA-08**: Daily AI spend tracking with MAX_DAILY_AI_SPEND hard stop
+- [ ] **INFRA-09**: Input sanitization utility strips HTML/invisible text from feed content
+
+### Authentication
+
+- [ ] **AUTH-01**: User can log in with a password (AUTH_PASSWORD env var + session cookie)
+- [ ] **AUTH-02**: Unauthenticated requests are redirected to login page
+- [ ] **AUTH-03**: User session persists across browser refresh
+
+### Brands
+
+- [ ] **BRAND-01**: User can create a brand with name, niche, voice/tone, target audience, and goals
+- [ ] **BRAND-02**: User can edit brand profile: topics, dos/donts, example posts, platform notes
+- [ ] **BRAND-03**: User can configure brand visual style: colors, logo URL, watermark position/opacity
+- [ ] **BRAND-04**: User can set brand CTA text, bio templates, bio link, banned hashtags
+- [ ] **BRAND-05**: User can set warmup date for new brand accounts
+- [ ] **BRAND-06**: User can delete a brand (with confirmation)
+
+### Social Accounts
+
+- [ ] **ACCT-01**: User can connect social accounts to a brand via Upload-Post
+- [ ] **ACCT-02**: User can view connected accounts with platform, username, and status
+- [ ] **ACCT-03**: System auto-marks accounts as disconnected after persistent publish failures
+
+### Content Generation
+
+- [ ] **GEN-01**: User can paste a URL, upload a PDF, or type text as a content source
+- [ ] **GEN-02**: System extracts text from YouTube videos (transcript), articles, and PDFs
+- [ ] **GEN-03**: AI generates platform-optimized text content using brand voice and context
+- [ ] **GEN-04**: AI generates 5-10 hook/title variants, self-scores them, and uses the best one
+- [ ] **GEN-05**: User can select target platforms (checkboxes for each connected account)
+- [ ] **GEN-06**: User can preview generated content per platform before publishing
+- [ ] **GEN-07**: User can edit generated content before publishing
+- [ ] **GEN-08**: AI model selection is configurable via AI_MODE env var (testing vs production)
+
+### Quality Pipeline
+
+- [ ] **QUAL-01**: Self-refine loop: generate → Sonnet critique (5 dimensions) → Opus rewrite
+- [ ] **QUAL-02**: Self-refine is conditional: skip if first draft quality gate scores ≥ 8
+- [ ] **QUAL-03**: Quality gate: Sonnet scores each post 1-10 on hook, value, voice, uniqueness, platform fit
+- [ ] **QUAL-04**: Quality gate routing: ≥ 7 pass, 5-7 trigger re-refine, < 5 discard
+- [ ] **QUAL-05**: Quality score is stored on each post for analytics
+
+### Image Generation
+
+- [ ] **IMG-01**: AI generates images using OpenAI GPT Image API with brand style directive
+- [ ] **IMG-02**: Generated images include brand logo watermark at configured position and opacity
+- [ ] **IMG-03**: Images are stored in Cloudflare R2 with 400px thumbnails for dashboard
+- [ ] **IMG-04**: User can regenerate or override image prompts
+- [ ] **IMG-05**: Media library page shows grid of generated images, filterable by date/type
+
+### Carousel Generation
+
+- [ ] **CARO-01**: 3-5 Satori carousel templates with brand colors, fonts, and logo
+- [ ] **CARO-02**: First slide optimized as thumbnail hook, last slide has CTA + brand handle
+- [ ] **CARO-03**: AI generates slide content from source material
+- [ ] **CARO-04**: User can preview carousel, pick template, and edit individual slides
+- [ ] **CARO-05**: Carousel renders to images via Satori → sharp → stored in R2
+
+### Calendar & Scheduling
+
+- [ ] **SCHED-01**: Week and month calendar views showing scheduled and published posts
+- [ ] **SCHED-02**: Drag-and-drop rescheduling of posts
+- [ ] **SCHED-03**: Platform color coding, content type icons, and status indicators on calendar
+- [ ] **SCHED-04**: Slot-based scheduling with configurable posting times per brand per platform
+- [ ] **SCHED-05**: Timing jitter (±15 min random offset) on all scheduled posts
+- [ ] **SCHED-06**: Auto-publish cron job runs every 1 min, publishes via Upload-Post
+- [ ] **SCHED-07**: Publish retry logic: 3 retries with 5 min backoff, then status=failed
+
+### Feed Automation
+
+- [ ] **FEED-01**: User can add RSS feed sources (RSS, YouTube channels, subreddits, Google News)
+- [ ] **FEED-02**: Per-feed config: poll interval, relevance threshold, target platforms, content types
+- [ ] **FEED-03**: Poll-feeds cron (every 5 min) fetches RSS, deduplicates by URL
+- [ ] **FEED-04**: Haiku relevance filter scores each entry 1-10 against brand topics/goals
+- [ ] **FEED-05**: Entries scoring ≥ threshold are extracted and queued for generation
+- [ ] **FEED-06**: Auto-generate cron (every 15 min) generates posts through full quality pipeline
+- [ ] **FEED-07**: Content mix management: avoid repeating same topic within 48 hours
+- [ ] **FEED-08**: User can configure automation level per brand: manual, semi, mostly, full auto
+- [ ] **FEED-09**: Confidence scoring determines auto-publish vs queue for review
+- [ ] **FEED-10**: Feed auto-disables after 10 consecutive failures
+
+### Spam Prevention
+
+- [ ] **SPAM-01**: Per-platform daily post caps (X: 3-5, Instagram: 1-3, LinkedIn: 1-2, TikTok: 1-3)
+- [ ] **SPAM-02**: Minimum 1 hour gap between posts on same platform
+- [ ] **SPAM-03**: Cross-platform staggering: same source content spaced 30-60 min apart
+- [ ] **SPAM-04**: New account warmup: Week 1 = 1/day, Week 2 = 2/day, Week 3+ = normal
+- [ ] **SPAM-05**: Topic deduplication within configurable window (default 48 hours)
+- [ ] **SPAM-06**: Max 30-40% of posts contain links
+- [ ] **SPAM-07**: Platform-appropriate hashtag counts (X: 0-3, Instagram: 5-15, LinkedIn: 3-5)
+
+### Analytics
+
+- [ ] **ANLY-01**: Collect-analytics cron (every 6 hours) fetches metrics from Upload-Post
+- [ ] **ANLY-02**: Calculate normalized engagement score per post (guard impressions=0)
+- [ ] **ANLY-03**: Classify posts as top performer (>75th), average, or underperformer (<25th)
+- [ ] **ANLY-04**: Per-brand analytics page showing posts published and basic engagement metrics
+
+### Dashboard
+
+- [ ] **DASH-01**: Cross-brand home page: brand cards with stats, engagement trend, next scheduled post
+- [ ] **DASH-02**: Brand home page: quick stats, recent posts with status + engagement
+- [ ] **DASH-03**: Activity log page: scrollable, filterable by brand/type/level, errors highlighted
+- [ ] **DASH-04**: Dashboard shell: sidebar, brand switcher, AI_MODE indicator, system health badge
+- [ ] **DASH-05**: Weekly digest data displayed on dashboard home
+
+## v2 Requirements (M2 — Intelligence Layer)
+
+### Self-Improvement
+
+- **LEARN-01**: Weekly analysis cron identifies patterns in top/bottom performers
+- **LEARN-02**: AI generates insights (hook, format, tone, topic, timing, media, cta, length)
+- **LEARN-03**: Learnings injected into generation prompts sorted by confidence
+- **LEARN-04**: Learnings validated: posts with vs without, ineffective learnings deactivated
+- **LEARN-05**: Post-mortem on failures: underperformers → "avoid" learnings
+- **LEARN-06**: Golden examples auto-curated from 90th percentile posts
+- **LEARN-07**: Dynamic few-shot: top 5 recent performers as examples at generation time
+
+### Advanced Quality
+
+- **ADVQ-01**: Multi-variant generation: 3 variants, self-refine each, gate picks best
+- **ADVQ-02**: Prompt evolution: monthly cron suggests improved template, A/B tests for 2 weeks
+- **ADVQ-03**: Cross-brand insights page showing universal patterns
+
+### Content Strategy
+
+- **STRAT-01**: Evergreen recycling: resurface top performers with fresh angle
+- **STRAT-02**: Content repurposing chains: spread one source across days/platforms
+- **STRAT-03**: "Plan My Week" AI strategist
+
+### Engagement & Polish
+
+- **ENG-01**: Engagement helper: posts with unresponded comments + direct links + suggested replies
+- **ENG-02**: Bulk pipeline: paste multiple URLs, batch generate, review queue
+- **ENG-03**: Analytics charts: engagement over time, platform comparison, posting time heatmap
+- **ENG-04**: Pinterest pin template
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Multi-user auth / billing | Personal tool — single user only |
+| Video generation (Remotion + TTS) | High complexity, deferred to future |
+| Audio transcription (Whisper) | Not core to content repurposing workflow |
+| Voice cloning (ElevenLabs) | Future personal brand feature |
+| Mobile app | Web dashboard is sufficient |
+| Auto-reply to comments | Platform detection risk, use engagement helper instead |
+| Real-time analytics | Engagement data needs 48h to stabilize |
+| Cross-brand engagement | Platforms detect coordinated inauthentic behavior |
+
+## Traceability
+
+Populated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-01 through INFRA-05 | Phase 0 | Pending |
+| INFRA-06 through INFRA-09, AUTH-01 through AUTH-03 | Phase 1 | Pending |
+| BRAND-01 through BRAND-06 | Phase 1 | Pending |
+| ACCT-01 through ACCT-03 | Phase 1 | Pending |
+| DASH-04 | Phase 1 | Pending |
+| GEN-01 through GEN-08, GEN-03 through GEN-04 | Phase 2A | Pending |
+| QUAL-01 through QUAL-05 | Phase 2B | Pending |
+| GEN-01, GEN-02, IMG-01 through IMG-05 | Phase 3 | Pending |
+| CARO-01 through CARO-05 | Phase 4 | Pending |
+| SCHED-01 through SCHED-07 | Phase 5 | Pending |
+| FEED-01 through FEED-10, SPAM-01 through SPAM-07 | Phase 6 | Pending |
+| ANLY-01 through ANLY-04, DASH-01 through DASH-05 | Phase 7 | Pending |
+
+**Coverage:**
+- v1 requirements: 67 total
+- Mapped to phases: 67
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-03-15*
+*Last updated: 2026-03-15 after initial definition*
