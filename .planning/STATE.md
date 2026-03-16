@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 0 in progress -- Plan 01 complete, Plan 02 (Railway deploy) next
+**Current focus:** Phase 0 complete -- all Railway infrastructure assumptions validated. Ready for Phase 1.
 
 ## Current Milestone
 
@@ -18,7 +18,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 
 | # | Phase | Status | Started | Completed |
 |---|-------|--------|---------|-----------|
-| 0 | Infrastructure Validation | In Progress | 2026-03-16 | — |
+| 0 | Infrastructure Validation | Complete | 2026-03-16 | 2026-03-16 |
 | 1 | Scaffolding + Database + Auth | Not Started | — | — |
 | 2A | Brand Profiles + AI Generation | Not Started | — | — |
 | 2B | Quality Pipeline | Not Started | — | — |
@@ -34,6 +34,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - Satori requires WOFF format fonts (not WOFF2 or variable TTF) -- use @fontsource/inter WOFF files
 - tsx validation scripts need async main() wrapper (CJS output doesn't support top-level await)
 - @fontsource/inter installed as devDependency for reliable binary font files
+- Dockerfile required for Railway (not Railpack): better-sqlite3 needs python3/make/g++ for native compilation
+- HOSTNAME=0.0.0.0 required in Dockerfile ENV for Railway networking
+- node-cron must be in serverExternalPackages explicitly (auto-externals not reliable in standalone)
+- Next.js standalone does NOT compile instrumentation.ts -- cron must initialize via health endpoint or custom server.js
+- SQLite volume mount confirmed: /data volume persists across Railway redeployment
 
 ## Blockers
 
@@ -45,14 +50,15 @@ None.
 - Tailwind v4 + shadcn v4 chosen for latest compatibility
 - drizzle-orm for type-safe queries + migrations
 - After M1 runs 2-4 weeks collecting data, start M2 (Phases 8-11)
-- INFRA-01 through INFRA-05 validated locally; Railway deploy validation pending (Plan 02)
+- INFRA-01 through INFRA-05 validated locally (Plan 01) and on Railway (Plan 02) -- all confirmed
+- Railway test project deleted after capturing results (spike complete)
 
 ## Session Continuity
 
 Last session: 2026-03-16
-Stopped at: Phase 0 Plan 01 complete (local validation scripts all passing)
-Resume file: .planning/phases/00-infrastructure-validation-spike/00-02-PLAN.md
+Stopped at: Phase 0 complete -- Plan 02 (Railway deploy) done, all 4 infrastructure checks passed
+Resume file: .planning/phases/01-scaffolding-database-auth/ (Phase 1 plans)
 
 ---
 *State initialized: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 0 Plan 01 execution*
+*Last updated: 2026-03-16 after Phase 0 Plan 02 execution (phase complete)*

@@ -42,7 +42,7 @@
 
 Plans:
 - [x] 00-01-PLAN.md — Scaffold Next.js 15 project + create 5 local validation scripts (DONE 2026-03-16)
-- [ ] 00-02-PLAN.md — Deploy to Railway + validate infrastructure on Linux environment
+- [x] 00-02-PLAN.md — Deploy to Railway + validate infrastructure on Linux environment (DONE 2026-03-16)
 
 ---
 
@@ -215,4 +215,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 0 Plan 01 execution*
+*Last updated: 2026-03-16 after Phase 0 Plan 02 execution (Phase 0 complete)*
