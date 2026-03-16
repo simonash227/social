@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { DeleteBrandDialog } from './delete-dialog' // uses deleteBrand server action
+import { AccountsSection } from './accounts-section'
 
 interface BrandDetailPageProps {
   params: Promise<{ id: string }>
@@ -263,49 +264,7 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
 
       {/* Connected Accounts */}
       <Separator />
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Connected Accounts
-          </h2>
-          <Button
-            variant="outline"
-            size="sm"
-            render={<a href="https://app.upload-post.com" target="_blank" rel="noreferrer" />}
-          >
-            Connect Account
-          </Button>
-        </div>
-
-        {accounts.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No connected accounts yet.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {accounts.map((account) => (
-              <div
-                key={account.id}
-                className="flex items-center justify-between rounded-md border p-3"
-              >
-                <div className="space-y-0.5">
-                  <p className="text-sm font-medium capitalize">{account.platform}</p>
-                  <p className="text-xs text-muted-foreground">@{account.username}</p>
-                </div>
-                <Badge
-                  variant={account.status === 'connected' ? 'default' : 'destructive'}
-                >
-                  {account.status}
-                </Badge>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <p className="text-xs text-muted-foreground">
-          Manage your social accounts on Upload-Post, then they&apos;ll appear here automatically.
-        </p>
-      </section>
+      <AccountsSection brandId={brandId} accounts={accounts} />
 
       {/* Delete */}
       <Separator />
