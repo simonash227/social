@@ -19,7 +19,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 0 complete -- all Railway infrastructure assumptions validated. Ready for Phase 1.
+**Current focus:** Phase 1 planned (5 plans, 5 waves), ready to execute
 
 ## Current Milestone
 
@@ -33,7 +33,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 | # | Phase | Status | Started | Completed |
 |---|-------|--------|---------|-----------|
 | 0 | Infrastructure Validation | Complete | 2026-03-16 | 2026-03-16 |
-| 1 | Scaffolding + Database + Auth | Not Started | — | — |
+| 1 | Scaffolding + Database + Auth | Planned | 2026-03-16 | — |
 | 2A | Brand Profiles + AI Generation | Not Started | — | — |
 | 2B | Quality Pipeline | Not Started | — | — |
 | 3 | Content Extraction + Images | Not Started | — | — |
@@ -70,8 +70,8 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-16
-Stopped at: Phase 0 complete -- Plan 02 (Railway deploy) done, all 4 infrastructure checks passed
-Resume file: .planning/phases/01-scaffolding-database-auth/ (Phase 1 plans)
+Stopped at: Phase 1 planned (5 plans, 5 waves), ready to execute
+Resume file: .planning/phases/01-scaffolding-database-auth/01-01-PLAN.md
 
 ---
 *State initialized: 2026-03-15*
