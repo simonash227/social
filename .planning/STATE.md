@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 0 context gathered, ready to plan
+**Current focus:** Phase 0 planned, ready to execute
 
 ## Current Milestone
 
@@ -18,7 +18,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 
 | # | Phase | Status | Started | Completed |
 |---|-------|--------|---------|-----------|
-| 0 | Infrastructure Validation | Not Started | — | — |
+| 0 | Infrastructure Validation | Planned | 2026-03-16 | — |
 | 1 | Scaffolding + Database + Auth | Not Started | — | — |
 | 2A | Brand Profiles + AI Generation | Not Started | — | — |
 | 2B | Quality Pipeline | Not Started | — | — |
@@ -42,9 +42,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-16
-Stopped at: Phase 0 context gathered, proceeding to plan
-Resume file: .planning/phases/00-infrastructure-validation-spike/00-CONTEXT.md
+Stopped at: Phase 0 planned (2 plans, 2 waves), ready to execute
+Resume file: .planning/phases/00-infrastructure-validation-spike/00-01-PLAN.md
 
 ---
 *State initialized: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 0 context gathering*
+*Last updated: 2026-03-16 after Phase 0 planning*
