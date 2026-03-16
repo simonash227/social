@@ -86,6 +86,13 @@ Plans:
 
 **Estimated effort:** 2 days
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 2A-01-PLAN.md — Install Anthropic SDK, add postPlatforms content column, build generation server action with prompt construction and hook optimization
+- [ ] 2A-02-PLAN.md — Build generation page UI at /brands/[id]/generate with source input, platform selection, preview, editing, save; add Generate button to brand detail page
+- [ ] 2A-03-PLAN.md — Human verification of end-to-end AI content generation flow
+
 ---
 
 ### Phase 2B: Quality Pipeline
@@ -224,4 +231,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 1 planning (5 plans created)*
+*Last updated: 2026-03-17 after Phase 2A planning (3 plans created)*
