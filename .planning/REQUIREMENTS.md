@@ -12,9 +12,9 @@
 - [x] **INFRA-03**: node-cron jobs start via instrumentation.ts singleton and survive Railway redeploy
 - [x] **INFRA-04**: Satori + sharp renders carousel images on Railway's Linux environment
 - [x] **INFRA-05**: Upload-Post API can match analytics data back to posts by request ID
-- [ ] **INFRA-06**: Daily SQLite database backup to Cloudflare R2
+- [x] **INFRA-06**: Daily SQLite database backup to Cloudflare R2
 - [x] **INFRA-07**: Circuit breaker pauses API calls after N consecutive failures and logs alert
-- [ ] **INFRA-08**: Daily AI spend tracking with MAX_DAILY_AI_SPEND hard stop
+- [x] **INFRA-08**: Daily AI spend tracking with MAX_DAILY_AI_SPEND hard stop
 - [x] **INFRA-09**: Input sanitization utility strips HTML/invisible text from feed content
 
 ### Authentication
@@ -34,9 +34,9 @@
 
 ### Social Accounts
 
-- [ ] **ACCT-01**: User can connect social accounts to a brand via Upload-Post
-- [ ] **ACCT-02**: User can view connected accounts with platform, username, and status
-- [ ] **ACCT-03**: System auto-marks accounts as disconnected after persistent publish failures
+- [x] **ACCT-01**: User can connect social accounts to a brand via Upload-Post
+- [x] **ACCT-02**: User can view connected accounts with platform, username, and status
+- [x] **ACCT-03**: System auto-marks accounts as disconnected after persistent publish failures
 
 ### Content Generation
 

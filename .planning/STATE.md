@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "Phase 01 Plan 04 complete -- brand CRUD: server actions, form, list, detail, edit, delete"
-last_updated: "2026-03-16T07:59:53.332Z"
+stopped_at: Phase 01 Plan 05 complete -- cron infrastructure, account sync, AccountsSection component
+last_updated: "2026-03-16T08:07:36.534Z"
 progress:
   total_phases: 9
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # STATE: Personal Content Engine
@@ -64,6 +64,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 01-04]: base-ui Button/DialogTrigger use render prop (render={<Link />}) not asChild -- all UI components follow this pattern
 - [Phase 01-04]: base-ui Select onValueChange passes string|null -- handlers must accept null
 - [Phase 01-04]: DeleteBrandDialog isolated as client component to keep detail page as server component while enabling typed-name confirmation state
+- [Phase 01-scaffolding-database-auth]: Cron logs to activityLog table for observability without extra infrastructure
+- [Phase 01-scaffolding-database-auth]: syncAccounts never deletes rows -- only inserts or re-connects -- preserves history
 
 ## Blockers
 
@@ -80,8 +82,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T07:59:53.327Z
-Stopped at: Phase 01 Plan 04 complete -- brand CRUD: server actions, form, list, detail, edit, delete
+Last session: 2026-03-16T08:07:36.528Z
+Stopped at: Phase 01 Plan 05 complete -- cron infrastructure, account sync, AccountsSection component
 Resume file: None
 
 ---
