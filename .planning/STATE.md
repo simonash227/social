@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-stopped_at: Phase 2A planned (3 plans, 3 waves)
-last_updated: "2026-03-16T23:03:46.675Z"
+status: in-progress
+stopped_at: Completed 2A-01-PLAN.md (AI generation server action)
+last_updated: "2026-03-16T23:17:53Z"
 progress:
   total_phases: 9
   completed_phases: 2
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # STATE: Personal Content Engine
@@ -19,7 +19,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 1 planned (5 plans, 5 waves), ready to execute
+**Current focus:** Phase 2A plan 01 complete, plan 02 next (generation page UI)
 
 ## Current Milestone
 
@@ -34,7 +34,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 |---|-------|--------|---------|-----------|
 | 0 | Infrastructure Validation | Complete | 2026-03-16 | 2026-03-16 |
 | 1 | Scaffolding + Database + Auth | Planned | 2026-03-16 | — |
-| 2A | Brand Profiles + AI Generation | Not Started | — | — |
+| 2A | Brand Profiles + AI Generation | In Progress | 2026-03-17 | — |
 | 2B | Quality Pipeline | Not Started | — | — |
 | 3 | Content Extraction + Images | Not Started | — | — |
 | 4 | Carousel Generation | Not Started | — | — |
@@ -66,6 +66,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 01-04]: DeleteBrandDialog isolated as client component to keep detail page as server component while enabling typed-name confirmation state
 - [Phase 01-scaffolding-database-auth]: Cron logs to activityLog table for observability without extra infrastructure
 - [Phase 01-scaffolding-database-auth]: syncAccounts never deletes rows -- only inserts or re-connects -- preserves history
+- [Phase 2A-01]: Prompt-based JSON extraction used instead of native structured outputs (claude-haiku-3 does not support output_config.format)
+- [Phase 2A-01]: Module-level Anthropic client instantiation (one per process, reads ANTHROPIC_API_KEY from env)
+- [Phase 2A-01]: saveGeneratedPosts uses redirect() after insert; generateContent returns data -- different action patterns for different use cases
 
 ## Blockers
 
@@ -82,10 +85,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T23:03:46.666Z
-Stopped at: Phase 2A planned (3 plans, 3 waves)
-Resume file: .planning/phases/2A-brand-profiles-ai-text-generation/2A-01-PLAN.md
+Last session: 2026-03-16T23:17:53Z
+Stopped at: Completed 2A-01-PLAN.md (AI generation server action)
+Resume file: .planning/phases/2A-brand-profiles-ai-text-generation/2A-02-PLAN.md
 
 ---
 *State initialized: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 0 Plan 02 execution (phase complete)*
+*Last updated: 2026-03-17 after Phase 2A Plan 01 execution*
