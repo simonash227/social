@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 01 Plan 01 complete -- schema, shadcn, circuit-breaker, sanitizer, API stubs
-last_updated: "2026-03-16T07:34:44.813Z"
+stopped_at: Phase 01 Plan 02 complete -- auth library, login/logout routes, login page, auth middleware
+last_updated: "2026-03-16T07:41:02.451Z"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 7
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # STATE: Personal Content Engine
@@ -56,6 +56,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 01-01]: drizzle-orm updated to 0.45.1 (from 0.30.x) to match drizzle-kit@0.31.9 requirement
 - [Phase 01-01]: shadcn v4 uses Nova preset (Radix + Geist) -- --style flag removed in shadcn v4 CLI
 - [Phase 01-01]: R2 S3Client requires requestChecksumCalculation: WHEN_REQUIRED for SDK v3.729.0+ compatibility with R2
+- [Phase 01]: middleware.ts runtime: nodejs is stable in Next.js 15.5 enabling better-sqlite3 session lookup without JWT or edge workarounds
+- [Phase 01]: bcryptjs pure-JS library used for password validation (not bcrypt) -- avoids native C++ binding issues in Next.js bundler
 
 ## Blockers
 
@@ -72,8 +74,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T07:34:44.808Z
-Stopped at: Phase 01 Plan 01 complete -- schema, shadcn, circuit-breaker, sanitizer, API stubs
+Last session: 2026-03-16T07:41:02.439Z
+Stopped at: Phase 01 Plan 02 complete -- auth library, login/logout routes, login page, auth middleware
 Resume file: None
 
 ---

@@ -19,9 +19,9 @@
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can log in with a password (AUTH_PASSWORD env var + session cookie)
-- [ ] **AUTH-02**: Unauthenticated requests are redirected to login page
-- [ ] **AUTH-03**: User session persists across browser refresh
+- [x] **AUTH-01**: User can log in with a password (AUTH_PASSWORD env var + session cookie)
+- [x] **AUTH-02**: Unauthenticated requests are redirected to login page
+- [x] **AUTH-03**: User session persists across browser refresh
 
 ### Brands
 
