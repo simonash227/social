@@ -85,6 +85,7 @@ export const postPlatforms = sqliteTable('post_platforms', {
   id:           integer().primaryKey({ autoIncrement: true }),
   postId:       integer('post_id').notNull().references(() => posts.id),
   platform:     text().notNull(),
+  content:      text(),  // nullable -- platform-specific AI-generated content
   status:       text({ enum: ['pending', 'published', 'failed'] }).notNull().default('pending'),
   failureCount: integer('failure_count').notNull().default(0),
   requestId:    text('request_id'),

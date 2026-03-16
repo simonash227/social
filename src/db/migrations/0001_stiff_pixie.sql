@@ -1,0 +1,1 @@
+ALTER TABLE `post_platforms` ADD `content` text;
