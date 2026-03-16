@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 01 Plan 02 complete -- auth library, login/logout routes, login page, auth middleware
-last_updated: "2026-03-16T07:41:02.451Z"
+stopped_at: Phase 01 Plan 03 complete -- dashboard shell with sidebar, top bar, dark theme
+last_updated: "2026-03-16T07:48:37.803Z"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # STATE: Personal Content Engine
@@ -58,6 +58,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 01-01]: R2 S3Client requires requestChecksumCalculation: WHEN_REQUIRED for SDK v3.729.0+ compatibility with R2
 - [Phase 01]: middleware.ts runtime: nodejs is stable in Next.js 15.5 enabling better-sqlite3 session lookup without JWT or edge workarounds
 - [Phase 01]: bcryptjs pure-JS library used for password validation (not bcrypt) -- avoids native C++ binding issues in Next.js bundler
+- [Phase 01-scaffolding-database-auth]: shadcn v4 base-ui Triggers (DropdownMenuTrigger, TooltipTrigger) do not accept asChild prop -- use className directly
+- [Phase 01-scaffolding-database-auth]: AppSidebar is a server component querying getDb() directly for brand switcher data -- no separate API route needed
+- [Phase 01-scaffolding-database-auth]: [Phase 01-03]: Dark mode only -- html className=dark + ThemeProvider(defaultTheme=dark, enableSystem=false) eliminates light-mode flash
 
 ## Blockers
 
@@ -74,8 +77,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T07:41:02.439Z
-Stopped at: Phase 01 Plan 02 complete -- auth library, login/logout routes, login page, auth middleware
+Last session: 2026-03-16T07:48:37.799Z
+Stopped at: Phase 01 Plan 03 complete -- dashboard shell with sidebar, top bar, dark theme
 Resume file: None
 
 ---

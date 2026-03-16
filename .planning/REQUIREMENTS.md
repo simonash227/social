@@ -118,7 +118,7 @@
 - [ ] **DASH-01**: Cross-brand home page: brand cards with stats, engagement trend, next scheduled post
 - [ ] **DASH-02**: Brand home page: quick stats, recent posts with status + engagement
 - [ ] **DASH-03**: Activity log page: scrollable, filterable by brand/type/level, errors highlighted
-- [ ] **DASH-04**: Dashboard shell: sidebar, brand switcher, AI_MODE indicator, system health badge
+- [x] **DASH-04**: Dashboard shell: sidebar, brand switcher, AI_MODE indicator, system health badge
 - [ ] **DASH-05**: Weekly digest data displayed on dashboard home
 
 ## v2 Requirements (M2 — Intelligence Layer)
@@ -175,7 +175,7 @@ Populated during roadmap creation.
 | INFRA-06 through INFRA-09, AUTH-01 through AUTH-03 | Phase 1 | Pending |
 | BRAND-01 through BRAND-06 | Phase 1 | Pending |
 | ACCT-01 through ACCT-03 | Phase 1 | Pending |
-| DASH-04 | Phase 1 | Pending |
+| DASH-04 | Phase 1 | Complete |
 | GEN-01 through GEN-08, GEN-03 through GEN-04 | Phase 2A | Pending |
 | QUAL-01 through QUAL-05 | Phase 2B | Pending |
 | GEN-01, GEN-02, IMG-01 through IMG-05 | Phase 3 | Pending |
