@@ -18,6 +18,8 @@ ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+# node-cron is dynamically imported in instrumentation.ts — not traced by standalone bundler
+COPY --from=builder /app/node_modules/node-cron ./node_modules/node-cron
 
 EXPOSE ${PORT:-3000}
 ENV PORT=${PORT:-3000}
