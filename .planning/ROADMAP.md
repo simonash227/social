@@ -38,6 +38,12 @@
 
 **Estimated effort:** 0.5 days
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 00-01-PLAN.md — Scaffold Next.js 15 project + create 5 local validation scripts
+- [ ] 00-02-PLAN.md — Deploy to Railway + validate infrastructure on Linux environment
+
 ---
 
 ### Phase 1: Scaffolding + Database + Auth
@@ -209,4 +215,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-15 after initial creation*
+*Last updated: 2026-03-16 after Phase 0 planning*
