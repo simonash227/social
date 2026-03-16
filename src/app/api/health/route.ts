@@ -1,165 +1,55 @@
 import { NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
-import os from 'os'
+import { initCron } from '@/lib/cron'
+import { getDb } from '@/db'
 
-// GET /api/health — validates infrastructure on Railway
-// Returns { status, checks: { sqlite, satori, cron, volume } }
+// GET /api/health — production-ready health endpoint.
+// Triggers cron initialization on first request (singleton guard in initCron).
+// Kept public (excluded from auth middleware) for Railway health checks.
 export async function GET() {
+  // Initialize cron jobs on first request
+  initCron()
+
   const checks: Record<string, unknown> = {}
 
-  // ------------------------------------------------------------------
-  // 1. Volume mount check
-  // ------------------------------------------------------------------
-  const volumePath = process.env.RAILWAY_VOLUME_MOUNT_PATH
-  if (volumePath) {
-    try {
-      const exists = fs.existsSync(volumePath)
-      let writable = false
-      if (exists) {
-        const testFile = path.join(volumePath, '.write-test')
-        try {
-          fs.writeFileSync(testFile, 'ok')
-          fs.unlinkSync(testFile)
-          writable = true
-        } catch {
-          writable = false
-        }
-      }
-      checks.volume = { pass: exists && writable, path: volumePath, exists, writable }
-    } catch (err) {
-      checks.volume = { pass: false, error: String(err) }
-    }
-  } else {
-    checks.volume = {
-      pass: false,
-      error: 'RAILWAY_VOLUME_MOUNT_PATH not set (expected in Railway environment)',
-    }
-  }
-
-  // ------------------------------------------------------------------
-  // 2. SQLite check — open DB on volume (or local fallback), WAL mode, CRUD
-  // ------------------------------------------------------------------
-  const dbDir = volumePath ?? path.join(process.cwd(), 'data')
-  const dbPath = path.join(dbDir, 'app.db')
+  // ── 1. Database ──────────────────────────────────────────────────────────
   try {
-    // Ensure directory exists (local dev fallback)
-    if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true })
-
-    const Database = (await import('better-sqlite3')).default
-    const db = new Database(dbPath)
-
-    // WAL mode + safety pragmas
-    db.pragma('journal_mode = WAL')
-    db.pragma('foreign_keys = ON')
-    db.pragma('busy_timeout = 5000')
-
-    // Integrity check
-    const integrity = db.pragma('integrity_check') as Array<{ integrity_check: string }>
-    const integrityOk = integrity[0]?.integrity_check === 'ok'
-
-    // CRUD smoke test
-    db.exec(
-      `CREATE TABLE IF NOT EXISTS _health_check (id INTEGER PRIMARY KEY, ts TEXT NOT NULL)`
-    )
-    const now = new Date().toISOString()
-    db.prepare('INSERT INTO _health_check (ts) VALUES (?)').run(now)
-    const row = db.prepare('SELECT ts FROM _health_check ORDER BY id DESC LIMIT 1').get() as
-      | { ts: string }
-      | undefined
-    db.close()
-
-    checks.sqlite = {
-      pass: integrityOk && row?.ts === now,
-      path: dbPath,
-      journalMode: 'WAL',
-      integrityCheck: integrityOk ? 'ok' : 'FAILED',
-      crudOk: row?.ts === now,
-    }
+    getDb()
+    checks.database = { pass: true }
   } catch (err) {
-    checks.sqlite = { pass: false, error: String(err) }
+    checks.database = { pass: false, error: String(err) }
   }
 
-  // ------------------------------------------------------------------
-  // 3. Satori + sharp check — render JSX vnode to PNG
-  // ------------------------------------------------------------------
-  try {
-    const satori = (await import('satori')).default
-    const sharp = (await import('sharp')).default
-
-    // Load Inter WOFF font
-    const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Inter-Regular.woff')
-    const fontData = fs.readFileSync(fontPath)
-
-    // Minimal vnode — Satori uses plain object format, not JSX.
-    // Cast to any to satisfy ReactNode type — Satori accepts plain vnodes at runtime.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const vnode: any = {
-      type: 'div',
-      props: {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100%',
-          background: '#000',
-          color: '#fff',
-          fontSize: 48,
-          fontFamily: 'Inter',
-        },
-        children: 'Railway Health Check',
-      },
-    }
-
-    const svg = await satori(vnode, {
-      width: 400,
-      height: 200,
-      fonts: [{ name: 'Inter', data: fontData, weight: 400, style: 'normal' }],
-    })
-
-    const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer()
-    const isPng = pngBuffer[0] === 0x89 && pngBuffer[1] === 0x50
-
-    checks.satori = {
-      pass: isPng,
-      pngBytes: pngBuffer.length,
-      pngHeaderValid: isPng,
-    }
-  } catch (err) {
-    checks.satori = { pass: false, error: String(err) }
+  // ── 2. Cron ─────────────────────────────────────────────────────────────
+  checks.cron = {
+    pass: !!(globalThis as Record<string, unknown>).__cronRegistered,
+    registered: !!(globalThis as Record<string, unknown>).__cronRegistered,
   }
 
-  // ------------------------------------------------------------------
-  // 4. Cron check — validate node-cron loads and can schedule on Linux
-  // Also start cron if not already running (instrumentation.ts may not
-  // fire in standalone mode — this is the fallback init pattern)
-  // ------------------------------------------------------------------
-  try {
-    const cron = (await import('node-cron')).default
-
-    // Start cron if not already registered (singleton guard)
-    if (!(globalThis as any).__cronRegistered) {
-      ;(globalThis as any).__cronRegistered = true
-      cron.schedule('* * * * *', () => {
-        console.log(`[cron] tick at ${new Date().toISOString()}`)
-      })
-      console.log('[cron] Scheduler registered via health check fallback')
-    }
-
-    checks.cron = {
-      pass: true,
-      registered: true,
-      note: 'node-cron loaded and scheduled successfully on ' + os.platform(),
-    }
-  } catch (err) {
-    checks.cron = { pass: false, error: String(err) }
+  // ── 3. AI Mode ──────────────────────────────────────────────────────────
+  checks.ai_mode = {
+    pass: true,
+    value: process.env.AI_MODE ?? 'testing',
   }
 
-  // ------------------------------------------------------------------
-  // Aggregate status
-  // ------------------------------------------------------------------
-  const allPass = Object.values(checks).every((c) => (c as any).pass === true)
+  // ── 4. Environment Variables (presence check only, never values) ─────────
+  const requiredEnvVars = [
+    'AUTH_PASSWORD',
+    'UPLOAD_POST_API_KEY',
+    'R2_ACCOUNT_ID',
+    'ANTHROPIC_API_KEY',
+    'MAX_DAILY_AI_SPEND',
+  ]
+  const envStatus: Record<string, boolean> = {}
+  for (const key of requiredEnvVars) {
+    envStatus[key] = !!process.env[key]
+  }
+  const allEnvPresent = Object.values(envStatus).every(Boolean)
+  checks.env_vars = {
+    pass: allEnvPresent,
+    present: envStatus,
+  }
+
+  const allPass = Object.values(checks).every((c) => (c as { pass: boolean }).pass === true)
 
   return NextResponse.json(
     {
@@ -167,9 +57,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       environment: {
         nodeVersion: process.version,
-        platform: os.platform(),
-        arch: os.arch(),
-        railway: !!process.env.RAILWAY_ENVIRONMENT,
+        aiMode: process.env.AI_MODE ?? 'testing',
       },
       checks,
     },
