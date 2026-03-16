@@ -7,11 +7,11 @@
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: SQLite database runs on Railway volume with WAL mode and integrity check on startup
-- [ ] **INFRA-02**: better-sqlite3 + Next.js 15 builds and deploys successfully on Railway
-- [ ] **INFRA-03**: node-cron jobs start via instrumentation.ts singleton and survive Railway redeploy
-- [ ] **INFRA-04**: Satori + sharp renders carousel images on Railway's Linux environment
-- [ ] **INFRA-05**: Upload-Post API can match analytics data back to posts by request ID
+- [x] **INFRA-01**: SQLite database runs on Railway volume with WAL mode and integrity check on startup
+- [x] **INFRA-02**: better-sqlite3 + Next.js 15 builds and deploys successfully on Railway
+- [x] **INFRA-03**: node-cron jobs start via instrumentation.ts singleton and survive Railway redeploy
+- [x] **INFRA-04**: Satori + sharp renders carousel images on Railway's Linux environment
+- [x] **INFRA-05**: Upload-Post API can match analytics data back to posts by request ID
 - [ ] **INFRA-06**: Daily SQLite database backup to Cloudflare R2
 - [ ] **INFRA-07**: Circuit breaker pauses API calls after N consecutive failures and logs alert
 - [ ] **INFRA-08**: Daily AI spend tracking with MAX_DAILY_AI_SPEND hard stop
