@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Ready to begin Phase 0
+**Current focus:** Phase 0 context gathered, ready to plan
 
 ## Current Milestone
 
@@ -39,6 +39,12 @@ None.
 - drizzle-orm for type-safe queries + migrations
 - After M1 runs 2-4 weeks collecting data, start M2 (Phases 8-11)
 
+## Session Continuity
+
+Last session: 2026-03-16
+Stopped at: Phase 0 context gathered, proceeding to plan
+Resume file: .planning/phases/00-infrastructure-validation-spike/00-CONTEXT.md
+
 ---
 *State initialized: 2026-03-15*
-*Last updated: 2026-03-15 after project initialization*
+*Last updated: 2026-03-16 after Phase 0 context gathering*
