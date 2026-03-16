@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 01 Plan 03 complete -- dashboard shell with sidebar, top bar, dark theme
-last_updated: "2026-03-16T07:48:37.803Z"
+stopped_at: "Phase 01 Plan 04 complete -- brand CRUD: server actions, form, list, detail, edit, delete"
+last_updated: "2026-03-16T07:59:53.332Z"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # STATE: Personal Content Engine
@@ -61,6 +61,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 01-scaffolding-database-auth]: shadcn v4 base-ui Triggers (DropdownMenuTrigger, TooltipTrigger) do not accept asChild prop -- use className directly
 - [Phase 01-scaffolding-database-auth]: AppSidebar is a server component querying getDb() directly for brand switcher data -- no separate API route needed
 - [Phase 01-scaffolding-database-auth]: [Phase 01-03]: Dark mode only -- html className=dark + ThemeProvider(defaultTheme=dark, enableSystem=false) eliminates light-mode flash
+- [Phase 01-04]: base-ui Button/DialogTrigger use render prop (render={<Link />}) not asChild -- all UI components follow this pattern
+- [Phase 01-04]: base-ui Select onValueChange passes string|null -- handlers must accept null
+- [Phase 01-04]: DeleteBrandDialog isolated as client component to keep detail page as server component while enabling typed-name confirmation state
 
 ## Blockers
 
@@ -77,8 +80,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T07:48:37.799Z
-Stopped at: Phase 01 Plan 03 complete -- dashboard shell with sidebar, top bar, dark theme
+Last session: 2026-03-16T07:59:53.327Z
+Stopped at: Phase 01 Plan 04 complete -- brand CRUD: server actions, form, list, detail, edit, delete
 Resume file: None
 
 ---

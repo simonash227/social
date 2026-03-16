@@ -25,12 +25,12 @@
 
 ### Brands
 
-- [ ] **BRAND-01**: User can create a brand with name, niche, voice/tone, target audience, and goals
-- [ ] **BRAND-02**: User can edit brand profile: topics, dos/donts, example posts, platform notes
-- [ ] **BRAND-03**: User can configure brand visual style: colors, logo URL, watermark position/opacity
-- [ ] **BRAND-04**: User can set brand CTA text, bio templates, bio link, banned hashtags
-- [ ] **BRAND-05**: User can set warmup date for new brand accounts
-- [ ] **BRAND-06**: User can delete a brand (with confirmation)
+- [x] **BRAND-01**: User can create a brand with name, niche, voice/tone, target audience, and goals
+- [x] **BRAND-02**: User can edit brand profile: topics, dos/donts, example posts, platform notes
+- [x] **BRAND-03**: User can configure brand visual style: colors, logo URL, watermark position/opacity
+- [x] **BRAND-04**: User can set brand CTA text, bio templates, bio link, banned hashtags
+- [x] **BRAND-05**: User can set warmup date for new brand accounts
+- [x] **BRAND-06**: User can delete a brand (with confirmation)
 
 ### Social Accounts
 
