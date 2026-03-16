@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:help.blotato.com)",
+      "WebFetch(domain:www.blotato.com)"
+    ]
+  }
+}
