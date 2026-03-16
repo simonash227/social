@@ -40,13 +40,13 @@
 
 ### Content Generation
 
-- [ ] **GEN-01**: User can paste a URL, upload a PDF, or type text as a content source
+- [x] **GEN-01**: User can paste a URL, upload a PDF, or type text as a content source
 - [ ] **GEN-02**: System extracts text from YouTube videos (transcript), articles, and PDFs
 - [x] **GEN-03**: AI generates platform-optimized text content using brand voice and context
 - [x] **GEN-04**: AI generates 5-10 hook/title variants, self-scores them, and uses the best one
-- [ ] **GEN-05**: User can select target platforms (checkboxes for each connected account)
-- [ ] **GEN-06**: User can preview generated content per platform before publishing
-- [ ] **GEN-07**: User can edit generated content before publishing
+- [x] **GEN-05**: User can select target platforms (checkboxes for each connected account)
+- [x] **GEN-06**: User can preview generated content per platform before publishing
+- [x] **GEN-07**: User can edit generated content before publishing
 - [x] **GEN-08**: AI model selection is configurable via AI_MODE env var (testing vs production)
 
 ### Quality Pipeline

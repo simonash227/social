@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 2A-01-PLAN.md (AI generation server action)
-last_updated: "2026-03-16T23:17:53Z"
+stopped_at: Completed 2A-02-PLAN.md (generation page UI)
+last_updated: "2026-03-16T23:24:01Z"
 progress:
   total_phases: 9
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # STATE: Personal Content Engine
@@ -19,7 +19,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 2A plan 01 complete, plan 02 next (generation page UI)
+**Current focus:** Phase 2A plan 02 complete (generation page UI), phase 2A fully done
 
 ## Current Milestone
 
@@ -69,6 +69,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 2A-01]: Prompt-based JSON extraction used instead of native structured outputs (claude-haiku-3 does not support output_config.format)
 - [Phase 2A-01]: Module-level Anthropic client instantiation (one per process, reads ANTHROPIC_API_KEY from env)
 - [Phase 2A-01]: saveGeneratedPosts uses redirect() after insert; generateContent returns data -- different action patterns for different use cases
+- [Phase 2A-02]: Native HTML checkboxes with has-[:checked] Tailwind styling (no shadcn Checkbox component needed)
+- [Phase 2A-02]: Generation page split into server page.tsx + client generate-section.tsx following accounts-section.tsx pattern
+- [Phase 2A-02]: Separate useTransition hooks for generate and save operations (independent loading states)
 
 ## Blockers
 
@@ -85,10 +88,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16T23:17:53Z
-Stopped at: Completed 2A-01-PLAN.md (AI generation server action)
-Resume file: .planning/phases/2A-brand-profiles-ai-text-generation/2A-02-PLAN.md
+Last session: 2026-03-16T23:24:01Z
+Stopped at: Completed 2A-02-PLAN.md (generation page UI)
+Resume file: Phase 2A complete
 
 ---
 *State initialized: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 2A Plan 01 execution*
+*Last updated: 2026-03-17 after Phase 2A Plan 02 execution*
