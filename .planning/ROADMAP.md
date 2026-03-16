@@ -57,9 +57,18 @@ Plans:
 2. Password auth works (login, session persistence, redirect)
 3. Brand CRUD works end-to-end (create, edit, delete with confirmation)
 4. Upload-Post client connects and lists available accounts
-5. Cron jobs initialize via instrumentation.ts with mutex guards
+5. Cron jobs initialize via health endpoint with singleton guard
 
 **Estimated effort:** 2 days
+
+**Plans:** 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Foundation: shadcn/ui init, database schema + migrations, circuit breaker, sanitizer, API client stubs
+- [ ] 01-02-PLAN.md — Auth: password login, session cookies, middleware protection
+- [ ] 01-03-PLAN.md — Dashboard shell: sidebar navigation, brand switcher, top bar with AI_MODE badge
+- [ ] 01-04-PLAN.md — Brand CRUD: create, edit, delete with confirmation, card grid, detail page
+- [ ] 01-05-PLAN.md — Cron infrastructure, DB backup, AI spend tracking, social account sync
 
 ---
 
@@ -215,4 +224,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-16 after Phase 0 Plan 02 execution (Phase 0 complete)*
+*Last updated: 2026-03-16 after Phase 1 planning (5 plans created)*
