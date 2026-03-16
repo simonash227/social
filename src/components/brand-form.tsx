@@ -263,7 +263,7 @@ export function BrandForm({ brand, action }: BrandFormProps) {
             <Select
               name="watermarkPosition"
               value={watermarkPosition}
-              onValueChange={setWatermarkPosition}
+              onValueChange={(v) => setWatermarkPosition(v ?? '')}
             >
               <SelectTrigger id="watermarkPosition">
                 <SelectValue placeholder="Select position" />
