@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 0 complete -- Plan 02 (Railway deploy) done, all 4 infrastructure checks passed
-last_updated: "2026-03-16T04:17:38.494Z"
+stopped_at: Phase 01 Plan 01 complete -- schema, shadcn, circuit-breaker, sanitizer, API stubs
+last_updated: "2026-03-16T07:34:44.813Z"
 progress:
   total_phases: 9
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 7
+  completed_plans: 3
 ---
 
 # STATE: Personal Content Engine
@@ -53,6 +53,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - node-cron must be in serverExternalPackages explicitly (auto-externals not reliable in standalone)
 - Next.js standalone does NOT compile instrumentation.ts -- cron must initialize via health endpoint or custom server.js
 - SQLite volume mount confirmed: /data volume persists across Railway redeployment
+- [Phase 01-01]: drizzle-orm updated to 0.45.1 (from 0.30.x) to match drizzle-kit@0.31.9 requirement
+- [Phase 01-01]: shadcn v4 uses Nova preset (Radix + Geist) -- --style flag removed in shadcn v4 CLI
+- [Phase 01-01]: R2 S3Client requires requestChecksumCalculation: WHEN_REQUIRED for SDK v3.729.0+ compatibility with R2
 
 ## Blockers
 
@@ -69,9 +72,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-16
-Stopped at: Phase 1 planned (5 plans, 5 waves), ready to execute
-Resume file: .planning/phases/01-scaffolding-database-auth/01-01-PLAN.md
+Last session: 2026-03-16T07:34:44.808Z
+Stopped at: Phase 01 Plan 01 complete -- schema, shadcn, circuit-breaker, sanitizer, API stubs
+Resume file: None
 
 ---
 *State initialized: 2026-03-15*

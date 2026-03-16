@@ -10,7 +10,7 @@
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|--------------|------------------|
 | 0 | Infrastructure Validation | Complete    | 2026-03-16 | 5 |
-| 1 | Scaffolding + Database + Auth | Foundation: DB, auth, cron infra, clients, brand CRUD | INFRA-06 through INFRA-09, AUTH-01 through AUTH-03, BRAND-01 through BRAND-06, ACCT-01 through ACCT-03, DASH-04 | 5 |
+| 1 | 1/5 | In Progress|  | 5 |
 | 2A | Brand Profiles + AI Generation | Core value prop: brand-aware AI content generation | GEN-01 through GEN-08 | 4 |
 | 2B | Quality Pipeline | Content quality assurance before publishing | QUAL-01 through QUAL-05 | 3 |
 | 3 | Content Extraction + Images | Multiple input types + AI visual content | GEN-01, GEN-02, IMG-01 through IMG-05 | 4 |
@@ -61,7 +61,7 @@ Plans:
 
 **Estimated effort:** 2 days
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
 - [ ] 01-01-PLAN.md — Foundation: shadcn/ui init, database schema + migrations, circuit breaker, sanitizer, API client stubs

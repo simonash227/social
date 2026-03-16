@@ -13,9 +13,9 @@
 - [x] **INFRA-04**: Satori + sharp renders carousel images on Railway's Linux environment
 - [x] **INFRA-05**: Upload-Post API can match analytics data back to posts by request ID
 - [ ] **INFRA-06**: Daily SQLite database backup to Cloudflare R2
-- [ ] **INFRA-07**: Circuit breaker pauses API calls after N consecutive failures and logs alert
+- [x] **INFRA-07**: Circuit breaker pauses API calls after N consecutive failures and logs alert
 - [ ] **INFRA-08**: Daily AI spend tracking with MAX_DAILY_AI_SPEND hard stop
-- [ ] **INFRA-09**: Input sanitization utility strips HTML/invisible text from feed content
+- [x] **INFRA-09**: Input sanitization utility strips HTML/invisible text from feed content
 
 ### Authentication
 
