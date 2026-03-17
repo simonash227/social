@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: "Completed 03-03 (Phase 3 complete — content extraction + image generation verified)"
-last_updated: "2026-03-17T02:10:00.000Z"
+status: unknown
+stopped_at: Completed 03-04 (IMG-05 gap closed — media library filter/sort controls)
+last_updated: "2026-03-17T03:35:35.782Z"
 progress:
   total_phases: 9
-  completed_phases: 6
-  total_plans: 15
-  completed_plans: 15
+  completed_phases: 5
+  total_plans: 16
+  completed_plans: 16
 ---
 
 # STATE: Personal Content Engine
@@ -87,6 +87,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 03]: router.refresh() after regeneration to re-fetch server component data (Next.js App Router pattern)
 - [Phase 03-03]: openai downgraded from v6 to v4 — v6 broke gpt-image-1 b64_json extraction; v4 stable and compatible
 - [Phase 03-03]: openai added to serverExternalPackages in next.config.ts — required for Node.js-only SDK in Next.js standalone build
+- [Phase 03-04]: Client-side useMemo filtering for media library (no server roundtrip; per-brand dataset is small)
+- [Phase 03-04]: useEffect closes detail panel on filter/sort change to prevent orphaned detail views
 
 ## Blockers
 
@@ -103,8 +105,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T02:10:00.000Z
-Stopped at: Completed 03-03 (Phase 3 complete — content extraction + image generation verified)
+Last session: 2026-03-17T03:35:35.775Z
+Stopped at: Completed 03-04 (IMG-05 gap closed — media library filter/sort controls)
 Resume file: None
 
 ---

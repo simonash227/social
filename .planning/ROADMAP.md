@@ -13,7 +13,7 @@
 | 1 | Scaffolding + Database + Auth | Complete | 2026-03-16 | 5/5 |
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
-| 3 | Content Extraction + Images | In Progress | — | 3/4 |
+| 3 | 4/4 | Complete   | 2026-03-17 | 3/4 |
 | 4 | Carousel Generation | Not Started | — | 0/? |
 | 5 | Calendar + Scheduling | Not Started | — | 0/? |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
@@ -130,7 +130,7 @@ Plans:
 
 **Estimated effort:** 2 days
 
-**Plans:** 4 plans (3 complete, 1 gap closure)
+**Plans:** 4/4 plans complete
 
 Plans:
 - [x] 03-01-PLAN.md — Content extraction: install youtube-transcript/readability/pdf-parse, create extract.ts module, integrate into generate action, add PDF upload + URL extract to generate UI (DONE 2026-03-17)
