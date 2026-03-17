@@ -13,6 +13,16 @@ export function initCron(): void {
   if ((globalThis as Record<string, unknown>).__cronRegistered) return
   ;(globalThis as Record<string, unknown>).__cronRegistered = true
 
+  // ── 0. Auto-publish every minute ────────────────────────────────────────
+  cron.schedule('* * * * *', async () => {
+    try {
+      const { publishDuePosts } = await import('./publish')
+      await publishDuePosts()
+    } catch (err) {
+      console.error('[cron] auto-publish failed:', err)
+    }
+  })
+
   // ── 1. Daily DB backup at 3:00 AM ───────────────────────────────────────
   cron.schedule('0 3 * * *', async () => {
     try {
@@ -68,5 +78,5 @@ export function initCron(): void {
     }
   })
 
-  console.log('[cron] Phase 1 jobs registered (backup, ai-spend-summary)')
+  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary)')
 }

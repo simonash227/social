@@ -51,3 +51,36 @@ export async function verifyApiKey(): Promise<UploadPostAccountInfo> {
     return res.json() as Promise<UploadPostAccountInfo>
   })
 }
+
+interface PublishTextPostResponse {
+  request_id?: string
+  job_id?: string
+  [key: string]: unknown
+}
+
+/**
+ * Publish a text post to one or more platforms via Upload-Post.
+ * Sends immediately (no scheduled_date) — the project owns scheduling.
+ */
+export async function publishTextPost(opts: {
+  uploadPostUsername: string
+  platforms: string[]
+  content: string
+}): Promise<PublishTextPostResponse> {
+  return getBreaker('upload-post').call(async () => {
+    const form = new FormData()
+    form.append('user', opts.uploadPostUsername)
+    for (const platform of opts.platforms) {
+      form.append('platform[]', platform)
+    }
+    form.append('title', opts.content)
+
+    const res = await fetch(`${BASE_URL}/upload_text`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: form,
+    })
+    if (!res.ok) throw new Error(`Upload-Post API error: ${res.status} ${res.statusText}`)
+    return res.json() as Promise<PublishTextPostResponse>
+  })
+}
