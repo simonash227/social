@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { Sparkles, ImageIcon } from 'lucide-react'
+import { Sparkles, ImageIcon, LayoutGrid } from 'lucide-react'
 import { DeleteBrandDialog } from './delete-dialog' // uses deleteBrand server action
 import { AccountsSection } from './accounts-section'
 
@@ -61,6 +61,10 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
           <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/media`} />}>
             <ImageIcon className="mr-2 h-4 w-4" />
             Media Library
+          </Button>
+          <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/carousels`} />}>
+            <LayoutGrid className="mr-2 h-4 w-4" />
+            Carousels
           </Button>
           <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/edit`} />}>
             Edit Brand
