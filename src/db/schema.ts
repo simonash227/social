@@ -115,6 +115,29 @@ export const generatedImages = sqliteTable('generated_images', {
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
+// ─── Carousels ────────────────────────────────────────────────────────────────
+export const carousels = sqliteTable('carousels', {
+  id:         integer().primaryKey({ autoIncrement: true }),
+  brandId:    integer('brand_id').notNull().references(() => brands.id),
+  postId:     integer('post_id').references(() => posts.id),  // nullable -- association with posts done later
+  templateId: text('template_id').notNull(),                   // 'minimal' | 'bold' | 'gradient'
+  sourceText: text('source_text'),
+  slideCount: integer('slide_count').notNull(),
+  status:     text({ enum: ['draft', 'ready'] }).notNull().default('draft'),
+  createdAt:  text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
+export const carouselSlides = sqliteTable('carousel_slides', {
+  id:          integer().primaryKey({ autoIncrement: true }),
+  carouselId:  integer('carousel_id').notNull().references(() => carousels.id),
+  slideIndex:  integer('slide_index').notNull(),   // 0-based
+  title:       text().notNull(),
+  body:        text(),
+  r2Key:       text('r2_key').notNull(),           // R2 key for slide PNG
+  thumbKey:    text('thumb_key'),                   // 400px JPEG thumbnail
+  createdAt:   text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
 // ─── Feed Entries ─────────────────────────────────────────────────────────────
 export const feedEntries = sqliteTable('feed_entries', {
   id:             integer().primaryKey({ autoIncrement: true }),

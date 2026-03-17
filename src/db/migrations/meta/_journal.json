@@ -29,6 +29,13 @@
       "when": 1773710546000,
       "tag": "0003_generated_images",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1773720613840,
+      "tag": "0004_carousels",
+      "breakpoints": true
     }
   ]
 }
