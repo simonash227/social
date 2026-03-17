@@ -2,7 +2,7 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { getDb } from '@/db'
-import { brands, posts, postPlatforms } from '@/db/schema'
+import { brands, posts, postPlatforms, activityLog, QualityDetails } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { getModelConfig, checkAiSpend, logAiSpend } from '@/lib/ai'
 import { getBreaker } from '@/lib/circuit-breaker'
@@ -17,6 +17,27 @@ export interface GenerationResult {
     content: string
     hookVariants: Array<{ text: string; score: number }>
     winningHook: string
+  }>
+  totalCostUsd: number
+  error?: string
+}
+
+interface CritiqueResult {
+  dimensions: QualityDetails
+  overallScore: number
+  weakestDimension: string
+}
+
+export interface RefinedGenerationResult {
+  platforms: Record<string, {
+    content: string
+    hookVariants: Array<{ text: string; score: number }>
+    winningHook: string
+    qualityScore: number
+    qualityDetails: QualityDetails
+    qualityWarning?: string
+    discarded?: true
+    discardReason?: string
   }>
   totalCostUsd: number
   error?: string
@@ -183,6 +204,186 @@ function calculateCostUsd(model: string, inputTokens: number, outputTokens: numb
   return cost.toFixed(6)
 }
 
+// ─── Quality pipeline helpers ────────────────────────────────────────────────
+
+function computeOverallScore(dimensions: QualityDetails): number {
+  return Math.round(
+    (dimensions.hook.score + dimensions.value.score + dimensions.voice.score +
+     dimensions.uniqueness.score + dimensions.platformFit.score) / 5
+  )
+}
+
+function findWeakestDimension(dimensions: QualityDetails): string {
+  const entries: Array<[string, number]> = [
+    ['hook',        dimensions.hook.score],
+    ['value',       dimensions.value.score],
+    ['voice',       dimensions.voice.score],
+    ['uniqueness',  dimensions.uniqueness.score],
+    ['platformFit', dimensions.platformFit.score],
+  ]
+  return entries.reduce((a, b) => (b[1] < a[1] ? b : a))[0]
+}
+
+function buildCritiquePrompt(platform: string, content: string, brandVoice: string): string {
+  return [
+    `You are a social media content quality evaluator for the ${platform} platform.`,
+    `Brand voice: ${brandVoice}`,
+    '',
+    'Evaluate the following post on 5 dimensions, scoring each 1-10 (integer only):',
+    '- hook: Does the opening grab attention and stop the scroll?',
+    '- value: Does the post provide genuine value or insight to the reader?',
+    '- voice: Does the content match the brand voice and tone?',
+    '- uniqueness: Is the content original and non-generic?',
+    '- platformFit: Is the format, length, and style appropriate for ' + platform + '?',
+    '',
+    'POST TO EVALUATE:',
+    content,
+    '',
+    'Return ONLY valid JSON -- no markdown fences, no commentary:',
+    '{',
+    '  "dimensions": {',
+    '    "hook":        { "score": 8, "note": "brief note" },',
+    '    "value":       { "score": 7, "note": "brief note" },',
+    '    "voice":       { "score": 9, "note": "brief note" },',
+    '    "uniqueness":  { "score": 6, "note": "brief note" },',
+    '    "platformFit": { "score": 8, "note": "brief note" }',
+    '  }',
+    '}',
+  ].join('\n')
+}
+
+function buildRewritePrompt(
+  platform: string,
+  originalContent: string,
+  critique: CritiqueResult,
+  brandSystemPrompt: string
+): string {
+  const weakDimensions = Object.entries(critique.dimensions)
+    .filter(([, dim]) => dim.score < 7)
+    .map(([name, dim]) => `- ${name} (score ${dim.score}/10): ${dim.note}`)
+    .join('\n')
+
+  const strongDimensions = Object.entries(critique.dimensions)
+    .filter(([, dim]) => dim.score >= 8)
+    .map(([name, dim]) => `- ${name} (score ${dim.score}/10): preserve this`)
+    .join('\n')
+
+  return [
+    `Rewrite this ${platform} post to improve its weak dimensions while preserving what is already strong.`,
+    '',
+    'DIMENSIONS TO IMPROVE:',
+    weakDimensions || '(none -- general polish)',
+    '',
+    strongDimensions ? 'DIMENSIONS TO PRESERVE:\n' + strongDimensions : '',
+    '',
+    'ORIGINAL POST:',
+    originalContent,
+    '',
+    'Return ONLY the rewritten post text -- no JSON, no commentary, no markdown fences.',
+    'Keep the same platform format and length constraints for ' + platform + '.',
+  ].filter(line => line !== null).join('\n')
+}
+
+interface CritiqueDimensionsJson {
+  dimensions: QualityDetails
+}
+
+async function runCritique(
+  brandId: number,
+  platform: string,
+  content: string,
+  brandVoice: string
+): Promise<CritiqueResult> {
+  const modelConfig = getModelConfig()
+  const prompt = buildCritiquePrompt(platform, content, brandVoice)
+
+  try {
+    const response = await getBreaker('anthropic').call(() =>
+      anthropic.messages.create({
+        model: modelConfig.critique,
+        max_tokens: 1024,
+        system: 'You are a social media content quality evaluator. Respond with ONLY valid JSON -- no markdown fences, no commentary.',
+        messages: [{ role: 'user', content: prompt }],
+      })
+    )
+
+    const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const costUsd = calculateCostUsd(
+      modelConfig.critique,
+      response.usage.input_tokens,
+      response.usage.output_tokens
+    )
+    logAiSpend({
+      brandId,
+      model: modelConfig.critique,
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
+      costUsd,
+    })
+
+    const parsed = parseJsonResponse<CritiqueDimensionsJson>(rawText)
+    const dimensions = parsed.dimensions
+    const overallScore = computeOverallScore(dimensions)
+    const weakestDimension = findWeakestDimension(dimensions)
+
+    return { dimensions, overallScore, weakestDimension }
+  } catch {
+    // Fallback: do not throw -- return a passing score to avoid blocking the user
+    const fallbackDimensions: QualityDetails = {
+      hook:        { score: 7, note: 'Critique parse error -- fallback pass' },
+      value:       { score: 7, note: 'Critique parse error -- fallback pass' },
+      voice:       { score: 7, note: 'Critique parse error -- fallback pass' },
+      uniqueness:  { score: 7, note: 'Critique parse error -- fallback pass' },
+      platformFit: { score: 7, note: 'Critique parse error -- fallback pass' },
+    }
+    return {
+      dimensions: fallbackDimensions,
+      overallScore: 7,
+      weakestDimension: 'hook',
+    }
+  }
+}
+
+async function runRewrite(
+  brandId: number,
+  platform: string,
+  originalContent: string,
+  critique: CritiqueResult,
+  brand: BrandRow
+): Promise<{ content: string; costUsd: number }> {
+  const modelConfig = getModelConfig()
+  const systemPrompt = buildSystemPrompt(brand)
+  const rewritePrompt = buildRewritePrompt(platform, originalContent, critique, systemPrompt)
+
+  const response = await getBreaker('anthropic').call(() =>
+    anthropic.messages.create({
+      model: modelConfig.primary,
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: rewritePrompt }],
+    })
+  )
+
+  const rewrittenContent = response.content[0].type === 'text'
+    ? response.content[0].text.trim()
+    : originalContent
+
+  const costUsdStr = calculateCostUsd(
+    modelConfig.primary,
+    response.usage.input_tokens,
+    response.usage.output_tokens
+  )
+  logAiSpend({
+    brandId,
+    model: modelConfig.primary,
+    inputTokens: response.usage.input_tokens,
+    outputTokens: response.usage.output_tokens,
+    costUsd: costUsdStr,
+  })
+
+  return { content: rewrittenContent, costUsd: parseFloat(costUsdStr) }
+}
+
 // ─── Exported server actions ─────────────────────────────────────────────────
 
 export async function generateContent(
@@ -312,11 +513,166 @@ export async function generateContent(
   }
 }
 
+export async function refineAndGate(
+  brandId: number,
+  generated: GenerationResult
+): Promise<RefinedGenerationResult> {
+  const emptyResult: RefinedGenerationResult = { platforms: {}, totalCostUsd: 0 }
+
+  try {
+    const db = getDb()
+
+    // 1. Query brand
+    const brand = db.select().from(brands).where(eq(brands.id, brandId)).get()
+    if (!brand) {
+      return { ...emptyResult, error: 'Brand not found' }
+    }
+
+    // 2. Check spend limit
+    const underLimit = await checkAiSpend()
+    if (!underLimit) {
+      return { ...emptyResult, error: 'Daily AI spend limit reached' }
+    }
+
+    const brandVoice = `${brand.voiceTone}${brand.targetAudience ? ', targeting ' + brand.targetAudience : ''}`
+    let totalCost = 0
+    const refinedPlatforms: RefinedGenerationResult['platforms'] = {}
+
+    // 3. Process each platform
+    for (const [platform, platformData] of Object.entries(generated.platforms)) {
+      let currentContent = platformData.content
+      let retried = false
+
+      // a. Initial critique
+      const initialCritique = await runCritique(brandId, platform, currentContent, brandVoice)
+      totalCost += 0 // critique cost already logged inside runCritique
+
+      // b. Conditional skip: score >= 8
+      if (initialCritique.overallScore >= 8) {
+        db.insert(activityLog).values({
+          brandId,
+          type: 'quality',
+          level: 'info',
+          message: `Self-refine skipped: initial score ${initialCritique.overallScore}/10 for ${platform}`,
+          createdAt: new Date().toISOString(),
+        }).run()
+
+        refinedPlatforms[platform] = {
+          ...platformData,
+          qualityScore: initialCritique.overallScore,
+          qualityDetails: initialCritique.dimensions,
+        }
+        continue
+      }
+
+      // c. Self-refine: score < 8, run rewrite + re-critique
+      const rewriteResult = await runRewrite(brandId, platform, currentContent, initialCritique, brand)
+      currentContent = rewriteResult.content
+      totalCost += rewriteResult.costUsd
+
+      let currentCritique = await runCritique(brandId, platform, currentContent, brandVoice)
+
+      // d. Quality gate routing
+      if (currentCritique.overallScore >= 7) {
+        // Pass
+        db.insert(activityLog).values({
+          brandId,
+          type: 'quality',
+          level: 'info',
+          message: `Quality gate passed: score ${currentCritique.overallScore}/10 for ${platform}`,
+          createdAt: new Date().toISOString(),
+        }).run()
+
+        refinedPlatforms[platform] = {
+          ...platformData,
+          content: currentContent,
+          qualityScore: currentCritique.overallScore,
+          qualityDetails: currentCritique.dimensions,
+        }
+      } else if (currentCritique.overallScore >= 5 && !retried) {
+        // Score 5-6: one re-refine retry
+        retried = true
+        const retryRewrite = await runRewrite(brandId, platform, currentContent, currentCritique, brand)
+        currentContent = retryRewrite.content
+        totalCost += retryRewrite.costUsd
+
+        currentCritique = await runCritique(brandId, platform, currentContent, brandVoice)
+
+        const warningMsg = `Passed after retry with marginal score ${currentCritique.overallScore}/10`
+        db.insert(activityLog).values({
+          brandId,
+          type: 'quality',
+          level: 'warn',
+          message: `Quality gate marginal: score ${currentCritique.overallScore}/10 for ${platform} after retry`,
+          createdAt: new Date().toISOString(),
+        }).run()
+
+        refinedPlatforms[platform] = {
+          ...platformData,
+          content: currentContent,
+          qualityScore: currentCritique.overallScore,
+          qualityDetails: currentCritique.dimensions,
+          qualityWarning: warningMsg,
+        }
+      } else if (currentCritique.overallScore < 5) {
+        // Discard
+        const weakestNote = currentCritique.dimensions[currentCritique.weakestDimension as keyof QualityDetails]?.note ?? 'Low quality'
+        db.insert(activityLog).values({
+          brandId,
+          type: 'quality',
+          level: 'warn',
+          message: `Content discarded: score ${currentCritique.overallScore}/10 for ${platform}, reason: ${weakestNote}`,
+          createdAt: new Date().toISOString(),
+        }).run()
+
+        refinedPlatforms[platform] = {
+          ...platformData,
+          content: currentContent,
+          qualityScore: currentCritique.overallScore,
+          qualityDetails: currentCritique.dimensions,
+          discarded: true,
+          discardReason: weakestNote,
+        }
+      } else {
+        // Score >= 7 after first rewrite (catches case where retried=true but score climbed >= 7)
+        db.insert(activityLog).values({
+          brandId,
+          type: 'quality',
+          level: 'info',
+          message: `Quality gate passed: score ${currentCritique.overallScore}/10 for ${platform}`,
+          createdAt: new Date().toISOString(),
+        }).run()
+
+        refinedPlatforms[platform] = {
+          ...platformData,
+          content: currentContent,
+          qualityScore: currentCritique.overallScore,
+          qualityDetails: currentCritique.dimensions,
+        }
+      }
+    }
+
+    return {
+      platforms: refinedPlatforms,
+      totalCostUsd: generated.totalCostUsd + totalCost,
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error during quality pipeline'
+
+    if (message.includes('circuit-breaker')) {
+      return { ...emptyResult, error: 'Service temporarily unavailable. Please try again in a few minutes.' }
+    }
+
+    return { ...emptyResult, error: message }
+  }
+}
+
 export async function saveGeneratedPosts(
   brandId: number,
   platformContents: Record<string, string>,
   sourceText: string,
-  sourceUrl: string
+  sourceUrl: string,
+  qualityData?: Record<string, { score: number; details: QualityDetails }>
 ): Promise<{ error?: string }> {
   try {
     const db = getDb()
@@ -336,7 +692,8 @@ export async function saveGeneratedPosts(
       sourceText: sourceText || null,
       content: primaryContent,
       status: 'draft',
-      qualityScore: null,
+      qualityScore: qualityData?.[platformKeys[0]]?.score ?? null,
+      qualityDetails: qualityData?.[platformKeys[0]]?.details ?? null,
     }).returning({ id: posts.id }).get()
 
     // Insert one postPlatform per platform
