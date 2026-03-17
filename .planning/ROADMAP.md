@@ -14,7 +14,7 @@
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
-| 4 | Carousel Generation | Not Started | — | 0/? |
+| 4 | Carousel Generation | Not Started | — | 0/2 |
 | 5 | Calendar + Scheduling | Not Started | — | 0/? |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
@@ -153,6 +153,12 @@ Plans:
 
 **Estimated effort:** 2 days
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Database schema + fonts + 3 Satori carousel templates + render pipeline (carousel-gen.ts)
+- [ ] 04-02-PLAN.md — AI slide content generation, carousel page UI with template picker + slide editor + render, brand detail Carousels link, human verification
+
 ---
 
 ### Phase 5: Calendar + Scheduling
@@ -245,4 +251,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 3 gap closure plan created*
+*Last updated: 2026-03-17 after Phase 4 plans created*
