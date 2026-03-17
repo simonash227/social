@@ -21,14 +21,14 @@ export function getModelConfig(): ModelConfig {
     return {
       primary: 'claude-opus-4-20250514',
       critique: 'claude-sonnet-4-20250514',
-      filter: 'claude-haiku-3-20250307',
+      filter: 'claude-haiku-4-5-20251001',
     }
   }
   // Default: testing mode
   return {
     primary: 'claude-sonnet-4-20250514',
-    critique: 'claude-haiku-3-20250307',
-    filter: 'claude-haiku-3-20250307',
+    critique: 'claude-haiku-4-5-20251001',
+    filter: 'claude-haiku-4-5-20251001',
   }
 }
 
