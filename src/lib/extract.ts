@@ -1,9 +1,7 @@
 import { YoutubeTranscript } from 'youtube-transcript'
 import { Readability } from '@mozilla/readability'
 import { JSDOM } from 'jsdom'
-// pdf-parse ESM types lack a default export; use dynamic require to avoid TS errors
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require('pdf-parse') as (buffer: Buffer) => Promise<{ text: string }>
+import { PDFParse } from 'pdf-parse'
 
 const YOUTUBE_REGEX = /(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/
 const MAX_HTML_BYTES = 5 * 1024 * 1024 // 5MB
@@ -67,8 +65,9 @@ export async function extractPdf(
   buffer: Buffer
 ): Promise<{ text: string; error?: string }> {
   try {
-    const data = await pdfParse(buffer)
-    return { text: data.text.trim() }
+    const parser = new PDFParse({ data: new Uint8Array(buffer) })
+    const result = await parser.getText()
+    return { text: result.text.trim() }
   } catch {
     return { text: '', error: 'Could not extract PDF content' }
   }
