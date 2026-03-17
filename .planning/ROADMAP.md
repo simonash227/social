@@ -130,6 +130,13 @@ Plans:
 
 **Estimated effort:** 2 days
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Content extraction: install youtube-transcript/readability/pdf-parse, create extract.ts module, integrate into generate action, add PDF upload + URL extract to generate UI
+- [ ] 03-02-PLAN.md — Image generation backend: install OpenAI SDK, generatedImages DB table + migration, image-gen.ts pipeline (gpt-image-1 + watermark + thumbnail + R2), server actions
+- [ ] 03-03-PLAN.md — Image generation UI + media library: image generation section on generate page, media library page with grid/detail/regenerate, brand detail Media Library link
+
 ---
 
 ### Phase 4: Carousel Generation
@@ -237,4 +244,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 2B completion*
+*Last updated: 2026-03-17 after Phase 3 planning*
