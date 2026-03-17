@@ -60,6 +60,16 @@ export async function deleteR2Object(bucket: string, key: string): Promise<void>
 }
 
 /**
+ * Get the public URL for an R2 object in the media bucket.
+ * Requires R2_MEDIA_PUBLIC_BASE env var (e.g. https://media.example.com).
+ */
+export function getR2PublicUrl(key: string): string {
+  const base = process.env.R2_MEDIA_PUBLIC_BASE
+  if (!base) throw new Error('R2_MEDIA_PUBLIC_BASE env var not set')
+  return `${base.replace(/\/$/, '')}/${key}`
+}
+
+/**
  * Run the daily database backup:
  * - Copies SQLite DB file to R2 with a date-stamped key
  * - Keeps the last 7 backups, deletes older ones

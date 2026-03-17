@@ -101,6 +101,20 @@ export const postPlatforms = sqliteTable('post_platforms', {
   requestId:    text('request_id'),
 })
 
+// ─── Generated Images ─────────────────────────────────────────────────────────
+export const generatedImages = sqliteTable('generated_images', {
+  id:        integer().primaryKey({ autoIncrement: true }),
+  brandId:   integer('brand_id').notNull().references(() => brands.id),
+  postId:    integer('post_id').references(() => posts.id), // nullable -- image can exist without a post
+  prompt:    text().notNull(),
+  fullKey:   text('full_key').notNull(),     // R2 key for full-size image
+  thumbKey:  text('thumb_key').notNull(),    // R2 key for 400px thumbnail
+  r2Bucket:  text('r2_bucket').notNull(),
+  costUsd:   text('cost_usd').notNull(),
+  type:      text({ enum: ['generated'] }).notNull().default('generated'),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
 // ─── Feed Entries ─────────────────────────────────────────────────────────────
 export const feedEntries = sqliteTable('feed_entries', {
   id:             integer().primaryKey({ autoIncrement: true }),
