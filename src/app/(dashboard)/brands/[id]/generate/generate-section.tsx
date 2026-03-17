@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition, type ChangeEvent } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import {
   generateContent,
   refineAndGate,
@@ -15,7 +17,8 @@ import {
   extractSource,
   type RefinedGenerationResult,
 } from '@/app/actions/generate'
-import { ChevronDown, ChevronUp, Sparkles, Save, Upload, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { generateImage } from '@/app/actions/images'
+import { ChevronDown, ChevronUp, Sparkles, Save, Upload, CheckCircle, AlertCircle, Loader2, ImageIcon } from 'lucide-react'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -99,6 +102,11 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
 
   // Error state
   const [error, setError] = useState<string | null>(null)
+
+  // Image generation state
+  const [imagePrompt, setImagePrompt] = useState('')
+  const [imageResult, setImageResult] = useState<{ imageId: number; error?: string } | null>(null)
+  const [isGeneratingImage, startImageTransition] = useTransition()
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
@@ -242,6 +250,13 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
 
   function updateEditedContent(platform: string, content: string) {
     setEditedContent((prev) => ({ ...prev, [platform]: content }))
+  }
+
+  function handleGenerateImage() {
+    startImageTransition(async () => {
+      const result = await generateImage(brandId, imagePrompt)
+      setImageResult(result)
+    })
   }
 
   // ─── Derived values ──────────────────────────────────────────────────────────
@@ -439,6 +454,67 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
           <Skeleton className="h-10 w-48" />
         </div>
       )}
+
+      {/* Image Generation Section */}
+      <Separator className="my-8" />
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <ImageIcon className="h-5 w-5" />
+          Image Generation
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Generate an AI image to accompany your content. The image will use your brand&apos;s visual style.
+        </p>
+
+        {/* Image Prompt Input */}
+        <div className="space-y-2">
+          <Textarea
+            placeholder="Describe the image you want to generate..."
+            rows={3}
+            value={imagePrompt}
+            onChange={(e) => setImagePrompt(e.target.value)}
+          />
+          <Button
+            type="button"
+            onClick={handleGenerateImage}
+            disabled={imagePrompt.trim() === '' || isGeneratingImage}
+          >
+            <ImageIcon className="mr-2 h-4 w-4" />
+            {isGeneratingImage ? 'Generating image...' : 'Generate Image'}
+          </Button>
+        </div>
+
+        {/* Image Result */}
+        {imageResult?.error && (
+          <div className="rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {imageResult.error}
+          </div>
+        )}
+        {imageResult?.imageId ? (
+          <div className="rounded-md border border-green-500/30 bg-green-500/5 px-4 py-3 space-y-2">
+            <p className="text-sm text-green-500 font-medium">Image generated successfully!</p>
+            <Link
+              href={`/brands/${brandId}/media`}
+              className="text-sm text-primary underline underline-offset-2 hover:no-underline"
+            >
+              View in Media Library
+            </Link>
+            <div className="pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setImageResult(null)
+                  setImagePrompt('')
+                }}
+              >
+                Generate Another
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </section>
 
       {/* Results Section */}
       {result && !isPending && platformKeys.length > 0 && (
