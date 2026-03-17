@@ -78,5 +78,25 @@ export function initCron(): void {
     }
   })
 
-  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary)')
+  // ── 3. Poll feeds every 5 minutes ───────────────────────────────────────
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { pollFeeds } = await import('./feed-poll')
+      await pollFeeds()
+    } catch (err) {
+      console.error('[cron] feed-poll failed:', err)
+    }
+  })
+
+  // ── 4. Auto-generate every 15 minutes ───────────────────────────────────
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      const { autoGenerate } = await import('./auto-generate')
+      await autoGenerate()
+    } catch (err) {
+      console.error('[cron] auto-generate failed:', err)
+    }
+  })
+
+  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate)')
 }
