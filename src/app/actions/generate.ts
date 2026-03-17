@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm'
 import { getModelConfig, checkAiSpend, logAiSpend } from '@/lib/ai'
 import { getBreaker } from '@/lib/circuit-breaker'
 import { sanitizeText } from '@/lib/sanitize'
+import { extractFromUrl, extractPdf } from '@/lib/extract'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -386,6 +387,27 @@ async function runRewrite(
 
 // ─── Exported server actions ─────────────────────────────────────────────────
 
+/**
+ * Extract source content from a URL or PDF base64 string.
+ * Called from the client BEFORE generateContent so the user can see and edit
+ * the extracted text before triggering generation.
+ */
+export async function extractSource(
+  sourceUrl: string,
+  pdfBase64?: string
+): Promise<{ text: string; title?: string; error?: string }> {
+  if (pdfBase64) {
+    const buffer = Buffer.from(pdfBase64, 'base64')
+    return extractPdf(buffer)
+  }
+
+  if (sourceUrl) {
+    return extractFromUrl(sourceUrl)
+  }
+
+  return { text: '' }
+}
+
 export async function generateContent(
   brandId: number,
   platforms: string[],
@@ -409,8 +431,16 @@ export async function generateContent(
       return { ...emptyResult, error: 'Daily AI spend limit reached' }
     }
 
-    // 3. Sanitize source text if provided
-    const cleanSourceText = sourceText ? sanitizeText(sourceText) : ''
+    // 3. Sanitize source text if provided; auto-extract from URL if sourceText is empty
+    let cleanSourceText = sourceText ? sanitizeText(sourceText) : ''
+
+    if (!cleanSourceText && sourceUrl) {
+      const extracted = await extractFromUrl(sourceUrl)
+      if (extracted.text) {
+        cleanSourceText = extracted.text
+      }
+      // If extraction failed, continue with URL-only prompt behavior (graceful degradation)
+    }
 
     // 4. Build prompts
     const systemPrompt = buildSystemPrompt(brand)
