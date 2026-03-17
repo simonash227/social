@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-01 (content extraction module + UI)
-last_updated: "2026-03-17T01:36:21.377Z"
+stopped_at: "Completed 03-03 tasks 1-2 (image UI + media library), awaiting checkpoint:human-verify at task 3"
+last_updated: "2026-03-17T01:40:58.894Z"
 progress:
   total_phases: 9
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # STATE: Personal Content Engine
@@ -82,6 +82,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 03]: Watermark failure is non-fatal in image-gen.ts -- logged and image proceeds without watermark
 - [Phase 03-01]: pdf-parse v2 uses PDFParse class API (not v1 function call) -- new PDFParse({ data: Uint8Array }) + .getText()
 - [Phase 03-01]: extractSource action is additive -- called client-side before generateContent so user can see and edit extracted text
+- [Phase 03]: Image generation section always visible on generate page (not gated by text results) -- independent image workflows
+- [Phase 03]: Media grid detail view uses inline expanded panel below grid (not modal/overlay) -- simpler UX, no portal needed
+- [Phase 03]: router.refresh() after regeneration to re-fetch server component data (Next.js App Router pattern)
 
 ## Blockers
 
@@ -98,8 +101,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T01:36:21.371Z
-Stopped at: Completed 03-01 (content extraction module + UI)
+Last session: 2026-03-17T01:40:58.886Z
+Stopped at: Completed 03-03 tasks 1-2 (image UI + media library), awaiting checkpoint:human-verify at task 3
 Resume file: None
 
 ---

@@ -62,8 +62,8 @@
 - [x] **IMG-01**: AI generates images using OpenAI GPT Image API with brand style directive
 - [x] **IMG-02**: Generated images include brand logo watermark at configured position and opacity
 - [x] **IMG-03**: Images are stored in Cloudflare R2 with 400px thumbnails for dashboard
-- [ ] **IMG-04**: User can regenerate or override image prompts
-- [ ] **IMG-05**: Media library page shows grid of generated images, filterable by date/type
+- [x] **IMG-04**: User can regenerate or override image prompts
+- [x] **IMG-05**: Media library page shows grid of generated images, filterable by date/type
 
 ### Carousel Generation
 
