@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
@@ -12,9 +12,10 @@ import {
   generateContent,
   refineAndGate,
   saveGeneratedPosts,
+  extractSource,
   type RefinedGenerationResult,
 } from '@/app/actions/generate'
-import { ChevronDown, ChevronUp, Sparkles, Save } from 'lucide-react'
+import { ChevronDown, ChevronUp, Sparkles, Save, Upload, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -72,6 +73,14 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
   const [sourceUrl, setSourceUrl] = useState('')
   const [sourceText, setSourceText] = useState('')
 
+  // PDF upload state
+  const [pdfFileName, setPdfFileName] = useState<string | null>(null)
+
+  // Extraction status
+  const [extractionStatus, setExtractionStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle')
+  const [extractionMessage, setExtractionMessage] = useState('')
+  const [, startExtractionTransition] = useTransition()
+
   // Platform selection
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
 
@@ -99,6 +108,64 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
         ? prev.filter((p) => p !== platform)
         : [...prev, platform]
     )
+  }
+
+  function handlePdfUpload(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setPdfFileName(file.name)
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const arrayBuffer = event.target?.result as ArrayBuffer
+      if (!arrayBuffer) return
+
+      // Convert ArrayBuffer to base64
+      const uint8Array = new Uint8Array(arrayBuffer)
+      let binary = ''
+      for (let i = 0; i < uint8Array.length; i++) {
+        binary += String.fromCharCode(uint8Array[i])
+      }
+      const base64 = btoa(binary)
+
+      startExtractionTransition(async () => {
+        setExtractionStatus('extracting')
+        setExtractionMessage('Extracting PDF text...')
+
+        const result = await extractSource('', base64)
+
+        if (result.text) {
+          setSourceText(result.text)
+          setExtractionStatus('done')
+          setExtractionMessage(`Extracted ${result.text.length.toLocaleString()} characters`)
+        } else {
+          setExtractionStatus('error')
+          setExtractionMessage(result.error ?? 'Could not extract PDF content')
+        }
+      })
+    }
+    reader.readAsArrayBuffer(file)
+  }
+
+  function handleUrlExtract() {
+    startExtractionTransition(async () => {
+      setExtractionStatus('extracting')
+      setExtractionMessage('Extracting content...')
+
+      const result = await extractSource(sourceUrl)
+
+      if (result.text) {
+        setSourceText(result.text)
+        setExtractionStatus('done')
+        setExtractionMessage(
+          `Extracted: ${result.title ?? 'content'} (${result.text.length.toLocaleString()} chars)`
+        )
+      } else {
+        setExtractionStatus('error')
+        setExtractionMessage(result.error ?? 'Could not extract content')
+      }
+    })
   }
 
   function handleGenerate() {
@@ -179,9 +246,11 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
 
   // ─── Derived values ──────────────────────────────────────────────────────────
 
+  const isExtracting = extractionStatus === 'extracting'
+
   const canGenerate =
     !isPending &&
-    (sourceText.trim().length > 0 || sourceUrl.trim().length > 0) &&
+    (sourceText.trim().length > 0 || sourceUrl.trim().length > 0 || pdfFileName !== null) &&
     selectedPlatforms.length > 0
 
   const platformKeys = result ? Object.keys(result.platforms) : []
@@ -197,18 +266,71 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
       {/* Source Input Section */}
       <section className="space-y-3">
         <Label htmlFor="source-url">Source Material</Label>
-        <Input
-          id="source-url"
-          type="url"
-          placeholder="Paste a URL (article, blog post, etc.)"
-          value={sourceUrl}
-          onChange={(e) => setSourceUrl(e.target.value)}
-        />
+
+        {/* URL Input with Extract button */}
+        <div className="flex gap-2">
+          <Input
+            id="source-url"
+            type="url"
+            placeholder="Paste a URL (YouTube video, article, blog post, etc.)"
+            value={sourceUrl}
+            onChange={(e) => setSourceUrl(e.target.value)}
+            className="flex-1"
+          />
+          {sourceUrl.trim() && !sourceText && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleUrlExtract}
+              disabled={isExtracting}
+              className="shrink-0"
+            >
+              {isExtracting ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : null}
+              Extract
+            </Button>
+          )}
+        </div>
+
+        {/* "or" divider */}
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
           <span className="text-xs text-muted-foreground">or</span>
           <div className="h-px flex-1 bg-border" />
         </div>
+
+        {/* PDF Upload */}
+        <div>
+          <label
+            htmlFor="pdf-upload"
+            className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed p-3 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+          >
+            <Upload className="h-4 w-4 shrink-0" />
+            {pdfFileName ? (
+              <span className="truncate text-foreground">{pdfFileName}</span>
+            ) : (
+              <span>Upload a PDF</span>
+            )}
+          </label>
+          <input
+            id="pdf-upload"
+            type="file"
+            accept=".pdf"
+            className="sr-only"
+            onChange={handlePdfUpload}
+          />
+        </div>
+
+        {/* "or" divider */}
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs text-muted-foreground">or</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        {/* Source Text */}
         <Textarea
           id="source-text"
           placeholder="Type or paste your source content here..."
@@ -216,6 +338,33 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
           value={sourceText}
           onChange={(e) => setSourceText(e.target.value)}
         />
+
+        {/* Extraction Status */}
+        {extractionStatus !== 'idle' && (
+          <div className={`flex items-start gap-2 text-sm ${
+            extractionStatus === 'done' ? 'text-green-500' :
+            extractionStatus === 'error' ? 'text-destructive' :
+            'text-muted-foreground'
+          }`}>
+            {extractionStatus === 'extracting' && (
+              <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
+            )}
+            {extractionStatus === 'done' && (
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            )}
+            {extractionStatus === 'error' && (
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            )}
+            <span>
+              {extractionMessage}
+              {extractionStatus === 'error' && (
+                <span className="ml-1 text-muted-foreground">
+                  You can still type content manually below.
+                </span>
+              )}
+            </span>
+          </div>
+        )}
       </section>
 
       {/* Platform Selection Section */}
