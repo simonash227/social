@@ -37,6 +37,7 @@ export const brands = sqliteTable('brands', {
   }),
   watermarkOpacity:  integer('watermark_opacity'),
   warmupDate:        text('warmup_date'),
+  automationLevel:   text('automation_level', { enum: ['manual', 'semi', 'mostly', 'full'] }).default('manual'),
   createdAt:         text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
   updatedAt:         text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
@@ -55,14 +56,16 @@ export const socialAccounts = sqliteTable('social_accounts', {
 
 // ─── Feed Sources ─────────────────────────────────────────────────────────────
 export const feedSources = sqliteTable('feed_sources', {
-  id:                 integer().primaryKey({ autoIncrement: true }),
-  brandId:            integer('brand_id').notNull().references(() => brands.id),
-  url:                text().notNull(),
-  type:               text({ enum: ['rss', 'youtube', 'reddit', 'google_news'] }).notNull(),
-  pollInterval:       integer('poll_interval'),
-  relevanceThreshold: integer('relevance_threshold'),
-  targetPlatforms:    text('target_platforms', { mode: 'json' }).$type<string[]>(),
-  createdAt:          text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  id:                   integer().primaryKey({ autoIncrement: true }),
+  brandId:              integer('brand_id').notNull().references(() => brands.id),
+  url:                  text().notNull(),
+  type:                 text({ enum: ['rss', 'youtube', 'reddit', 'google_news'] }).notNull(),
+  pollInterval:         integer('poll_interval'),
+  relevanceThreshold:   integer('relevance_threshold'),
+  targetPlatforms:      text('target_platforms', { mode: 'json' }).$type<string[]>(),
+  consecutiveFailures:  integer('consecutive_failures').notNull().default(0),
+  enabled:              integer().notNull().default(1),
+  createdAt:            text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
 // ─── Quality Details ──────────────────────────────────────────────────────────
@@ -87,6 +90,7 @@ export const posts = sqliteTable('posts', {
   requestId:    text('request_id'),
   scheduledAt:  text('scheduled_at'),
   publishedAt:  text('published_at'),
+  feedEntryId:  integer('feed_entry_id').references(() => feedEntries.id),
   createdAt:    text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 

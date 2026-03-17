@@ -36,6 +36,20 @@
       "when": 1773720613840,
       "tag": "0004_carousels",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1773789600000,
+      "tag": "0005_scheduling_slots",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1773790800000,
+      "tag": "0006_feed_automation",
+      "breakpoints": true
     }
   ]
 }
