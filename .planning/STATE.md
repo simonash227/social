@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 2B-01-PLAN.md
-last_updated: "2026-03-17T00:46:24.961Z"
+stopped_at: "Checkpoint: 2B-02 Task 2 human-verify (manual testing required)"
+last_updated: "2026-03-17T00:50:37.782Z"
 progress:
   total_phases: 9
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 12
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # STATE: Personal Content Engine
@@ -19,7 +19,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 2A plan 02 complete (generation page UI), phase 2A fully done
+**Current focus:** Phase 2B plan 02 complete (quality pipeline UI), awaiting human verification checkpoint
 
 ## Current Milestone
 
@@ -35,7 +35,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 | 0 | Infrastructure Validation | Complete | 2026-03-16 | 2026-03-16 |
 | 1 | Scaffolding + Database + Auth | Complete | 2026-03-16 | 2026-03-16 |
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 2026-03-17 |
-| 2B | Quality Pipeline | Not Started | — | — |
+| 2B | Quality Pipeline | In Progress | 2026-03-17 | — |
 | 3 | Content Extraction + Images | Not Started | — | — |
 | 4 | Carousel Generation | Not Started | — | — |
 | 5 | Calendar + Scheduling | Not Started | — | — |
@@ -74,6 +74,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 2A-02]: Separate useTransition hooks for generate and save operations (independent loading states)
 - [Phase 2B-01]: Critique fallback returns score=7 (not throw) to avoid blocking users when AI parse fails
 - [Phase 2B-01]: refineAndGate() uses per-platform retried flag ensuring exactly one retry per platform at score 5-6
+- [Phase 2B-02]: genCost tracked separately in state so generation cost is preserved while refinement runs
+- [Phase 2B-02]: Discarded tabs shown with strikethrough/opacity so user sees what was attempted
+- [Phase 2B-02]: hasPassingContent derived from result.platforms at render time (not state) to stay in sync
 
 ## Blockers
 
@@ -90,8 +93,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T00:46:24.954Z
-Stopped at: Completed 2B-01-PLAN.md
+Last session: 2026-03-17T00:50:37.776Z
+Stopped at: Checkpoint: 2B-02 Task 2 human-verify (manual testing required)
 Resume file: None
 
 ---
