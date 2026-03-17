@@ -173,6 +173,9 @@ export function CarouselSection({
   // Existing carousels (can be refreshed after render)
   const [existingCarousels, setExistingCarousels] = useState<ExistingCarousel[]>(initialCarousels)
 
+  // Detail view
+  const [selectedCarousel, setSelectedCarousel] = useState<ExistingCarousel | null>(null)
+
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
   function handleGenerate() {
@@ -423,9 +426,13 @@ export function CarouselSection({
               {existingCarousels.map((carousel) => {
                 const firstSlide = carousel.slides[0]
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={carousel.id}
-                    className="rounded-lg border border-border overflow-hidden space-y-2"
+                    onClick={() => setSelectedCarousel(selectedCarousel?.id === carousel.id ? null : carousel)}
+                    className={`rounded-lg border overflow-hidden space-y-2 text-left transition-all ${
+                      selectedCarousel?.id === carousel.id ? 'border-primary ring-2 ring-primary/30' : 'border-border hover:border-primary/50'
+                    }`}
                   >
                     {/* Thumbnail */}
                     <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
@@ -457,10 +464,48 @@ export function CarouselSection({
                         {formatDate(carousel.createdAt)}
                       </p>
                     </div>
-                  </div>
+                  </button>
                 )
               })}
             </div>
+
+            {/* Carousel Detail View */}
+            {selectedCarousel && (
+              <div className="rounded-lg border border-border p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-md font-semibold">
+                    Carousel #{selectedCarousel.id} — {selectedCarousel.slideCount} slides
+                  </h3>
+                  <Button variant="ghost" size="sm" onClick={() => setSelectedCarousel(null)}>
+                    Close
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                  {selectedCarousel.slides.map((slide) => (
+                    <div key={slide.slideIndex} className="space-y-1">
+                      <div className="aspect-square rounded-md overflow-hidden bg-muted">
+                        {slide.thumbUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={slide.thumbUrl}
+                            alt={slide.title || `Slide ${slide.slideIndex + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                            No preview
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {getSlideBadge(slide.slideIndex, selectedCarousel.slideCount)}
+                        <span className="text-xs text-muted-foreground truncate">{slide.title}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         </>
       )}
