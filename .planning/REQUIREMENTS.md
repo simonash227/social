@@ -78,10 +78,10 @@
 - [ ] **SCHED-01**: Week and month calendar views showing scheduled and published posts
 - [ ] **SCHED-02**: Drag-and-drop rescheduling of posts
 - [ ] **SCHED-03**: Platform color coding, content type icons, and status indicators on calendar
-- [ ] **SCHED-04**: Slot-based scheduling with configurable posting times per brand per platform
-- [ ] **SCHED-05**: Timing jitter (±15 min random offset) on all scheduled posts
-- [ ] **SCHED-06**: Auto-publish cron job runs every 1 min, publishes via Upload-Post
-- [ ] **SCHED-07**: Publish retry logic: 3 retries with 5 min backoff, then status=failed
+- [x] **SCHED-04**: Slot-based scheduling with configurable posting times per brand per platform
+- [x] **SCHED-05**: Timing jitter (±15 min random offset) on all scheduled posts
+- [x] **SCHED-06**: Auto-publish cron job runs every 1 min, publishes via Upload-Post
+- [x] **SCHED-07**: Publish retry logic: 3 retries with 5 min backoff, then status=failed
 
 ### Feed Automation
 

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-02-PLAN.md (Phase 4 Plan 02 fully verified)
-last_updated: "2026-03-17T08:14:01.012Z"
+stopped_at: Completed 05-01-PLAN.md (scheduling backend)
+last_updated: "2026-03-17T22:23:40.474Z"
 progress:
   total_phases: 9
-  completed_phases: 7
-  total_plans: 18
-  completed_plans: 18
+  completed_phases: 6
+  total_plans: 21
+  completed_plans: 19
 ---
 
 # STATE: Personal Content Engine
@@ -94,6 +94,10 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 04-carousel-generation]: getCarousels wraps getR2PublicUrl in try/catch so missing R2_MEDIA_PUBLIC_BASE in dev is non-fatal
 - [Phase 04-carousel-generation]: Carousel section uses optimistic UI update after render -- no router.refresh() needed
 - [Phase 04-carousel-generation]: Clicking a previous carousel card expands inline detail panel showing all slides (added during verification)
+- [Phase 05-01]: publishDuePosts uses globalThis.__publishRunning mutex to prevent overlapping cron ticks
+- [Phase 05-01]: Per-platform publish retry: 5-minute backoff, capped at 3 failures before status=failed
+- [Phase 05-01]: Post status only transitions to published/failed after ALL platforms are resolved
+- [Phase 05-01]: scheduleToNextSlot applies UTC-based slot matching with +/-15 min random jitter
 
 ## Blockers
 
@@ -110,8 +114,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T08:14:01.004Z
-Stopped at: Completed 04-02-PLAN.md (Phase 4 Plan 02 fully verified)
+Last session: 2026-03-17T22:23:40.469Z
+Stopped at: Completed 05-01-PLAN.md (scheduling backend)
 Resume file: None
 
 ---
