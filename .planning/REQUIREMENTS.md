@@ -68,9 +68,9 @@
 ### Carousel Generation
 
 - [x] **CARO-01**: 3-5 Satori carousel templates with brand colors, fonts, and logo
-- [ ] **CARO-02**: First slide optimized as thumbnail hook, last slide has CTA + brand handle
-- [ ] **CARO-03**: AI generates slide content from source material
-- [ ] **CARO-04**: User can preview carousel, pick template, and edit individual slides
+- [x] **CARO-02**: First slide optimized as thumbnail hook, last slide has CTA + brand handle
+- [x] **CARO-03**: AI generates slide content from source material
+- [x] **CARO-04**: User can preview carousel, pick template, and edit individual slides
 - [x] **CARO-05**: Carousel renders to images via Satori → sharp → stored in R2
 
 ### Calendar & Scheduling
