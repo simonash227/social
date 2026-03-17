@@ -98,7 +98,18 @@ export const postPlatforms = sqliteTable('post_platforms', {
   content:      text(),  // nullable -- platform-specific AI-generated content
   status:       text({ enum: ['pending', 'published', 'failed'] }).notNull().default('pending'),
   failureCount: integer('failure_count').notNull().default(0),
+  retryAt:      text('retry_at'),  // nullable ISO-8601 timestamp; null means eligible for publish now
   requestId:    text('request_id'),
+})
+
+// ─── Scheduling Slots ─────────────────────────────────────────────────────────
+export const schedulingSlots = sqliteTable('scheduling_slots', {
+  id:        integer().primaryKey({ autoIncrement: true }),
+  brandId:   integer('brand_id').notNull().references(() => brands.id),
+  platform:  text().notNull(),
+  hour:      integer().notNull(),    // 0-23
+  minute:    integer().notNull(),    // 0-59
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
 // ─── Generated Images ─────────────────────────────────────────────────────────
