@@ -85,25 +85,25 @@
 
 ### Feed Automation
 
-- [ ] **FEED-01**: User can add RSS feed sources (RSS, YouTube channels, subreddits, Google News)
+- [x] **FEED-01**: User can add RSS feed sources (RSS, YouTube channels, subreddits, Google News)
 - [ ] **FEED-02**: Per-feed config: poll interval, relevance threshold, target platforms, content types
-- [ ] **FEED-03**: Poll-feeds cron (every 5 min) fetches RSS, deduplicates by URL
-- [ ] **FEED-04**: Haiku relevance filter scores each entry 1-10 against brand topics/goals
-- [ ] **FEED-05**: Entries scoring ≥ threshold are extracted and queued for generation
+- [x] **FEED-03**: Poll-feeds cron (every 5 min) fetches RSS, deduplicates by URL
+- [x] **FEED-04**: Haiku relevance filter scores each entry 1-10 against brand topics/goals
+- [x] **FEED-05**: Entries scoring ≥ threshold are extracted and queued for generation
 - [ ] **FEED-06**: Auto-generate cron (every 15 min) generates posts through full quality pipeline
 - [ ] **FEED-07**: Content mix management: avoid repeating same topic within 48 hours
 - [ ] **FEED-08**: User can configure automation level per brand: manual, semi, mostly, full auto
 - [ ] **FEED-09**: Confidence scoring determines auto-publish vs queue for review
-- [ ] **FEED-10**: Feed auto-disables after 10 consecutive failures
+- [x] **FEED-10**: Feed auto-disables after 10 consecutive failures
 
 ### Spam Prevention
 
-- [ ] **SPAM-01**: Per-platform daily post caps (X: 3-5, Instagram: 1-3, LinkedIn: 1-2, TikTok: 1-3)
-- [ ] **SPAM-02**: Minimum 1 hour gap between posts on same platform
-- [ ] **SPAM-03**: Cross-platform staggering: same source content spaced 30-60 min apart
-- [ ] **SPAM-04**: New account warmup: Week 1 = 1/day, Week 2 = 2/day, Week 3+ = normal
-- [ ] **SPAM-05**: Topic deduplication within configurable window (default 48 hours)
-- [ ] **SPAM-06**: Max 30-40% of posts contain links
+- [x] **SPAM-01**: Per-platform daily post caps (X: 3-5, Instagram: 1-3, LinkedIn: 1-2, TikTok: 1-3)
+- [x] **SPAM-02**: Minimum 1 hour gap between posts on same platform
+- [x] **SPAM-03**: Cross-platform staggering: same source content spaced 30-60 min apart
+- [x] **SPAM-04**: New account warmup: Week 1 = 1/day, Week 2 = 2/day, Week 3+ = normal
+- [x] **SPAM-05**: Topic deduplication within configurable window (default 48 hours)
+- [x] **SPAM-06**: Max 30-40% of posts contain links
 - [ ] **SPAM-07**: Platform-appropriate hashtag counts (X: 0-3, Instagram: 5-15, LinkedIn: 3-5)
 
 ### Analytics
