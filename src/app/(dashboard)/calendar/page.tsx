@@ -1,9 +1,10 @@
 import { getCalendarEvents, getSchedulingSlots } from '@/app/actions/schedule'
 import { getDb } from '@/db'
-import { brands, socialAccounts } from '@/db/schema'
+import { brands, socialAccounts, posts, postPlatforms } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { CalendarView } from './calendar-view'
 import { SlotConfig } from './slot-config'
+import { DraftPosts } from './draft-posts'
 import Link from 'next/link'
 
 interface CalendarPageProps {
@@ -41,6 +42,37 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
 
     connectedPlatforms = [...new Set(accounts.map(a => a.platform))]
   }
+
+  // Fetch draft posts for scheduling
+  const draftRows = db
+    .select({
+      id: posts.id,
+      content: posts.content,
+      brandId: posts.brandId,
+      brandName: brands.name,
+      createdAt: posts.createdAt,
+    })
+    .from(posts)
+    .innerJoin(brands, eq(posts.brandId, brands.id))
+    .where(eq(posts.status, 'draft'))
+    .all() as { id: number; content: string; brandId: number; brandName: string; createdAt: string }[]
+
+  const draftPostIds = draftRows.map(d => d.id)
+  const draftPlatformRows = draftPostIds.length > 0
+    ? db
+        .select({ postId: postPlatforms.postId, platform: postPlatforms.platform })
+        .from(postPlatforms)
+        .all()
+        .filter(r => draftPostIds.includes(r.postId)) as { postId: number; platform: string }[]
+    : []
+
+  const drafts = draftRows.map(d => ({
+    id: d.id,
+    content: d.content,
+    brandName: d.brandName,
+    platforms: draftPlatformRows.filter(p => p.postId === d.id).map(p => p.platform),
+    createdAt: d.createdAt,
+  }))
 
   return (
     <div className="space-y-6">
@@ -101,6 +133,9 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
       <div className="rounded-lg border border-border bg-card p-4">
         <CalendarView events={events} />
       </div>
+
+      {/* Draft posts ready to schedule */}
+      <DraftPosts drafts={drafts} />
 
       {/* Slot Config (visible when brand is selected and schedule toggle is on) */}
       {brandIdParam && !isNaN(brandIdParam) && showSchedule && (

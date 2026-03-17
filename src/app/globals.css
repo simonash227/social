@@ -140,7 +140,7 @@
   --fc-event-bg-color: var(--primary);
   --fc-event-border-color: var(--primary);
   --fc-event-text-color: var(--primary-foreground);
-  --fc-today-bg-color: oklch(from var(--accent) l c h / 0.3);
+  --fc-today-bg-color: oklch(0.269 0 0 / 0.3);
   --fc-page-bg-color: transparent;
   --fc-neutral-bg-color: var(--muted);
   --fc-list-event-hover-bg-color: var(--accent);
