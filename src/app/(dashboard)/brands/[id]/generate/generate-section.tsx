@@ -10,8 +10,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
   generateContent,
+  refineAndGate,
   saveGeneratedPosts,
-  type GenerationResult,
+  type RefinedGenerationResult,
 } from '@/app/actions/generate'
 import { ChevronDown, ChevronUp, Sparkles, Save } from 'lucide-react'
 
@@ -75,13 +76,17 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
 
   // Generation results
-  const [result, setResult] = useState<GenerationResult | null>(null)
+  const [result, setResult] = useState<RefinedGenerationResult | null>(null)
   const [editedContent, setEditedContent] = useState<Record<string, string>>({})
   const [expandedHooks, setExpandedHooks] = useState<string | null>(null)
 
   // Loading states
   const [isPending, startTransition] = useTransition()
   const [isSaving, startSavingTransition] = useTransition()
+  const [loadingMessage, setLoadingMessage] = useState('Generating...')
+
+  // Generation cost tracking
+  const [genCost, setGenCost] = useState(0)
 
   // Error state
   const [error, setError] = useState<string | null>(null)
@@ -98,19 +103,36 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
 
   function handleGenerate() {
     setError(null)
+    setLoadingMessage('Generating...')
     startTransition(async () => {
-      const res = await generateContent(brandId, selectedPlatforms, sourceText, sourceUrl)
-      if (res.error) {
-        setError(res.error)
-      } else {
-        setResult(res)
-        setEditedContent(
-          Object.fromEntries(
-            Object.entries(res.platforms).map(([k, v]) => [k, v.content])
-          )
-        )
-        setError(null)
+      // Phase 1: Generate raw content
+      const genResult = await generateContent(brandId, selectedPlatforms, sourceText, sourceUrl)
+      if (genResult.error) {
+        setError(genResult.error)
+        return
       }
+
+      // Track generation cost separately
+      setGenCost(genResult.totalCostUsd)
+
+      // Phase 2: Refine and quality gate
+      setLoadingMessage('Refining...')
+      const refined = await refineAndGate(brandId, genResult)
+      if (refined.error) {
+        setError(refined.error)
+        return
+      }
+
+      setResult(refined)
+      // Only populate editedContent for non-discarded platforms
+      setEditedContent(
+        Object.fromEntries(
+          Object.entries(refined.platforms)
+            .filter(([, v]) => !v.discarded)
+            .map(([k, v]) => [k, v.content])
+        )
+      )
+      setError(null)
     })
   }
 
@@ -118,12 +140,32 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
     setResult(null)
     setEditedContent({})
     setExpandedHooks(null)
+    setGenCost(0)
     handleGenerate()
   }
 
   function handleSave() {
     startSavingTransition(async () => {
-      const res = await saveGeneratedPosts(brandId, editedContent, sourceText, sourceUrl)
+      // Build quality data from refined results
+      const qualityData: Record<string, { score: number; details: NonNullable<RefinedGenerationResult['platforms'][string]['qualityDetails']> }> = {}
+      if (result) {
+        for (const [platform, data] of Object.entries(result.platforms)) {
+          if (!data.discarded) {
+            qualityData[platform] = {
+              score: data.qualityScore,
+              details: data.qualityDetails,
+            }
+          }
+        }
+      }
+
+      const res = await saveGeneratedPosts(
+        brandId,
+        editedContent,
+        sourceText,
+        sourceUrl,
+        Object.keys(qualityData).length > 0 ? qualityData : undefined
+      )
       if (res?.error) {
         setError(res.error)
       }
@@ -143,6 +185,10 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
     selectedPlatforms.length > 0
 
   const platformKeys = result ? Object.keys(result.platforms) : []
+
+  const hasPassingContent = result
+    ? Object.values(result.platforms).some(p => !p.discarded)
+    : false
 
   // ─── Render ──────────────────────────────────────────────────────────────────
 
@@ -225,7 +271,7 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
         className="w-full"
       >
         <Sparkles className="mr-2 h-4 w-4" />
-        {isPending ? 'Generating...' : 'Generate Content'}
+        {isPending ? loadingMessage : 'Generate Content'}
       </Button>
 
       {/* Error Display */}
@@ -250,11 +296,18 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
         <div className="space-y-6">
           <Tabs defaultValue={platformKeys[0]}>
             <TabsList>
-              {platformKeys.map((platform) => (
-                <TabsTrigger key={platform} value={platform}>
-                  {getPlatformLabel(platform)}
-                </TabsTrigger>
-              ))}
+              {platformKeys.map((platform) => {
+                const isDiscarded = result.platforms[platform]?.discarded
+                return (
+                  <TabsTrigger
+                    key={platform}
+                    value={platform}
+                    className={isDiscarded ? 'opacity-50 line-through' : ''}
+                  >
+                    {getPlatformLabel(platform)}
+                  </TabsTrigger>
+                )
+              })}
             </TabsList>
 
             {platformKeys.map((platform) => {
@@ -266,90 +319,124 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
               return (
                 <TabsContent key={platform} value={platform}>
                   <div className="space-y-3 pt-3">
-                    {/* Hook Variants Toggle */}
-                    {platformData.hookVariants.length > 0 && (
-                      <div>
-                        <button
-                          type="button"
-                          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                          onClick={() =>
-                            setExpandedHooks(
-                              expandedHooks === platform ? null : platform
-                            )
-                          }
-                        >
-                          {expandedHooks === platform ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
+                    {platformData.discarded ? (
+                      /* Discarded platform: show error card */
+                      <div className="rounded-md border border-destructive/50 bg-destructive/5 p-4 space-y-2">
+                        <p className="text-sm font-medium text-destructive">Content Discarded</p>
+                        <p className="text-sm text-muted-foreground">
+                          Quality score too low ({platformData.qualityScore}/10).
+                          {platformData.discardReason && (
+                            <> Reason: {platformData.discardReason}</>
                           )}
-                          View hook variants ({platformData.hookVariants.length})
-                        </button>
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Quality Score Badge */}
+                        <div className="flex items-center gap-2">
+                          <Badge variant={platformData.qualityScore >= 8 ? 'default' : 'secondary'}>
+                            Quality: {platformData.qualityScore}/10
+                          </Badge>
+                          {platformData.qualityWarning && (
+                            <Badge variant="outline" className="text-yellow-500 border-yellow-500/50">
+                              Warning
+                            </Badge>
+                          )}
+                        </div>
 
-                        {expandedHooks === platform && (
-                          <div className="mt-2 space-y-1.5 rounded-md border p-3">
-                            {platformData.hookVariants
-                              .sort((a, b) => b.score - a.score)
-                              .map((variant, idx) => {
-                                const isWinner =
-                                  variant.text === platformData.winningHook
-                                return (
-                                  <div
-                                    key={idx}
-                                    className={`flex items-start justify-between gap-3 rounded-md px-2 py-1.5 text-sm ${
-                                      isWinner
-                                        ? 'bg-primary/10 font-medium'
-                                        : ''
-                                    }`}
-                                  >
-                                    <span className="flex-1">
-                                      {isWinner && (
-                                        <Badge
-                                          variant="default"
-                                          className="mr-2 text-[10px]"
-                                        >
-                                          Winner
-                                        </Badge>
-                                      )}
-                                      {variant.text}
-                                    </span>
-                                    <Badge variant="secondary" className="shrink-0">
-                                      {variant.score}/10
-                                    </Badge>
-                                  </div>
+                        {/* Hook Variants Toggle */}
+                        {platformData.hookVariants.length > 0 && (
+                          <div>
+                            <button
+                              type="button"
+                              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                              onClick={() =>
+                                setExpandedHooks(
+                                  expandedHooks === platform ? null : platform
                                 )
-                              })}
+                              }
+                            >
+                              {expandedHooks === platform ? (
+                                <ChevronUp className="h-4 w-4" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4" />
+                              )}
+                              View hook variants ({platformData.hookVariants.length})
+                            </button>
+
+                            {expandedHooks === platform && (
+                              <div className="mt-2 space-y-1.5 rounded-md border p-3">
+                                {platformData.hookVariants
+                                  .sort((a, b) => b.score - a.score)
+                                  .map((variant, idx) => {
+                                    const isWinner =
+                                      variant.text === platformData.winningHook
+                                    return (
+                                      <div
+                                        key={idx}
+                                        className={`flex items-start justify-between gap-3 rounded-md px-2 py-1.5 text-sm ${
+                                          isWinner
+                                            ? 'bg-primary/10 font-medium'
+                                            : ''
+                                        }`}
+                                      >
+                                        <span className="flex-1">
+                                          {isWinner && (
+                                            <Badge
+                                              variant="default"
+                                              className="mr-2 text-[10px]"
+                                            >
+                                              Winner
+                                            </Badge>
+                                          )}
+                                          {variant.text}
+                                        </span>
+                                        <Badge variant="secondary" className="shrink-0">
+                                          {variant.score}/10
+                                        </Badge>
+                                      </div>
+                                    )
+                                  })}
+                              </div>
+                            )}
                           </div>
                         )}
-                      </div>
+
+                        {/* Content Textarea */}
+                        <Textarea
+                          rows={10}
+                          value={content}
+                          onChange={(e) =>
+                            updateEditedContent(platform, e.target.value)
+                          }
+                        />
+
+                        {/* Character Count */}
+                        <div className="flex justify-end">
+                          <span
+                            className={`text-xs ${getCharCountColor(charCount, limit)}`}
+                          >
+                            {charCount} / {limit} characters
+                          </span>
+                        </div>
+                      </>
                     )}
-
-                    {/* Content Textarea */}
-                    <Textarea
-                      rows={10}
-                      value={content}
-                      onChange={(e) =>
-                        updateEditedContent(platform, e.target.value)
-                      }
-                    />
-
-                    {/* Character Count */}
-                    <div className="flex justify-end">
-                      <span
-                        className={`text-xs ${getCharCountColor(charCount, limit)}`}
-                      >
-                        {charCount} / {limit} characters
-                      </span>
-                    </div>
                   </div>
                 </TabsContent>
               )
             })}
           </Tabs>
 
+          {/* All platforms discarded warning */}
+          {result && !hasPassingContent && (
+            <div className="rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              All content was discarded due to low quality scores. Try with different or more detailed source material.
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
-            <Button onClick={handleSave} disabled={isSaving}>
+            <Button onClick={handleSave} disabled={isSaving || !hasPassingContent}>
               <Save className="mr-2 h-4 w-4" />
               {isSaving ? 'Saving...' : 'Save as Draft'}
             </Button>
@@ -363,9 +450,9 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
             </Button>
           </div>
 
-          {/* Cost Display */}
+          {/* Combined Cost Display */}
           <p className="text-xs text-muted-foreground">
-            AI cost: ${result.totalCostUsd.toFixed(4)}
+            AI cost: ${((genCost ?? 0) + (result?.totalCostUsd ?? 0)).toFixed(4)}
           </p>
         </div>
       )}
