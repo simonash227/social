@@ -65,6 +65,15 @@ export const feedSources = sqliteTable('feed_sources', {
   createdAt:          text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
+// ─── Quality Details ──────────────────────────────────────────────────────────
+export interface QualityDetails {
+  hook:        { score: number; note: string }
+  value:       { score: number; note: string }
+  voice:       { score: number; note: string }
+  uniqueness:  { score: number; note: string }
+  platformFit: { score: number; note: string }
+}
+
 // ─── Posts ────────────────────────────────────────────────────────────────────
 export const posts = sqliteTable('posts', {
   id:           integer().primaryKey({ autoIncrement: true }),
@@ -73,7 +82,8 @@ export const posts = sqliteTable('posts', {
   sourceText:   text('source_text'),
   content:      text().notNull(),
   status:       text({ enum: ['draft', 'scheduled', 'published', 'failed'] }).notNull().default('draft'),
-  qualityScore: integer('quality_score'),
+  qualityScore:   integer('quality_score'),
+  qualityDetails: text('quality_details', { mode: 'json' }).$type<QualityDetails | null>(),
   requestId:    text('request_id'),
   scheduledAt:  text('scheduled_at'),
   publishedAt:  text('published_at'),
