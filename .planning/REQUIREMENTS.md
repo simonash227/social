@@ -41,7 +41,7 @@
 ### Content Generation
 
 - [x] **GEN-01**: User can paste a URL, upload a PDF, or type text as a content source
-- [ ] **GEN-02**: System extracts text from YouTube videos (transcript), articles, and PDFs
+- [x] **GEN-02**: System extracts text from YouTube videos (transcript), articles, and PDFs
 - [x] **GEN-03**: AI generates platform-optimized text content using brand voice and context
 - [x] **GEN-04**: AI generates 5-10 hook/title variants, self-scores them, and uses the best one
 - [x] **GEN-05**: User can select target platforms (checkboxes for each connected account)

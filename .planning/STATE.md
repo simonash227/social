@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "Completed 03-02 (image generation backend: OpenAI SDK, sharp watermark, R2 dual upload, DB tracking)"
-last_updated: "2026-03-17T01:32:22.885Z"
+stopped_at: Completed 03-01 (content extraction module + UI)
+last_updated: "2026-03-17T01:36:21.377Z"
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # STATE: Personal Content Engine
@@ -80,6 +80,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 03]: gpt-image-1 returns b64_json only (not URL) -- response.data[0].b64_json extraction required
 - [Phase 03]: Module-level OpenAI client (same singleton pattern as Anthropic client in generate.ts)
 - [Phase 03]: Watermark failure is non-fatal in image-gen.ts -- logged and image proceeds without watermark
+- [Phase 03-01]: pdf-parse v2 uses PDFParse class API (not v1 function call) -- new PDFParse({ data: Uint8Array }) + .getText()
+- [Phase 03-01]: extractSource action is additive -- called client-side before generateContent so user can see and edit extracted text
 
 ## Blockers
 
@@ -96,8 +98,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T01:32:22.879Z
-Stopped at: Completed 03-02 (image generation backend: OpenAI SDK, sharp watermark, R2 dual upload, DB tracking)
+Last session: 2026-03-17T01:36:21.371Z
+Stopped at: Completed 03-01 (content extraction module + UI)
 Resume file: None
 
 ---
