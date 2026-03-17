@@ -126,3 +126,57 @@
     @apply font-sans;
     }
 }
+
+/* ─── FullCalendar dark mode overrides ───────────────────────────────────── */
+.fc {
+  --fc-border-color: var(--border);
+  --fc-button-bg-color: var(--muted);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--foreground);
+  --fc-button-hover-bg-color: var(--accent);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--primary);
+  --fc-button-active-border-color: var(--primary);
+  --fc-event-bg-color: var(--primary);
+  --fc-event-border-color: var(--primary);
+  --fc-event-text-color: var(--primary-foreground);
+  --fc-today-bg-color: oklch(from var(--accent) l c h / 0.3);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: var(--muted);
+  --fc-list-event-hover-bg-color: var(--accent);
+  --fc-now-indicator-color: var(--destructive);
+}
+
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number {
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.fc .fc-toolbar-title {
+  color: var(--foreground);
+}
+
+.fc .fc-button {
+  text-transform: capitalize;
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.fc .fc-scrollgrid {
+  border-color: var(--border);
+}
+
+.fc td,
+.fc th {
+  border-color: var(--border);
+}
+
+.fc .fc-timegrid-slot {
+  height: 2rem;
+}
