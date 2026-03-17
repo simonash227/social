@@ -108,6 +108,12 @@ Plans:
 
 **Estimated effort:** 1.5 days
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 2B-01-PLAN.md — Schema migration for qualityDetails + refineAndGate() backend with critique/rewrite/gate logic + saveGeneratedPosts() extension
+- [ ] 2B-02-PLAN.md — Wire quality pipeline into generation UI with loading states, quality badges, discard handling, and human verification
+
 ---
 
 ### Phase 3: Content Extraction + Image Generation
@@ -231,4 +237,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 2A Plan 02 execution*
+*Last updated: 2026-03-17 after Phase 2B planning*
