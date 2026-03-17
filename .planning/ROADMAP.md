@@ -14,7 +14,7 @@
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
-| 4 | Carousel Generation | Not Started | — | 0/2 |
+| 4 | 1/2 | In Progress|  | 0/2 |
 | 5 | Calendar + Scheduling | Not Started | — | 0/? |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
@@ -153,7 +153,7 @@ Plans:
 
 **Estimated effort:** 2 days
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — Database schema + fonts + 3 Satori carousel templates + render pipeline (carousel-gen.ts)

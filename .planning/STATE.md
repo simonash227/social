@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-04 (IMG-05 gap closed — media library filter/sort controls)
-last_updated: "2026-03-17T03:35:35.782Z"
+stopped_at: Completed 04-01 (carousel schema + 3 Satori templates + R2 render pipeline)
+last_updated: "2026-03-17T04:15:14.822Z"
 progress:
   total_phases: 9
   completed_phases: 5
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 18
+  completed_plans: 17
 ---
 
 # STATE: Personal Content Engine
@@ -89,6 +89,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 03-03]: openai added to serverExternalPackages in next.config.ts — required for Node.js-only SDK in Next.js standalone build
 - [Phase 03-04]: Client-side useMemo filtering for media library (no server roundtrip; per-brand dataset is small)
 - [Phase 03-04]: useEffect closes detail panel on filter/sort change to prevent orphaned detail views
+- [Phase 04-carousel-generation]: Migration renamed from 0004_brainy_morph to 0004_carousels; 0003_snapshot.json manually created to fix drizzle-kit lineage gap
+- [Phase 04-carousel-generation]: Satori object-vnode style (no JSX) used in all carousel templates; fonts loaded once per renderCarouselSlides call
 
 ## Blockers
 
@@ -105,8 +107,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T03:35:35.775Z
-Stopped at: Completed 03-04 (IMG-05 gap closed — media library filter/sort controls)
+Last session: 2026-03-17T04:15:14.811Z
+Stopped at: Completed 04-01 (carousel schema + 3 Satori templates + R2 render pipeline)
 Resume file: None
 
 ---
