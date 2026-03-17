@@ -16,7 +16,7 @@
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
 | 4 | Carousel Generation | Complete | 2026-03-17 | 2/2 |
 | 5 | 2/3 | In Progress|  | 0/3 |
-| 6 | Content Automation Pipeline | Not Started | — | 0/? |
+| 6 | Content Automation Pipeline | Not Started | — | 0/4 |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
 
 ---
@@ -103,8 +103,8 @@ Plans:
 
 **Success Criteria:**
 1. Self-refine loop: Sonnet critiques on 5 dimensions, Opus rewrites
-2. Conditional skip: posts scoring ≥ 8 skip self-refine
-3. Quality gate enforces routing: ≥ 7 pass, 5-7 re-refine, < 5 discard with reason
+2. Conditional skip: posts scoring >= 8 skip self-refine
+3. Quality gate enforces routing: >= 7 pass, 5-7 re-refine, < 5 discard with reason
 
 **Estimated effort:** 1.5 days
 
@@ -199,6 +199,14 @@ Plans:
 
 **Estimated effort:** 3 days
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Schema migration + spam guard module + feed polling with Haiku relevance scoring
+- [ ] 06-02-PLAN.md — Auto-generate pipeline with automation level routing + cron wiring
+- [ ] 06-03-PLAN.md — Feed management UI + automation level config
+- [ ] 06-04-PLAN.md — Human verification of full automation pipeline
+
 ---
 
 ### Phase 7: Analytics Collection + Dashboard + Polish
@@ -258,4 +266,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-18 after Phase 5 plans created*
+*Last updated: 2026-03-18 after Phase 6 plans created*
