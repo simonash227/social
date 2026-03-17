@@ -15,7 +15,7 @@
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
 | 4 | Carousel Generation | Complete | 2026-03-17 | 2/2 |
-| 5 | Calendar + Scheduling | Not Started | — | 0/? |
+| 5 | Calendar + Scheduling | Not Started | — | 0/3 |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
 
@@ -175,6 +175,13 @@ Plans:
 
 **Estimated effort:** 1.5 days
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Schema migration (scheduling_slots + retryAt), publish module, auto-publish cron, schedule server actions
+- [ ] 05-02-PLAN.md — FullCalendar UI (month/week views, drag-and-drop, platform colors, status indicators), slot configuration panel
+- [ ] 05-03-PLAN.md — Human verification of all SCHED requirements end-to-end
+
 ---
 
 ### Phase 6: Content Automation Pipeline
@@ -251,4 +258,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 4 plans created*
+*Last updated: 2026-03-18 after Phase 5 plans created*
