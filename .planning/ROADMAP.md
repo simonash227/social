@@ -15,7 +15,7 @@
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
 | 4 | Carousel Generation | Complete | 2026-03-17 | 2/2 |
-| 5 | 1/3 | In Progress|  | 0/3 |
+| 5 | 2/3 | In Progress|  | 0/3 |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
 
@@ -175,7 +175,7 @@ Plans:
 
 **Estimated effort:** 1.5 days
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 05-01-PLAN.md — Schema migration (scheduling_slots + retryAt), publish module, auto-publish cron, schedule server actions

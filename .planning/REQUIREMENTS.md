@@ -75,9 +75,9 @@
 
 ### Calendar & Scheduling
 
-- [ ] **SCHED-01**: Week and month calendar views showing scheduled and published posts
-- [ ] **SCHED-02**: Drag-and-drop rescheduling of posts
-- [ ] **SCHED-03**: Platform color coding, content type icons, and status indicators on calendar
+- [x] **SCHED-01**: Week and month calendar views showing scheduled and published posts
+- [x] **SCHED-02**: Drag-and-drop rescheduling of posts
+- [x] **SCHED-03**: Platform color coding, content type icons, and status indicators on calendar
 - [x] **SCHED-04**: Slot-based scheduling with configurable posting times per brand per platform
 - [x] **SCHED-05**: Timing jitter (±15 min random offset) on all scheduled posts
 - [x] **SCHED-06**: Auto-publish cron job runs every 1 min, publishes via Upload-Post

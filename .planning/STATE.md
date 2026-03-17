@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-01-PLAN.md (scheduling backend)
-last_updated: "2026-03-17T22:23:40.474Z"
+stopped_at: Completed 05-02-PLAN.md (calendar UI)
+last_updated: "2026-03-17T22:32:03.096Z"
 progress:
   total_phases: 9
   completed_phases: 6
   total_plans: 21
-  completed_plans: 19
+  completed_plans: 20
 ---
 
 # STATE: Personal Content Engine
@@ -98,6 +98,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 05-01]: Per-platform publish retry: 5-minute backoff, capped at 3 failures before status=failed
 - [Phase 05-01]: Post status only transitions to published/failed after ALL platforms are resolved
 - [Phase 05-01]: scheduleToNextSlot applies UTC-based slot matching with +/-15 min random jitter
+- [Phase 05-02]: FullCalendar dark mode overrides use CSS custom properties (var(--*)) referencing oklch theme vars directly
+- [Phase 05-02]: Slot config hidden behind ?schedule=1 searchParam toggle to keep calendar view uncluttered
+- [Phase 05-02]: Platform color dots use 6px circles for per-platform color coding on calendar events
 
 ## Blockers
 
@@ -114,8 +117,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T22:23:40.469Z
-Stopped at: Completed 05-01-PLAN.md (scheduling backend)
+Last session: 2026-03-17T22:32:03.090Z
+Stopped at: Completed 05-02-PLAN.md (calendar UI)
 Resume file: None
 
 ---
