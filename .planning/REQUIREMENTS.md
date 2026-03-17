@@ -177,7 +177,7 @@ Populated during roadmap creation.
 | ACCT-01 through ACCT-03 | Phase 1 | Pending |
 | DASH-04 | Phase 1 | Complete |
 | GEN-01 through GEN-08, GEN-03 through GEN-04 | Phase 2A | Pending |
-| QUAL-01 through QUAL-05 | Phase 2B | Pending |
+| QUAL-01 through QUAL-05 | Phase 2B | Complete |
 | GEN-01, GEN-02, IMG-01 through IMG-05 | Phase 3 | Pending |
 | CARO-01 through CARO-05 | Phase 4 | Pending |
 | SCHED-01 through SCHED-07 | Phase 5 | Pending |
