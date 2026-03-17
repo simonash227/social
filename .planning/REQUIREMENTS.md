@@ -51,11 +51,11 @@
 
 ### Quality Pipeline
 
-- [ ] **QUAL-01**: Self-refine loop: generate → Sonnet critique (5 dimensions) → Opus rewrite
-- [ ] **QUAL-02**: Self-refine is conditional: skip if first draft quality gate scores ≥ 8
-- [ ] **QUAL-03**: Quality gate: Sonnet scores each post 1-10 on hook, value, voice, uniqueness, platform fit
-- [ ] **QUAL-04**: Quality gate routing: ≥ 7 pass, 5-7 trigger re-refine, < 5 discard
-- [ ] **QUAL-05**: Quality score is stored on each post for analytics
+- [x] **QUAL-01**: Self-refine loop: generate → Sonnet critique (5 dimensions) → Opus rewrite
+- [x] **QUAL-02**: Self-refine is conditional: skip if first draft quality gate scores ≥ 8
+- [x] **QUAL-03**: Quality gate: Sonnet scores each post 1-10 on hook, value, voice, uniqueness, platform fit
+- [x] **QUAL-04**: Quality gate routing: ≥ 7 pass, 5-7 trigger re-refine, < 5 discard
+- [x] **QUAL-05**: Quality score is stored on each post for analytics
 
 ### Image Generation
 

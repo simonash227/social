@@ -111,7 +111,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 2B-01-PLAN.md — Schema migration for qualityDetails + refineAndGate() backend with critique/rewrite/gate logic + saveGeneratedPosts() extension
+- [x] 2B-01-PLAN.md — Schema migration for qualityDetails + refineAndGate() backend with critique/rewrite/gate logic + saveGeneratedPosts() extension (DONE 2026-03-17)
 - [ ] 2B-02-PLAN.md — Wire quality pipeline into generation UI with loading states, quality badges, discard handling, and human verification
 
 ---
