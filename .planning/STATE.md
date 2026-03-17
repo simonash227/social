@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-stopped_at: "Completed 03-03 tasks 1-2 (image UI + media library), awaiting checkpoint:human-verify at task 3"
-last_updated: "2026-03-17T01:40:58.894Z"
+status: in-progress
+stopped_at: "Completed 03-03 (Phase 3 complete — content extraction + image generation verified)"
+last_updated: "2026-03-17T02:10:00.000Z"
 progress:
   total_phases: 9
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 15
   completed_plans: 15
 ---
@@ -36,7 +36,7 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 | 1 | Scaffolding + Database + Auth | Complete | 2026-03-16 | 2026-03-16 |
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 2026-03-17 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2026-03-17 |
-| 3 | Content Extraction + Images | Not Started | — | — |
+| 3 | Content Extraction + Images | Complete | 2026-03-17 | 2026-03-17 |
 | 4 | Carousel Generation | Not Started | — | — |
 | 5 | Calendar + Scheduling | Not Started | — | — |
 | 6 | Content Automation Pipeline | Not Started | — | — |
@@ -85,6 +85,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 03]: Image generation section always visible on generate page (not gated by text results) -- independent image workflows
 - [Phase 03]: Media grid detail view uses inline expanded panel below grid (not modal/overlay) -- simpler UX, no portal needed
 - [Phase 03]: router.refresh() after regeneration to re-fetch server component data (Next.js App Router pattern)
+- [Phase 03-03]: openai downgraded from v6 to v4 — v6 broke gpt-image-1 b64_json extraction; v4 stable and compatible
+- [Phase 03-03]: openai added to serverExternalPackages in next.config.ts — required for Node.js-only SDK in Next.js standalone build
 
 ## Blockers
 
@@ -101,8 +103,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T01:40:58.886Z
-Stopped at: Completed 03-03 tasks 1-2 (image UI + media library), awaiting checkpoint:human-verify at task 3
+Last session: 2026-03-17T02:10:00.000Z
+Stopped at: Completed 03-03 (Phase 3 complete — content extraction + image generation verified)
 Resume file: None
 
 ---

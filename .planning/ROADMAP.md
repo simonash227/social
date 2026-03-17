@@ -7,16 +7,17 @@
 
 ## Phase Overview
 
-| # | Phase | Goal | Requirements | Success Criteria |
-|---|-------|------|--------------|------------------|
-| 0 | Infrastructure Validation | Complete    | 2026-03-16 | 5 |
-| 1 | 5/5 | Complete    | 2026-03-16 | 5 |
-| 2A | Brand Profiles + AI Generation | Complete    | 2026-03-17 | 4 |
-| 2B | Quality Pipeline | Complete    | 2026-03-17 | 3 | 3/3 | Complete   | 2026-03-17 | Multiple input types + AI visual content | GEN-01, GEN-02, IMG-01 through IMG-05 | 4 |
-| 4 | Carousel Generation | High-engagement carousel format | CARO-01 through CARO-05 | 3 |
-| 5 | Calendar + Scheduling | Content calendar and auto-publish | SCHED-01 through SCHED-07 | 4 |
-| 6 | Content Automation Pipeline | Full autonomous pipeline: feeds → filter → generate → publish | FEED-01 through FEED-10, SPAM-01 through SPAM-07 | 5 |
-| 7 | Analytics + Dashboard + Polish | Metrics collection, dashboard pages, weekly digest | ANLY-01 through ANLY-04, DASH-01 through DASH-05 | 4 |
+| # | Phase | Status | Completed | Plans |
+|---|-------|--------|-----------|-------|
+| 0 | Infrastructure Validation | Complete | 2026-03-16 | 2/2 |
+| 1 | Scaffolding + Database + Auth | Complete | 2026-03-16 | 5/5 |
+| 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
+| 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
+| 3 | Content Extraction + Images | Complete | 2026-03-17 | 3/3 |
+| 4 | Carousel Generation | Not Started | — | 0/? |
+| 5 | Calendar + Scheduling | Not Started | — | 0/? |
+| 6 | Content Automation Pipeline | Not Started | — | 0/? |
+| 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
 
 ---
 
@@ -132,9 +133,9 @@ Plans:
 **Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 03-01-PLAN.md — Content extraction: install youtube-transcript/readability/pdf-parse, create extract.ts module, integrate into generate action, add PDF upload + URL extract to generate UI
-- [ ] 03-02-PLAN.md — Image generation backend: install OpenAI SDK, generatedImages DB table + migration, image-gen.ts pipeline (gpt-image-1 + watermark + thumbnail + R2), server actions
-- [ ] 03-03-PLAN.md — Image generation UI + media library: image generation section on generate page, media library page with grid/detail/regenerate, brand detail Media Library link
+- [x] 03-01-PLAN.md — Content extraction: install youtube-transcript/readability/pdf-parse, create extract.ts module, integrate into generate action, add PDF upload + URL extract to generate UI (DONE 2026-03-17)
+- [x] 03-02-PLAN.md — Image generation backend: install OpenAI SDK, generatedImages DB table + migration, image-gen.ts pipeline (gpt-image-1 + watermark + thumbnail + R2), server actions (DONE 2026-03-17)
+- [x] 03-03-PLAN.md — Image generation UI + media library: image generation section on generate page, media library page with grid/detail/regenerate, brand detail Media Library link (DONE 2026-03-17)
 
 ---
 
@@ -243,4 +244,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 3 planning*
+*Last updated: 2026-03-17 after Phase 3 complete*

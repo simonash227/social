@@ -22,15 +22,20 @@ key_files:
   modified:
     - src/app/(dashboard)/brands/[id]/generate/generate-section.tsx
     - src/app/(dashboard)/brands/[id]/page.tsx
-decisions:
+key-decisions:
   - "Image generation section always visible on generate page (not gated by text results) — enables independent image workflows"
   - "Media grid detail view uses inline expanded panel below grid (not modal/overlay) — simpler UX, no portal needed"
   - "router.refresh() after regeneration to re-fetch server component data (Next.js App Router pattern)"
   - "brandId prop on MediaGrid passed through but not used (only imageId needed for regenerateImage) — kept for future extensibility"
+  - "openai downgraded from v6 to v4 — v6 broke with gpt-image-1 b64_json extraction, v4 API stable and compatible"
+  - "openai added to serverExternalPackages in next.config.ts — required for Node.js-only SDK in Next.js standalone build"
+
+requirements-completed: [IMG-04, IMG-05]
+
 metrics:
-  duration_seconds: 120
+  duration_seconds: 180
   completed_date: "2026-03-17"
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_total: 3
   files_created: 2
   files_modified: 2
@@ -38,69 +43,80 @@ metrics:
 
 # Phase 3 Plan 3: Image Generation UI and Media Library Summary
 
-**One-liner:** Image generation section on generate page with prompt/generate/result flow, plus /brands/[id]/media library with responsive thumbnail grid, full-size detail view, and regenerate-with-new-prompt capability.
+**Image generation section on generate page with prompt/generate/result flow, /brands/[id]/media library with responsive thumbnail grid and full-size detail view, plus gpt-image-1 model fix and openai v4 downgrade verified via live testing.**
 
-## What Was Built
+## Performance
 
-Two tasks implementing the image generation UI end-to-end:
+- **Duration:** ~30 min (includes human verification)
+- **Started:** 2026-03-17T01:20:00Z
+- **Completed:** 2026-03-17
+- **Tasks:** 3/3 (including human-verify checkpoint)
+- **Files modified:** 4
 
-1. **`generate-section.tsx`** — Image Generation section added below text generation controls:
-   - `ImageIcon`-labeled section with subtitle explaining brand style usage
-   - `Textarea` for custom image prompt (rows=3)
-   - "Generate Image" button calling `generateImage(brandId, prompt)` via `useTransition`
-   - Loading state: "Generating image..." while in transition
-   - Success result: green card with "Image generated successfully!" + "View in Media Library" link to `/brands/[id]/media`
-   - Error result: destructive styled message
-   - "Generate Another" button clears both result and prompt
-   - Section always visible (independent of text generation results)
+## Accomplishments
 
-2. **`src/app/(dashboard)/brands/[id]/media/page.tsx`** — Server component media library page:
-   - Follows generate/page.tsx pattern: parse params, validate, query brand, notFound if missing
-   - Calls `getMediaLibrary(brandId)` for images array
-   - Back button to brand detail page
-   - Empty state: dashed border card with link to generate page
-   - Non-empty: renders `<MediaGrid images={images} brandId={brandId} />`
+- Image generation section added to generate page — prompt textarea, generate button with loading state, success/error result display, "View in Media Library" link
+- Media library page at `/brands/[id]/media` — responsive 2/3/4-col grid, click-to-expand detail panel, full-size image view, regenerate with custom prompt
+- Brand detail page updated with Media Library navigation button
+- Critical runtime fix: openai downgraded from v6 to v4 and added to serverExternalPackages — gpt-image-1 now works correctly in production
+- Human verification confirmed all 13 steps pass: content extraction (YouTube, article, PDF), image generation, media library display, regeneration, navigation
 
-3. **`src/app/(dashboard)/brands/[id]/media/media-grid.tsx`** — Client component:
-   - Responsive CSS grid: 2 cols on mobile, 3 on md, 4 on lg
-   - Each cell: thumbnail (`aspect-square object-cover`), truncated prompt text, formatted date
-   - Click-to-select opens inline detail panel below grid
-   - Detail panel: full-size image, original prompt, cost + date metadata, regenerate section
-   - Regenerate section: pre-filled `Textarea` with existing prompt, "Regenerate with new prompt" button
-   - On success: `router.refresh()` re-fetches server data, closes detail view
-   - On error: shows destructive error message in regenerate section
+## Task Commits
 
-4. **`brands/[id]/page.tsx`** — Brand detail page updated:
-   - Added `ImageIcon` import from lucide-react
-   - Media Library button with `ImageIcon` placed between "Generate Content" and "Edit Brand"
+Each task was committed atomically:
+
+1. **Task 1: Add image generation section to generate page** - `ad4ced2` (feat)
+2. **Task 2: Create media library page and add navigation link** - `6f83b51` (feat)
+3. **Task 3: Verify complete content extraction and image generation system** - human-verified (checkpoint approved)
+
+**Deviation fix:** `a33e1e6` (fix: correct model IDs, downgrade openai to v4, externalize openai package)
+
+## Files Created/Modified
+
+- `src/app/(dashboard)/brands/[id]/media/page.tsx` - Server component media library page; fetches images via getMediaLibrary, renders empty state or MediaGrid
+- `src/app/(dashboard)/brands/[id]/media/media-grid.tsx` - Client component; responsive image grid, click-to-expand detail panel, regenerate with prompt override, router.refresh() on success
+- `src/app/(dashboard)/brands/[id]/generate/generate-section.tsx` - Updated with Image Generation section: prompt textarea, generate button, result display with media library link
+- `src/app/(dashboard)/brands/[id]/page.tsx` - Added Media Library button with ImageIcon between Generate Content and Edit Brand
+
+## Decisions Made
+
+- Image generation section always visible on generate page (not gated by text generation results) — users can generate images independently of text content
+- Media grid detail view uses inline expanded panel below the grid, not a modal — simpler UX, no portal/z-index management needed
+- router.refresh() after regeneration re-fetches server component data — correct Next.js App Router pattern for invalidating server-fetched data
+- openai v6 downgraded to v4 — v6 introduced breaking changes with gpt-image-1 b64_json response extraction; v4 stable and tested
+- openai added to serverExternalPackages in next.config.ts — prevents bundler from attempting to bundle Node.js-only OpenAI SDK
 
 ## Deviations from Plan
 
-None — plan executed exactly as written.
+### Auto-fixed Issues
 
-## Self-Check: PASSED
+**1. [Rule 1 - Bug] Fixed model IDs and openai version incompatibility**
+- **Found during:** Task 3 (human verification)
+- **Issue:** gpt-image-1 failed at runtime; investigation revealed openai v6 changed the response format for image generation; also model ID claude-haiku was incorrect (needed claude-haiku-4-5-20251001)
+- **Fix:** Downgraded openai from v6 to v4 in package.json; corrected model ID strings; added openai to serverExternalPackages in next.config.ts
+- **Files modified:** package.json, next.config.ts (serverExternalPackages)
+- **Verification:** Human tested image generation end-to-end — gpt-image-1 generates successfully
+- **Committed in:** a33e1e6
 
-| Check | Result |
-|-------|--------|
-| generate-section.tsx exists | FOUND |
-| media/page.tsx exists | FOUND |
-| media/media-grid.tsx exists | FOUND |
-| Commit ad4ced2 (Task 1) | FOUND |
-| Commit 6f83b51 (Task 2) | FOUND |
+---
 
-## Checkpoint Status
+**Total deviations:** 1 auto-fixed (1 bug — runtime incompatibility)
+**Impact on plan:** Essential for image generation to function. No scope creep.
 
-Task 3 is a `checkpoint:human-verify` — paused awaiting human verification of the complete Phase 3 system (content extraction + image generation pipeline).
+## Issues Encountered
 
-**Verification steps required:**
-1. YouTube URL extraction on generate page
-2. Article URL extraction
-3. PDF upload extraction
-4. Content generation from extracted text
-5. Image generation from Image Generation section
-6. Media Library link from success message
-7. Thumbnail display in media library
-8. Full-size view on click
-9. Regenerate with new prompt
-10. Brand detail page Media Library button
-11. Navigation to /brands/[id]/media
+- openai SDK v6 changed response handling for gpt-image-1 b64_json extraction — caught during human verification, fixed by downgrading to v4 which has stable, tested API
+
+## User Setup Required
+
+None - no new external service configuration required. OPENAI_API_KEY was already required from Plan 02.
+
+## Next Phase Readiness
+
+- Phase 3 complete: content extraction (YouTube, article, PDF), image generation pipeline, media library all verified working
+- Phase 4 (Carousel Generation) can begin — depends on Phase 3 complete brand/generation infrastructure
+- No blockers
+
+---
+*Phase: 03-content-extraction-images*
+*Completed: 2026-03-17*
