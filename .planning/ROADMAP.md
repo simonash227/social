@@ -14,7 +14,7 @@
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
-| 4 | 2/2 | Complete   | 2026-03-17 | 0/2 |
+| 4 | Carousel Generation | Complete | 2026-03-17 | 2/2 |
 | 5 | Calendar + Scheduling | Not Started | — | 0/? |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
