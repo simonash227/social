@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: "Completed 2B-02 (quality pipeline UI integration verified)"
-last_updated: "2026-03-17T01:00:00.000Z"
+status: unknown
+stopped_at: "Completed 03-02 (image generation backend: OpenAI SDK, sharp watermark, R2 dual upload, DB tracking)"
+last_updated: "2026-03-17T01:32:22.885Z"
 progress:
   total_phases: 9
-  completed_phases: 5
-  total_plans: 12
-  completed_plans: 12
+  completed_phases: 4
+  total_plans: 15
+  completed_plans: 13
 ---
 
 # STATE: Personal Content Engine
@@ -77,6 +77,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 2B-02]: genCost tracked separately in state so generation cost is preserved while refinement runs
 - [Phase 2B-02]: Discarded tabs shown with strikethrough/opacity so user sees what was attempted
 - [Phase 2B-02]: hasPassingContent derived from result.platforms at render time (not state) to stay in sync
+- [Phase 03]: gpt-image-1 returns b64_json only (not URL) -- response.data[0].b64_json extraction required
+- [Phase 03]: Module-level OpenAI client (same singleton pattern as Anthropic client in generate.ts)
+- [Phase 03]: Watermark failure is non-fatal in image-gen.ts -- logged and image proceeds without watermark
 
 ## Blockers
 
@@ -93,8 +96,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T01:00:00.000Z
-Stopped at: Completed 2B-02 (quality pipeline UI verified by human review)
+Last session: 2026-03-17T01:32:22.879Z
+Stopped at: Completed 03-02 (image generation backend: OpenAI SDK, sharp watermark, R2 dual upload, DB tracking)
 Resume file: None
 
 ---
