@@ -13,7 +13,7 @@
 | 1 | Scaffolding + Database + Auth | Complete | 2026-03-16 | 5/5 |
 | 2A | Brand Profiles + AI Generation | Complete | 2026-03-17 | 3/3 |
 | 2B | Quality Pipeline | Complete | 2026-03-17 | 2/2 |
-| 3 | Content Extraction + Images | Complete | 2026-03-17 | 3/3 |
+| 3 | Content Extraction + Images | In Progress | — | 3/4 |
 | 4 | Carousel Generation | Not Started | — | 0/? |
 | 5 | Calendar + Scheduling | Not Started | — | 0/? |
 | 6 | Content Automation Pipeline | Not Started | — | 0/? |
@@ -130,12 +130,13 @@ Plans:
 
 **Estimated effort:** 2 days
 
-**Plans:** 3/3 plans complete
+**Plans:** 4 plans (3 complete, 1 gap closure)
 
 Plans:
 - [x] 03-01-PLAN.md — Content extraction: install youtube-transcript/readability/pdf-parse, create extract.ts module, integrate into generate action, add PDF upload + URL extract to generate UI (DONE 2026-03-17)
 - [x] 03-02-PLAN.md — Image generation backend: install OpenAI SDK, generatedImages DB table + migration, image-gen.ts pipeline (gpt-image-1 + watermark + thumbnail + R2), server actions (DONE 2026-03-17)
 - [x] 03-03-PLAN.md — Image generation UI + media library: image generation section on generate page, media library page with grid/detail/regenerate, brand detail Media Library link (DONE 2026-03-17)
+- [ ] 03-04-PLAN.md — Gap closure: add filter/sort controls to media library (date range, type dropdown, sort order)
 
 ---
 
@@ -244,4 +245,4 @@ Create a brand, connect accounts, add RSS feeds, and the system autonomously dis
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-17 after Phase 3 complete*
+*Last updated: 2026-03-17 after Phase 3 gap closure plan created*
