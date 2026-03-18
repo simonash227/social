@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-01-PLAN.md (schema migration, spam guard, feed polling)
-last_updated: "2026-03-17T23:50:40.605Z"
+stopped_at: Completed 06-02-PLAN.md (auto-generate orchestration + cron wire-up)
+last_updated: "2026-03-17T23:59:48.451Z"
 progress:
   total_phases: 9
   completed_phases: 7
   total_plans: 25
-  completed_plans: 22
+  completed_plans: 23
 ---
 
 # STATE: Personal Content Engine
@@ -103,6 +103,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 05-02]: Platform color dots use 6px circles for per-platform color coding on calendar events
 - [Phase 06-01]: drizzle snapshot lineage repaired: 0003/0004 prevId collision fixed, 0005/0006 snapshots manually created to fix drizzle-kit lineage
 - [Phase 06-01]: rss-parser added to serverExternalPackages in next.config.ts for standalone build compatibility
+- [Phase 06-02]: processedAt set BEFORE generation to prevent double-pick on overlapping cron ticks
+- [Phase 06-02]: saveAsAutoPost() non-server-action helper in auto-generate.ts -- no redirect/revalidatePath calls
+- [Phase 06-02]: Cross-platform stagger uses 30-60 min random offset from first-platform scheduledAt
 
 ## Blockers
 
@@ -119,8 +122,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T23:50:40.597Z
-Stopped at: Completed 06-01-PLAN.md (schema migration, spam guard, feed polling)
+Last session: 2026-03-17T23:59:48.441Z
+Stopped at: Completed 06-02-PLAN.md (auto-generate orchestration + cron wire-up)
 Resume file: None
 
 ---

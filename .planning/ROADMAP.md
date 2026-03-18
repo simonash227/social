@@ -16,7 +16,7 @@
 | 3 | Content Extraction + Images | Complete | 2026-03-17 | 4/4 |
 | 4 | Carousel Generation | Complete | 2026-03-17 | 2/2 |
 | 5 | 2/3 | In Progress|  | 0/3 |
-| 6 | Content Automation Pipeline | Not Started | — | 0/4 |
+| 6 | 2/4 | In Progress|  | 0/4 |
 | 7 | Analytics + Dashboard + Polish | Not Started | — | 0/? |
 
 ---
@@ -199,7 +199,7 @@ Plans:
 
 **Estimated effort:** 3 days
 
-**Plans:** 4 plans
+**Plans:** 2/4 plans executed
 
 Plans:
 - [ ] 06-01-PLAN.md — Schema migration + spam guard module + feed polling with Haiku relevance scoring

@@ -90,10 +90,10 @@
 - [x] **FEED-03**: Poll-feeds cron (every 5 min) fetches RSS, deduplicates by URL
 - [x] **FEED-04**: Haiku relevance filter scores each entry 1-10 against brand topics/goals
 - [x] **FEED-05**: Entries scoring ≥ threshold are extracted and queued for generation
-- [ ] **FEED-06**: Auto-generate cron (every 15 min) generates posts through full quality pipeline
-- [ ] **FEED-07**: Content mix management: avoid repeating same topic within 48 hours
-- [ ] **FEED-08**: User can configure automation level per brand: manual, semi, mostly, full auto
-- [ ] **FEED-09**: Confidence scoring determines auto-publish vs queue for review
+- [x] **FEED-06**: Auto-generate cron (every 15 min) generates posts through full quality pipeline
+- [x] **FEED-07**: Content mix management: avoid repeating same topic within 48 hours
+- [x] **FEED-08**: User can configure automation level per brand: manual, semi, mostly, full auto
+- [x] **FEED-09**: Confidence scoring determines auto-publish vs queue for review
 - [x] **FEED-10**: Feed auto-disables after 10 consecutive failures
 
 ### Spam Prevention
@@ -104,7 +104,7 @@
 - [x] **SPAM-04**: New account warmup: Week 1 = 1/day, Week 2 = 2/day, Week 3+ = normal
 - [x] **SPAM-05**: Topic deduplication within configurable window (default 48 hours)
 - [x] **SPAM-06**: Max 30-40% of posts contain links
-- [ ] **SPAM-07**: Platform-appropriate hashtag counts (X: 0-3, Instagram: 5-15, LinkedIn: 3-5)
+- [x] **SPAM-07**: Platform-appropriate hashtag counts (X: 0-3, Instagram: 5-15, LinkedIn: 3-5)
 
 ### Analytics
 
