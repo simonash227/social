@@ -1,7 +1,6 @@
 import { YoutubeTranscript } from 'youtube-transcript'
 import { Readability } from '@mozilla/readability'
 import { JSDOM } from 'jsdom'
-import { PDFParse } from 'pdf-parse'
 
 const YOUTUBE_REGEX = /(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/
 const MAX_HTML_BYTES = 5 * 1024 * 1024 // 5MB
@@ -65,6 +64,7 @@ export async function extractPdf(
   buffer: Buffer
 ): Promise<{ text: string; error?: string }> {
   try {
+    const { PDFParse } = await import('pdf-parse')
     const parser = new PDFParse({ data: new Uint8Array(buffer) })
     const result = await parser.getText()
     return { text: result.text.trim() }
