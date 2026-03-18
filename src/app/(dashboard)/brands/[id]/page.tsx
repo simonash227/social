@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getDb } from '@/db'
-import { brands, socialAccounts } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { brands, socialAccounts, posts, postPlatforms, postAnalytics } from '@/db/schema'
+import { and, desc, eq, sql } from 'drizzle-orm'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { Sparkles, ImageIcon, LayoutGrid, Rss } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Sparkles, ImageIcon, LayoutGrid, Rss, BarChart3 } from 'lucide-react'
 import { DeleteBrandDialog } from './delete-dialog' // uses deleteBrand server action
 import { AccountsSection } from './accounts-section'
 
@@ -30,6 +31,92 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
     .from(socialAccounts)
     .where(eq(socialAccounts.brandId, brandId))
     .all()
+
+  // Quick stats queries
+  const publishedCountResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(posts)
+    .where(and(eq(posts.brandId, brandId), eq(posts.status, 'published')))
+    .get()
+
+  const scheduledCountResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(posts)
+    .where(and(eq(posts.brandId, brandId), eq(posts.status, 'scheduled')))
+    .get()
+
+  const avgEngResult = await db
+    .select({ avg: sql<number | null>`avg(${postAnalytics.engagementScore})` })
+    .from(postAnalytics)
+    .innerJoin(posts, eq(postAnalytics.postId, posts.id))
+    .where(eq(posts.brandId, brandId))
+    .get()
+
+  const topTierCountResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(postAnalytics)
+    .innerJoin(posts, eq(postAnalytics.postId, posts.id))
+    .where(and(eq(posts.brandId, brandId), eq(postAnalytics.performerTier, 'top')))
+    .get()
+
+  const publishedCount = publishedCountResult?.count ?? 0
+  const scheduledCount = scheduledCountResult?.count ?? 0
+  const avgEngagement = avgEngResult?.avg != null ? Math.round(avgEngResult.avg) : null
+  const topTierCount = topTierCountResult?.count ?? 0
+
+  // Recent 5 posts with platform info
+  const recentPosts = await db
+    .select({
+      id: posts.id,
+      content: posts.content,
+      status: posts.status,
+      createdAt: posts.createdAt,
+    })
+    .from(posts)
+    .where(eq(posts.brandId, brandId))
+    .orderBy(desc(posts.createdAt))
+    .limit(5)
+    .all()
+
+  // Get platforms and analytics for recent posts
+  const recentPostIds = recentPosts.map((p) => p.id)
+  const recentPlatforms = recentPostIds.length > 0
+    ? await db
+        .select({ postId: postPlatforms.postId, platform: postPlatforms.platform, status: postPlatforms.status })
+        .from(postPlatforms)
+        .where(sql`${postPlatforms.postId} IN (${sql.raw(recentPostIds.join(','))})`)
+        .all()
+    : []
+
+  const recentAnalytics = recentPostIds.length > 0
+    ? await db
+        .select({ postId: postAnalytics.postId, engagementScore: postAnalytics.engagementScore })
+        .from(postAnalytics)
+        .where(sql`${postAnalytics.postId} IN (${sql.raw(recentPostIds.join(','))})`)
+        .orderBy(desc(postAnalytics.engagementScore))
+        .all()
+    : []
+
+  // Build lookup maps
+  const platformsByPost = new Map<number, string[]>()
+  for (const pp of recentPlatforms) {
+    if (!platformsByPost.has(pp.postId)) platformsByPost.set(pp.postId, [])
+    platformsByPost.get(pp.postId)!.push(pp.platform)
+  }
+
+  const topAnalyticsByPost = new Map<number, number | null>()
+  for (const pa of recentAnalytics) {
+    if (!topAnalyticsByPost.has(pa.postId)) {
+      topAnalyticsByPost.set(pa.postId, pa.engagementScore)
+    }
+  }
+
+  function statusVariant(status: string): 'default' | 'secondary' | 'destructive' | 'outline' {
+    if (status === 'published') return 'default'
+    if (status === 'failed') return 'destructive'
+    if (status === 'scheduled') return 'secondary'
+    return 'outline'
+  }
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -70,11 +157,56 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
             <Rss className="mr-2 h-4 w-4" />
             Feed Sources
           </Button>
+          <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/analytics`} />}>
+            <BarChart3 className="mr-2 h-4 w-4" />
+            Analytics
+          </Button>
           <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/edit`} />}>
             Edit Brand
           </Button>
         </div>
       </div>
+
+      <Separator />
+
+      {/* Quick Stats */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Quick Stats</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-1 pt-4 px-4">
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Published</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <p className="text-2xl font-bold">{publishedCount}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-1 pt-4 px-4">
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Scheduled</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <p className="text-2xl font-bold">{scheduledCount}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-1 pt-4 px-4">
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Avg Engagement</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <p className="text-2xl font-bold">{avgEngagement != null ? avgEngagement : 'N/A'}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-1 pt-4 px-4">
+              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Top Tier Posts</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <p className="text-2xl font-bold">{topTierCount}</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       <Separator />
 
@@ -284,6 +416,50 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
       {/* Connected Accounts */}
       <Separator />
       <AccountsSection brandId={brandId} accounts={accounts} />
+
+      {/* Recent Posts */}
+      <Separator />
+      <section className="space-y-4">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Recent Posts</h2>
+        {recentPosts.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No posts yet.{' '}
+            <Link href={`/brands/${brand.id}/generate`} className="text-primary hover:underline">
+              Generate your first content.
+            </Link>
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {recentPosts.map((post) => {
+              const platforms = platformsByPost.get(post.id) ?? []
+              const engagement = topAnalyticsByPost.get(post.id) ?? null
+              return (
+                <div key={post.id} className="flex items-start gap-3 rounded-md border px-4 py-3 text-sm">
+                  <span className="flex-1 text-sm leading-snug text-muted-foreground" title={post.content}>
+                    {post.content.slice(0, 80)}{post.content.length > 80 ? '…' : ''}
+                  </span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Badge variant={statusVariant(post.status)} className="text-xs capitalize">
+                      {post.status}
+                    </Badge>
+                    {platforms.map((p) => (
+                      <Badge key={p} variant="outline" className="text-xs">
+                        {p}
+                      </Badge>
+                    ))}
+                    {engagement != null && (
+                      <span className="text-xs text-muted-foreground">score {engagement}</span>
+                    )}
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
 
       {/* Delete */}
       <Separator />
