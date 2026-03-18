@@ -1,0 +1,9 @@
+node_modules
+.next
+.planning
+.git
+*.md
+social.db
+social.db-wal
+social.db-shm
+scripts/
