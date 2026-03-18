@@ -82,7 +82,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Brand filter */}
-          {allBrands.length > 1 && (
+          {allBrands.length >= 1 && (
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Brand:</span>
               <div className="flex gap-1 flex-wrap">
