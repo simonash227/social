@@ -385,46 +385,41 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
       {/* Platform Selection Section */}
       <section className="space-y-3">
         <Label>Target Platforms</Label>
-        {accounts.length === 0 ? (
-          <div className="rounded-md border border-dashed p-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              No connected accounts. Connect accounts on{' '}
-              <a
-                href="https://app.upload-post.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2"
-              >
-                Upload-Post
-              </a>
-              , then sync from the brand page.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {accounts.map((account) => (
-              <label
-                key={account.id}
-                className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-muted/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
-              >
-                <input
-                  type="checkbox"
-                  className="size-4 rounded border-input accent-primary"
-                  checked={selectedPlatforms.includes(account.platform)}
-                  onChange={() => togglePlatform(account.platform)}
-                />
-                <div>
-                  <span className="text-sm font-medium">
-                    {getPlatformLabel(account.platform)}
-                  </span>
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    @{account.username}
-                  </span>
-                </div>
-              </label>
-            ))}
-          </div>
-        )}
+        {(() => {
+          const DEFAULT_PLATFORMS = ['twitter', 'linkedin', 'instagram', 'facebook', 'threads', 'reddit', 'bluesky']
+          const platformItems = accounts.length > 0
+            ? accounts.map(a => ({ key: a.id.toString(), platform: a.platform, label: getPlatformLabel(a.platform), subtitle: `@${a.username}` }))
+            : DEFAULT_PLATFORMS.map(p => ({ key: p, platform: p, label: getPlatformLabel(p), subtitle: null }))
+
+          return (
+            <>
+              {accounts.length === 0 && (
+                <p className="text-xs text-muted-foreground mb-1">No connected accounts — select platforms to generate for:</p>
+              )}
+              <div className="space-y-2">
+                {platformItems.map((item) => (
+                  <label
+                    key={item.key}
+                    className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-muted/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                  >
+                    <input
+                      type="checkbox"
+                      className="size-4 rounded border-input accent-primary"
+                      checked={selectedPlatforms.includes(item.platform)}
+                      onChange={() => togglePlatform(item.platform)}
+                    />
+                    <div>
+                      <span className="text-sm font-medium">{item.label}</span>
+                      {item.subtitle && (
+                        <span className="ml-2 text-xs text-muted-foreground">{item.subtitle}</span>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </>
+          )
+        })()}
       </section>
 
       {/* Generate Button */}
