@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-01-PLAN.md (analytics collection backend)
-last_updated: "2026-03-18T01:02:50.494Z"
+stopped_at: Completed 07-02-PLAN.md (dashboard pages with real data)
+last_updated: "2026-03-18T01:14:57.925Z"
 progress:
   total_phases: 9
   completed_phases: 8
   total_plans: 28
-  completed_plans: 26
+  completed_plans: 27
 ---
 
 # STATE: Personal Content Engine
@@ -110,6 +110,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 06-03]: targetPlatforms null means all platforms, empty array means none -- feed platform toggle handles null/empty boundary
 - [Phase 07-01]: drizzle-kit push applied migration; manually inserted hash into __drizzle_migrations to prevent duplicate table error on runtime migrate()
 - [Phase 07-01]: Zero-engagement-score posts (views=0) excluded from percentile calc, classified as 'under'; cohorts <4 posts default to 'average'
+- [Phase 07-02]: ActivityFilters uses useSearchParams + router.push for client-side filter state
+- [Phase 07-02]: Per-platform analytics breakdown computed in JS from full result set — small dataset, simpler than groupBy SQL
 
 ## Blockers
 
@@ -126,8 +128,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T01:02:50.485Z
-Stopped at: Completed 07-01-PLAN.md (analytics collection backend)
+Last session: 2026-03-18T01:14:57.917Z
+Stopped at: Completed 07-02-PLAN.md (dashboard pages with real data)
 Resume file: None
 
 ---

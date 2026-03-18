@@ -111,15 +111,15 @@
 - [x] **ANLY-01**: Collect-analytics cron (every 6 hours) fetches metrics from Upload-Post
 - [x] **ANLY-02**: Calculate normalized engagement score per post (guard impressions=0)
 - [x] **ANLY-03**: Classify posts as top performer (>75th), average, or underperformer (<25th)
-- [ ] **ANLY-04**: Per-brand analytics page showing posts published and basic engagement metrics
+- [x] **ANLY-04**: Per-brand analytics page showing posts published and basic engagement metrics
 
 ### Dashboard
 
-- [ ] **DASH-01**: Cross-brand home page: brand cards with stats, engagement trend, next scheduled post
-- [ ] **DASH-02**: Brand home page: quick stats, recent posts with status + engagement
-- [ ] **DASH-03**: Activity log page: scrollable, filterable by brand/type/level, errors highlighted
+- [x] **DASH-01**: Cross-brand home page: brand cards with stats, engagement trend, next scheduled post
+- [x] **DASH-02**: Brand home page: quick stats, recent posts with status + engagement
+- [x] **DASH-03**: Activity log page: scrollable, filterable by brand/type/level, errors highlighted
 - [x] **DASH-04**: Dashboard shell: sidebar, brand switcher, AI_MODE indicator, system health badge
-- [ ] **DASH-05**: Weekly digest data displayed on dashboard home
+- [x] **DASH-05**: Weekly digest data displayed on dashboard home
 
 ## v2 Requirements (M2 — Intelligence Layer)
 
