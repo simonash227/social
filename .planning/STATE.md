@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-03-PLAN.md (feed management UI and server actions)
-last_updated: "2026-03-18T00:16:38.820Z"
+stopped_at: Completed 07-01-PLAN.md (analytics collection backend)
+last_updated: "2026-03-18T01:02:50.494Z"
 progress:
   total_phases: 9
   completed_phases: 8
-  total_plans: 25
-  completed_plans: 25
+  total_plans: 28
+  completed_plans: 26
 ---
 
 # STATE: Personal Content Engine
@@ -108,6 +108,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 06-02]: Cross-platform stagger uses 30-60 min random offset from first-platform scheduledAt
 - [Phase 06-03]: FeedWithStats aggregation uses three separate count queries per feed (total/relevant/processed) -- sufficient for small per-brand datasets
 - [Phase 06-03]: targetPlatforms null means all platforms, empty array means none -- feed platform toggle handles null/empty boundary
+- [Phase 07-01]: drizzle-kit push applied migration; manually inserted hash into __drizzle_migrations to prevent duplicate table error on runtime migrate()
+- [Phase 07-01]: Zero-engagement-score posts (views=0) excluded from percentile calc, classified as 'under'; cohorts <4 posts default to 'average'
 
 ## Blockers
 
@@ -124,8 +126,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-18T00:07:18.767Z
-Stopped at: Completed 06-03-PLAN.md (feed management UI and server actions)
+Last session: 2026-03-18T01:02:50.485Z
+Stopped at: Completed 07-01-PLAN.md (analytics collection backend)
 Resume file: None
 
 ---

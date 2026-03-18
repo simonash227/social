@@ -108,9 +108,9 @@
 
 ### Analytics
 
-- [ ] **ANLY-01**: Collect-analytics cron (every 6 hours) fetches metrics from Upload-Post
-- [ ] **ANLY-02**: Calculate normalized engagement score per post (guard impressions=0)
-- [ ] **ANLY-03**: Classify posts as top performer (>75th), average, or underperformer (<25th)
+- [x] **ANLY-01**: Collect-analytics cron (every 6 hours) fetches metrics from Upload-Post
+- [x] **ANLY-02**: Calculate normalized engagement score per post (guard impressions=0)
+- [x] **ANLY-03**: Classify posts as top performer (>75th), average, or underperformer (<25th)
 - [ ] **ANLY-04**: Per-brand analytics page showing posts published and basic engagement metrics
 
 ### Dashboard
