@@ -36,9 +36,24 @@ Set up a brand once, then only check in weekly. Everything else — discovery, f
 - ✓ Circuit breaker for API failures — v1.0
 - ✓ Daily AI spend tracking and limits — v1.0
 
+## Current Milestone: v2.0 Intelligence Layer
+
+**Goal:** Make the engine self-improving — analyze what works, learn from it, and generate better content over time. Add multi-variant generation, content recycling, and advanced analytics.
+
+**Target features:**
+- Self-improvement loop: analyze top/bottom performers weekly, inject learnings into prompts
+- Learning validation: A/B test learnings, deactivate ineffective ones
+- Golden examples: auto-curate 90th percentile posts as few-shot examples
+- Multi-variant generation: 3 variants per post, quality gate picks best
+- Prompt evolution: monthly cron suggests improved templates
+- Evergreen recycling: resurface top performers with fresh angle
+- Content repurposing chains: spread one source across days/platforms
+- Engagement helper: unresponded comments + suggested replies
+- Advanced analytics: charts, platform comparison, posting time heatmap
+
 ### Active
 
-<!-- M2 Intelligence Layer — requires 2-4 weeks of M1 data collection first -->
+<!-- v2.0 Intelligence Layer -->
 
 - [ ] Self-improvement: weekly analysis of top/bottom performers → learnings injected into prompts
 - [ ] Learning validation: A/B test learnings, deactivate ineffective ones
@@ -69,7 +84,7 @@ Shipped v1.0 with 13,213 LOC TypeScript across 215 files in 4 days.
 
 **Current state:** Full pipeline operational — RSS → Haiku filter → extract → Claude generate → Sonnet refine → quality gate → schedule → Upload-Post publish. Dashboard monitors all brands. Analytics collecting engagement data.
 
-**Next:** Deploy to Railway, run M1 for 2-4 weeks collecting engagement data, then start M2 (Intelligence Layer) with self-improvement loop.
+**Next:** v2.0 Intelligence Layer — self-improvement loop, multi-variant generation, content recycling, advanced analytics. Requires engagement data from deployed v1.0.
 
 ## Constraints
 
@@ -97,4 +112,4 @@ Shipped v1.0 with 13,213 LOC TypeScript across 215 files in 4 days.
 | openai SDK v4 over v6 | v6 broke gpt-image-1 b64_json extraction | ⚠ Revisit — check if v6 fixes land |
 
 ---
-*Last updated: 2026-03-19 after v1.0 milestone*
+*Last updated: 2026-03-19 after v2.0 milestone start*
