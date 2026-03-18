@@ -175,6 +175,21 @@ export const activityLog = sqliteTable('activity_log', {
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
+// ─── Post Analytics ───────────────────────────────────────────────────────────
+export const postAnalytics = sqliteTable('post_analytics', {
+  id:              integer().primaryKey({ autoIncrement: true }),
+  postId:          integer('post_id').notNull().references(() => posts.id),
+  platform:        text().notNull(),
+  views:           integer(),
+  likes:           integer(),
+  comments:        integer(),
+  shares:          integer(),
+  engagementScore: integer('engagement_score'),
+  performerTier:   text('performer_tier', { enum: ['top', 'average', 'under'] }),
+  collectedAt:     text('collected_at').notNull(),
+  createdAt:       text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
 // ─── AI Spend Log ─────────────────────────────────────────────────────────────
 export const aiSpendLog = sqliteTable('ai_spend_log', {
   id:           integer().primaryKey({ autoIncrement: true }),
