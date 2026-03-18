@@ -2,8 +2,12 @@ import OpenAI from 'openai'
 import sharp from 'sharp'
 import { uploadToR2 } from '@/lib/r2'
 
-// Module-level OpenAI client — reads OPENAI_API_KEY from env (same pattern as Anthropic client)
-const openai = new OpenAI()
+// Lazy-initialized OpenAI client — deferred to avoid build-time env var check
+let _openai: OpenAI | null = null
+function getOpenAI(): OpenAI {
+  if (!_openai) _openai = new OpenAI()
+  return _openai
+}
 
 type WatermarkPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
@@ -76,7 +80,7 @@ export async function generateBrandImage(params: {
   brandId: number
 }): Promise<{ fullKey: string; thumbKey: string; costUsd: string }> {
   // 1. Generate image via gpt-image-1 (returns b64_json, not URL)
-  const response = await openai.images.generate({
+  const response = await getOpenAI().images.generate({
     model: 'gpt-image-1',
     prompt: `${params.brandStyleDirective}\n\n${params.prompt}`,
     size: '1024x1024',

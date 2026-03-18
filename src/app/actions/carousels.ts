@@ -9,9 +9,13 @@ import { getBreaker } from '@/lib/circuit-breaker'
 import { renderCarouselSlides, type BrandStyle, type SlideData, type TemplateId, TEMPLATE_IDS } from '@/lib/carousel-gen'
 import { getR2PublicUrl } from '@/lib/r2'
 
-// ─── Module-level Anthropic client ───────────────────────────────────────────
+// ─── Lazy-initialized Anthropic client ───────────────────────────────────────
 
-const anthropic = new Anthropic()
+let _anthropic: Anthropic | null = null
+function getAnthropic(): Anthropic {
+  if (!_anthropic) _anthropic = new Anthropic()
+  return _anthropic
+}
 
 // ─── Internal helpers (duplicated from generate.ts -- small private utilities) ──
 
@@ -107,7 +111,7 @@ export async function generateSlideContent(
 
     // 5. Call Anthropic via circuit breaker
     const response = await getBreaker('anthropic').call(() =>
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model,
         max_tokens: 2048,
         system: 'You are a carousel content expert. Respond with ONLY valid JSON -- no markdown fences, no commentary.',

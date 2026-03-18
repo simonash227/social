@@ -9,7 +9,11 @@ import { sanitizeText } from '@/lib/sanitize'
 
 // ─── Module-level singletons ──────────────────────────────────────────────────
 
-const anthropic = new Anthropic()
+let _anthropic: Anthropic | null = null
+function getAnthropic(): Anthropic {
+  if (!_anthropic) _anthropic = new Anthropic()
+  return _anthropic
+}
 
 const parser = new Parser({
   timeout: 10_000,
@@ -218,7 +222,7 @@ Respond with ONLY a JSON array in this exact format (no other text):
   try {
     const breaker = getBreaker('anthropic-feed-scoring')
     const response = await breaker.call(() =>
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model,
         max_tokens: 512,
         messages: [{ role: 'user', content: prompt }],

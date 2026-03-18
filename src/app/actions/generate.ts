@@ -64,9 +64,13 @@ const PLATFORM_CONSTRAINTS: Record<string, { limit: number; hashtagNote: string 
   tiktok:    { limit: 2200, hashtagNote: '3-5 hashtags' },
 }
 
-// ─── Module-level Anthropic client ───────────────────────────────────────────
+// ─── Lazy-initialized Anthropic client ───────────────────────────────────────
 
-const anthropic = new Anthropic()
+let _anthropic: Anthropic | null = null
+function getAnthropic(): Anthropic {
+  if (!_anthropic) _anthropic = new Anthropic()
+  return _anthropic
+}
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 
@@ -300,7 +304,7 @@ async function runCritique(
 
   try {
     const response = await getBreaker('anthropic').call(() =>
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model: modelConfig.critique,
         max_tokens: 1024,
         system: 'You are a social media content quality evaluator. Respond with ONLY valid JSON -- no markdown fences, no commentary.',
@@ -357,7 +361,7 @@ async function runRewrite(
   const rewritePrompt = buildRewritePrompt(platform, originalContent, critique, systemPrompt)
 
   const response = await getBreaker('anthropic').call(() =>
-    anthropic.messages.create({
+    getAnthropic().messages.create({
       model: modelConfig.primary,
       max_tokens: 4096,
       system: systemPrompt,
@@ -449,7 +453,7 @@ export async function generateContent(
 
     // 5. Generation call via circuit breaker
     const genResponse = await getBreaker('anthropic').call(() =>
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model: modelConfig.primary,
         max_tokens: 4096,
         system: systemPrompt,
@@ -480,7 +484,7 @@ export async function generateContent(
     // 8. Hook scoring call
     const hookPrompt = buildHookScoringPrompt(platforms, generatedContent)
     const hookResponse = await getBreaker('anthropic').call(() =>
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model: modelConfig.critique,
         max_tokens: 4096,
         system: 'You are a social media hook optimization expert. Score hooks based on attention-grab, relevance, and brand fit. Respond with ONLY valid JSON -- no markdown fences, no commentary.',
