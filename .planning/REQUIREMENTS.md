@@ -49,12 +49,15 @@
 - [ ] **ENGAGE-02**: AI generates 3 reply suggestions per comment in brand voice
 - [ ] **ENGAGE-03**: Direct links to each post on its platform for manual reply posting
 
+### Content Strategy (moved to v2.0 from v2.1+ based on roadmap)
+
+- [ ] **STRAT-01**: Evergreen recycling: resurface top performers with fresh angle (90-day cooldown)
+- [ ] **STRAT-02**: Content repurposing chains: one source → multi-platform, multi-day stagger
+
 ## Future Requirements (v2.1+)
 
 ### Content Strategy
 
-- **STRAT-01**: Evergreen recycling: resurface top performers with fresh angle (90-day cooldown)
-- **STRAT-02**: Content repurposing chains: one source → multi-platform, multi-day stagger
 - **STRAT-03**: "Plan My Week" AI strategist
 
 ### Prompt Evolution
@@ -81,17 +84,42 @@
 
 ## Traceability
 
-Populated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmapper) | | |
+| LEARN-01 | Phase 9 | Pending |
+| LEARN-02 | Phase 9 | Pending |
+| LEARN-03 | Phase 9 | Pending |
+| LEARN-04 | Phase 9 | Pending |
+| LEARN-05 | Phase 9 | Pending |
+| LEARN-06 | Phase 9 | Pending |
+| LEARN-07 | Phase 9 | Pending |
+| GOLD-01 | Phase 9 | Pending |
+| GOLD-02 | Phase 9 | Pending |
+| GOLD-03 | Phase 9 | Pending |
+| VALID-01 | Phase 10 | Pending |
+| VALID-02 | Phase 10 | Pending |
+| VALID-03 | Phase 10 | Pending |
+| VALID-04 | Phase 10 | Pending |
+| MVAR-01 | Phase 11 | Pending |
+| MVAR-02 | Phase 11 | Pending |
+| MVAR-03 | Phase 11 | Pending |
+| MVAR-04 | Phase 11 | Pending |
+| CHART-01 | Phase 12 | Pending |
+| CHART-02 | Phase 12 | Pending |
+| CHART-03 | Phase 12 | Pending |
+| CHART-04 | Phase 12 | Pending |
+| CHART-05 | Phase 12 | Pending |
+| STRAT-01 | Phase 13 | Pending |
+| STRAT-02 | Phase 13 | Pending |
+| ENGAGE-01 | Phase 14 | Pending |
+| ENGAGE-02 | Phase 14 | Pending |
+| ENGAGE-03 | Phase 14 | Pending |
 
 **Coverage:**
-- v2.0 requirements: 24 total
-- Mapped to phases: 0
-- Unmapped: 24
+- v2.0 requirements: 28 total (26 from original list + STRAT-01, STRAT-02 promoted from v2.1+)
+- Mapped to phases: 28
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-19*
-*Last updated: 2026-03-19 after initial definition*
+*Last updated: 2026-03-19 after v2.0 roadmap creation — traceability populated*
