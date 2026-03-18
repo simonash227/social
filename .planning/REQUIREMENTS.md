@@ -86,7 +86,7 @@
 ### Feed Automation
 
 - [x] **FEED-01**: User can add RSS feed sources (RSS, YouTube channels, subreddits, Google News)
-- [ ] **FEED-02**: Per-feed config: poll interval, relevance threshold, target platforms, content types
+- [x] **FEED-02**: Per-feed config: poll interval, relevance threshold, target platforms, content types
 - [x] **FEED-03**: Poll-feeds cron (every 5 min) fetches RSS, deduplicates by URL
 - [x] **FEED-04**: Haiku relevance filter scores each entry 1-10 against brand topics/goals
 - [x] **FEED-05**: Entries scoring ≥ threshold are extracted and queued for generation

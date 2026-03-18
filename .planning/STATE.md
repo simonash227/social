@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-02-PLAN.md (auto-generate orchestration + cron wire-up)
-last_updated: "2026-03-17T23:59:48.451Z"
+stopped_at: Completed 06-03-PLAN.md (feed management UI and server actions)
+last_updated: "2026-03-18T00:07:18.778Z"
 progress:
   total_phases: 9
   completed_phases: 7
   total_plans: 25
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # STATE: Personal Content Engine
@@ -106,6 +106,8 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 - [Phase 06-02]: processedAt set BEFORE generation to prevent double-pick on overlapping cron ticks
 - [Phase 06-02]: saveAsAutoPost() non-server-action helper in auto-generate.ts -- no redirect/revalidatePath calls
 - [Phase 06-02]: Cross-platform stagger uses 30-60 min random offset from first-platform scheduledAt
+- [Phase 06-03]: FeedWithStats aggregation uses three separate count queries per feed (total/relevant/processed) -- sufficient for small per-brand datasets
+- [Phase 06-03]: targetPlatforms null means all platforms, empty array means none -- feed platform toggle handles null/empty boundary
 
 ## Blockers
 
@@ -122,8 +124,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-17T23:59:48.441Z
-Stopped at: Completed 06-02-PLAN.md (auto-generate orchestration + cron wire-up)
+Last session: 2026-03-18T00:07:18.767Z
+Stopped at: Completed 06-03-PLAN.md (feed management UI and server actions)
 Resume file: None
 
 ---
