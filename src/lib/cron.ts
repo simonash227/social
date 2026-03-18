@@ -98,5 +98,15 @@ export function initCron(): void {
     }
   })
 
-  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate)')
+  // ── 5. Collect analytics every 6 hours ───────────────────────────────────
+  cron.schedule('0 */6 * * *', async () => {
+    try {
+      const { collectAnalytics } = await import('./collect-analytics')
+      await collectAnalytics()
+    } catch (err) {
+      console.error('[cron] collect-analytics failed:', err)
+    }
+  })
+
+  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate, collect-analytics)')
 }
