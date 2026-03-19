@@ -62,7 +62,7 @@ Plans:
   3. After approval, learnings are injected into generation prompts (max 5, confidence-ordered, platform-matched); generated content visibly reflects injected context
   4. Failure post-mortems produce "avoid" learnings that appear alongside positive learnings on the dashboard with distinct labeling
   5. Golden examples page per brand shows 90th-percentile posts; top 5 pinned examples appear in generation prompts as few-shot context; user can pin or unpin any example
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 09-01-PLAN.md — Learning engine core: isGoldenPinned migration, learning-engine.ts, prompt-injector.ts, cron + collectAnalytics hooks
@@ -160,7 +160,7 @@ Plans:
 | 6. Content Automation Pipeline | v1.0 | 4/4 | Complete | 2026-03-18 |
 | 7. Analytics + Dashboard + Polish | v1.0 | 3/3 | Complete | 2026-03-18 |
 | 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
-| 9. Learning Engine + Golden Examples | v2.0 | 0/3 | Not started | - |
+| 9. Learning Engine + Golden Examples | 2/3 | In Progress|  | - |
 | 10. Learning Validation | v2.0 | 0/2 | Not started | - |
 | 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |
 | 12. Advanced Analytics | v2.0 | 0/2 | Not started | - |

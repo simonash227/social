@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 09-01-PLAN.md — learning engine data pipeline complete
-last_updated: "2026-03-19T22:35:37.317Z"
+stopped_at: Completed 09-02-PLAN.md — generation pipeline injection + learnings server actions complete
+last_updated: "2026-03-19T22:41:40.221Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
   percent: 14
 ---
 
@@ -54,6 +54,9 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase 08-schema-foundation]: AnySQLiteColumn annotation for self-referential Drizzle FK columns resolves circular TypeScript type inference
 - [Phase 09-01]: All learnings written with status=pending (never auto-approved) — Goodhart's Law prevention
 - [Phase 09-01]: loadLearnings requires BOTH isActive=1 AND status=approved — isActive alone is insufficient
+- [Phase 09-02]: goldenExamples inject AFTER examplePosts block, BEFORE closing JSON instruction for prompt coherence
+- [Phase 09-02]: generateContent passes platforms[0] to loadLearnings/loadGoldenExamples — primary platform drives injection for multi-platform generation
+- [Phase 09-02]: runManualAnalysis uses dynamic import to avoid bundling learning-engine into server action boundary
 
 ## Blockers
 
@@ -66,8 +69,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-19T22:35:37.313Z
-Stopped at: Completed 09-01-PLAN.md — learning engine data pipeline complete
+Last session: 2026-03-19T22:41:40.212Z
+Stopped at: Completed 09-02-PLAN.md — generation pipeline injection + learnings server actions complete
 Resume file: None
 
 ---
