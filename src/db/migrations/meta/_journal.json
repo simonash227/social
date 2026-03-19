@@ -57,6 +57,13 @@
       "when": 1773795321307,
       "tag": "0007_post_analytics",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1773904562715,
+      "tag": "0008_same_mongu",
+      "breakpoints": true
     }
   ]
 }

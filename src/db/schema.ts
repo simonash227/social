@@ -38,6 +38,10 @@ export const brands = sqliteTable('brands', {
   watermarkOpacity:  integer('watermark_opacity'),
   warmupDate:        text('warmup_date'),
   automationLevel:   text('automation_level', { enum: ['manual', 'semi', 'mostly', 'full'] }).default('manual'),
+  // v2.0 columns
+  enableVariants:    integer('enable_variants').notNull().default(0),
+  learningInjection: integer('learning_injection').notNull().default(1),
+  lastLearningRunAt: text('last_learning_run_at'),
   createdAt:         text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
   updatedAt:         text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
@@ -90,7 +94,12 @@ export const posts = sqliteTable('posts', {
   requestId:    text('request_id'),
   scheduledAt:  text('scheduled_at'),
   publishedAt:  text('published_at'),
-  feedEntryId:  integer('feed_entry_id').references(() => feedEntries.id),
+  feedEntryId:        integer('feed_entry_id').references(() => feedEntries.id),
+  // v2.0 columns
+  recycledFromPostId: integer('recycled_from_post_id').references(() => posts.id),
+  variantOf:          integer('variant_of').references(() => posts.id),
+  variantGroup:       text('variant_group'),
+  repurposeChainId:   text('repurpose_chain_id'),
   createdAt:    text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
@@ -175,19 +184,66 @@ export const activityLog = sqliteTable('activity_log', {
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
+// ─── v2.0 Tables ──────────────────────────────────────────────────────────────
+
+// ─── Brand Learnings ──────────────────────────────────────────────────────────
+export const brandLearnings = sqliteTable('brand_learnings', {
+  id:                integer().primaryKey({ autoIncrement: true }),
+  brandId:           integer('brand_id').notNull().references(() => brands.id),
+  platform:          text(),
+  type:              text().notNull(),
+  description:       text().notNull(),
+  confidence:        text().notNull(),
+  supportingPostIds: text('supporting_post_ids', { mode: 'json' }).$type<number[] | null>(),
+  isActive:          integer('is_active').notNull().default(1),
+  abTestGroup:       text('ab_test_group'),
+  validatedAt:       text('validated_at'),
+  status:            text().notNull().default('pending'),
+  createdAt:         text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt:         text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
+// ─── Prompt Templates ─────────────────────────────────────────────────────────
+export const promptTemplates = sqliteTable('prompt_templates', {
+  id:               integer().primaryKey({ autoIncrement: true }),
+  brandId:          integer('brand_id').notNull().references(() => brands.id),
+  platform:         text(),
+  templateText:     text('template_text').notNull(),
+  version:          integer().notNull(),
+  isActive:         integer('is_active').notNull().default(0),
+  suggestedByModel: text('suggested_by_model').notNull(),
+  performanceScore: text('performance_score'),
+  createdAt:        text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
 // ─── Post Analytics ───────────────────────────────────────────────────────────
 export const postAnalytics = sqliteTable('post_analytics', {
-  id:              integer().primaryKey({ autoIncrement: true }),
-  postId:          integer('post_id').notNull().references(() => posts.id),
-  platform:        text().notNull(),
-  views:           integer(),
-  likes:           integer(),
-  comments:        integer(),
-  shares:          integer(),
-  engagementScore: integer('engagement_score'),
-  performerTier:   text('performer_tier', { enum: ['top', 'average', 'under'] }),
-  collectedAt:     text('collected_at').notNull(),
-  createdAt:       text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  id:               integer().primaryKey({ autoIncrement: true }),
+  postId:           integer('post_id').notNull().references(() => posts.id),
+  platform:         text().notNull(),
+  views:            integer(),
+  likes:            integer(),
+  comments:         integer(),
+  shares:           integer(),
+  engagementScore:  integer('engagement_score'),
+  performerTier:    text('performer_tier', { enum: ['top', 'average', 'under'] }),
+  collectedAt:      text('collected_at').notNull(),
+  // v2.0 columns
+  promptTemplateId: integer('prompt_template_id').references(() => promptTemplates.id),
+  activeLearningIds: text('active_learning_ids', { mode: 'json' }).$type<number[] | null>(),
+  createdAt:        text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+})
+
+// ─── Comment Suggestions ──────────────────────────────────────────────────────
+export const commentSuggestions = sqliteTable('comment_suggestions', {
+  id:             integer().primaryKey({ autoIncrement: true }),
+  brandId:        integer('brand_id').notNull().references(() => brands.id),
+  platform:       text().notNull(),
+  postId:         integer('post_id').notNull().references(() => posts.id),
+  commentText:    text('comment_text').notNull(),
+  suggestedReply: text('suggested_reply').notNull(),
+  status:         text().notNull().default('pending'),
+  createdAt:      text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
 // ─── AI Spend Log ─────────────────────────────────────────────────────────────
