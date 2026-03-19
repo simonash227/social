@@ -1,0 +1,1 @@
+ALTER TABLE `posts` ADD `is_golden_pinned` integer DEFAULT 0 NOT NULL;

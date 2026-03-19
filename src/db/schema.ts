@@ -101,6 +101,8 @@ export const posts = sqliteTable('posts', {
   variantOf:          integer('variant_of').references((): AnySQLiteColumn => posts.id),
   variantGroup:       text('variant_group'),
   repurposeChainId:   text('repurpose_chain_id'),
+  // v2.0 golden examples
+  isGoldenPinned:     integer('is_golden_pinned').notNull().default(0),
   createdAt:    text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 
