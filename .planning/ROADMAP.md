@@ -28,7 +28,7 @@
 
 **Phases:**
 
-- [ ] **Phase 8: Schema Foundation** — New tables and columns enabling all v2.0 features, zero regressions to v1.0 pipeline
+- [x] **Phase 8: Schema Foundation** — New tables and columns enabling all v2.0 features, zero regressions to v1.0 pipeline (completed 2026-03-19)
 - [ ] **Phase 9: Learning Engine + Golden Examples** — Weekly self-improvement loop that extracts structured learnings from top/bottom performers and injects them into generation prompts alongside auto-curated golden examples
 - [ ] **Phase 10: Learning Validation** — A/B attribution and effectiveness tracking that auto-deactivates learnings that fail to lift engagement
 - [ ] **Phase 11: Multi-Variant Generation** — Per-brand 3-variant generation with quality gate winner selection and cost guardrails
@@ -47,7 +47,7 @@
   2. New columns on `posts` (recycledFromPostId, variantGroup, variantOf, repurposeChainId), `brands` (enableVariants, learningInjection, lastLearningRunAt), and `postAnalytics` (promptTemplateId, activeLearningIds) are present with nullable/default values so no existing rows break
   3. Existing automation pipeline (RSS → generate → schedule → publish) completes a full cycle without errors after migrations
   4. Drizzle studio shows all new tables and columns; schema.ts matches actual DB state
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 08-01-PLAN.md — Add v2.0 tables (brandLearnings, promptTemplates, commentSuggestions) and columns on existing tables, generate migration, verify no regressions
@@ -159,7 +159,7 @@ Plans:
 | 5. Calendar + Scheduling | v1.0 | 3/3 | Complete | 2026-03-18 |
 | 6. Content Automation Pipeline | v1.0 | 4/4 | Complete | 2026-03-18 |
 | 7. Analytics + Dashboard + Polish | v1.0 | 3/3 | Complete | 2026-03-18 |
-| 8. Schema Foundation | v2.0 | 0/1 | Not started | - |
+| 8. Schema Foundation | 1/1 | Complete   | 2026-03-19 | - |
 | 9. Learning Engine + Golden Examples | v2.0 | 0/3 | Not started | - |
 | 10. Learning Validation | v2.0 | 0/2 | Not started | - |
 | 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |

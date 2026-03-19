@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
-status: ready_to_plan
-stopped_at: Roadmap created — Phase 8 ready to plan
-last_updated: "2026-03-19"
+status: unknown
+stopped_at: Completed 08-01-PLAN.md — v2.0 schema foundation complete
+last_updated: "2026-03-19T07:24:56.275Z"
 progress:
   total_phases: 7
-  completed_phases: 0
-  total_plans: 14
-  completed_plans: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
+  percent: 0
 ---
 
 # STATE: Personal Content Engine
@@ -19,20 +20,20 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-19)
 
 **Core value:** Set up a brand once, then only check in weekly. Everything else runs autonomously.
-**Current focus:** Phase 8 — Schema Foundation (v2.0 start)
+**Current focus:** Phase 9 — Learning Engine + Golden Examples
 
 ## Current Milestone
 
 **v2.0 Intelligence Layer** — In Progress
 - Phases: 8-14 (7 phases, 14 plans estimated)
-- Status: Ready to plan Phase 8
-- Last activity: 2026-03-19 — Roadmap created, all 26 requirements mapped
+- Status: Phase 8 complete — ready for Phase 9
+- Last activity: 2026-03-19 — Phase 8 schema foundation complete
 
 ## Phase Status
 
 | Phase | Name | Plans | Status |
 |-------|------|-------|--------|
-| 8 | Schema Foundation | 0/1 | Not started |
+| 8 | Schema Foundation | 1/1 | Complete |
 | 9 | Learning Engine + Golden Examples | 0/3 | Not started |
 | 10 | Learning Validation | 0/2 | Not started |
 | 11 | Multi-Variant Generation | 0/2 | Not started |
@@ -40,7 +41,7 @@ See: .planning/PROJECT.md (updated 2026-03-19)
 | 13 | Content Recycling + Repurposing | 0/2 | Not started |
 | 14 | Engagement Helper | 0/2 | Not started (external API blocker) |
 
-Progress: [░░░░░░░░░░] 0% of v2.0
+Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Decisions
 
@@ -50,6 +51,7 @@ Progress: [░░░░░░░░░░] 0% of v2.0
 - [v2.0 research]: 30-post cohort minimum before learning analysis runs; 10-post minimum per A/B variant
 - [v1.0]: Cron init via health endpoint (instrumentation.ts broken in standalone mode)
 - [v1.0]: SQLite WAL mode active — stagger new cron schedules; `PRAGMA busy_timeout = 5000` on connection
+- [Phase 08-schema-foundation]: AnySQLiteColumn annotation for self-referential Drizzle FK columns resolves circular TypeScript type inference
 
 ## Blockers
 
@@ -62,8 +64,8 @@ Progress: [░░░░░░░░░░] 0% of v2.0
 
 ## Session Continuity
 
-Last session: 2026-03-19
-Stopped at: Roadmap created — ROADMAP.md, STATE.md written, REQUIREMENTS.md traceability updated
+Last session: 2026-03-19T07:24:56.268Z
+Stopped at: Completed 08-01-PLAN.md — v2.0 schema foundation complete
 Resume file: None
 
 ---
