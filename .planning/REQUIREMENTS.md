@@ -7,17 +7,17 @@
 
 ### Self-Improvement
 
-- [ ] **LEARN-01**: Weekly analysis cron identifies patterns in top/bottom performers per brand per platform
-- [ ] **LEARN-02**: AI generates structured learnings (hook, format, tone, topic, timing, media, cta, length dimensions)
+- [x] **LEARN-01**: Weekly analysis cron identifies patterns in top/bottom performers per brand per platform
+- [x] **LEARN-02**: AI generates structured learnings (hook, format, tone, topic, timing, media, cta, length dimensions)
 - [ ] **LEARN-03**: Learnings injected into generation prompts sorted by confidence score
 - [ ] **LEARN-04**: Learnings dashboard: view active/inactive learnings per brand with performance data
-- [ ] **LEARN-05**: Post-mortem on failures: underperformers generate "avoid" learnings
-- [ ] **LEARN-06**: Statistical minimum gate: analysis requires 30+ posts per cohort before generating learnings
+- [x] **LEARN-05**: Post-mortem on failures: underperformers generate "avoid" learnings
+- [x] **LEARN-06**: Statistical minimum gate: analysis requires 30+ posts per cohort before generating learnings
 - [ ] **LEARN-07**: Human approval gate: new learnings start as "pending" until approved on dashboard
 
 ### Golden Examples
 
-- [ ] **GOLD-01**: Auto-curate 90th percentile posts as golden examples per brand per platform
+- [x] **GOLD-01**: Auto-curate 90th percentile posts as golden examples per brand per platform
 - [ ] **GOLD-02**: Dynamic few-shot: inject top 5 recent golden examples into generation prompts
 - [ ] **GOLD-03**: Golden examples page: view, pin, unpin examples per brand
 
@@ -86,14 +86,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LEARN-01 | Phase 9 | Pending |
-| LEARN-02 | Phase 9 | Pending |
+| LEARN-01 | Phase 9 | Complete |
+| LEARN-02 | Phase 9 | Complete |
 | LEARN-03 | Phase 9 | Pending |
 | LEARN-04 | Phase 9 | Pending |
-| LEARN-05 | Phase 9 | Pending |
-| LEARN-06 | Phase 9 | Pending |
+| LEARN-05 | Phase 9 | Complete |
+| LEARN-06 | Phase 9 | Complete |
 | LEARN-07 | Phase 9 | Pending |
-| GOLD-01 | Phase 9 | Pending |
+| GOLD-01 | Phase 9 | Complete |
 | GOLD-02 | Phase 9 | Pending |
 | GOLD-03 | Phase 9 | Pending |
 | VALID-01 | Phase 10 | Pending |

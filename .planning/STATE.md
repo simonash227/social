@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 08-01-PLAN.md — v2.0 schema foundation complete
-last_updated: "2026-03-19T07:28:53.791Z"
+stopped_at: Completed 09-01-PLAN.md — learning engine data pipeline complete
+last_updated: "2026-03-19T22:35:37.317Z"
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
+  total_plans: 4
+  completed_plans: 2
   percent: 14
 ---
 
@@ -52,6 +52,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [v1.0]: Cron init via health endpoint (instrumentation.ts broken in standalone mode)
 - [v1.0]: SQLite WAL mode active — stagger new cron schedules; `PRAGMA busy_timeout = 5000` on connection
 - [Phase 08-schema-foundation]: AnySQLiteColumn annotation for self-referential Drizzle FK columns resolves circular TypeScript type inference
+- [Phase 09-01]: All learnings written with status=pending (never auto-approved) — Goodhart's Law prevention
+- [Phase 09-01]: loadLearnings requires BOTH isActive=1 AND status=approved — isActive alone is insufficient
 
 ## Blockers
 
@@ -64,8 +66,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-19T07:24:56.268Z
-Stopped at: Completed 08-01-PLAN.md — v2.0 schema foundation complete
+Last session: 2026-03-19T22:35:37.313Z
+Stopped at: Completed 09-01-PLAN.md — learning engine data pipeline complete
 Resume file: None
 
 ---
