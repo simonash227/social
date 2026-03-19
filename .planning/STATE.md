@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 09-02-PLAN.md — generation pipeline injection + learnings server actions complete
-last_updated: "2026-03-19T22:41:40.221Z"
+stopped_at: Completed 09-03-PLAN.md — learnings dashboard + golden examples UI complete
+last_updated: "2026-03-19T22:49:50.135Z"
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 14
 ---
 
@@ -57,6 +57,9 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase 09-02]: goldenExamples inject AFTER examplePosts block, BEFORE closing JSON instruction for prompt coherence
 - [Phase 09-02]: generateContent passes platforms[0] to loadLearnings/loadGoldenExamples — primary platform drives injection for multi-platform generation
 - [Phase 09-02]: runManualAnalysis uses dynamic import to avoid bundling learning-engine into server action boundary
+- [Phase 09-03]: Golden examples page queries all platforms (no platform filter) — shows brand-wide top performers
+- [Phase 09-03]: All p90+ posts shown in golden examples UI (not capped at 5) — first 5 marked as injected into prompts
+- [Phase 09-03]: Rejected learnings hidden by default with show/hide toggle to keep UI focused on actionable items
 
 ## Blockers
 
@@ -69,8 +72,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-19T22:41:40.212Z
-Stopped at: Completed 09-02-PLAN.md — generation pipeline injection + learnings server actions complete
+Last session: 2026-03-19T22:49:50.130Z
+Stopped at: Completed 09-03-PLAN.md — learnings dashboard + golden examples UI complete
 Resume file: None
 
 ---
