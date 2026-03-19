@@ -62,12 +62,12 @@ Plans:
   3. After approval, learnings are injected into generation prompts (max 5, confidence-ordered, platform-matched); generated content visibly reflects injected context
   4. Failure post-mortems produce "avoid" learnings that appear alongside positive learnings on the dashboard with distinct labeling
   5. Golden examples page per brand shows 90th-percentile posts; top 5 pinned examples appear in generation prompts as few-shot context; user can pin or unpin any example
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 09-01: Learning engine cron + analysis logic + brandLearnings writes
-- [ ] 09-02: Prompt injector + modified generation pipeline + golden examples curation
-- [ ] 09-03: Learnings dashboard UI + golden examples page
+- [ ] 09-01-PLAN.md — Learning engine core: isGoldenPinned migration, learning-engine.ts, prompt-injector.ts, cron + collectAnalytics hooks
+- [ ] 09-02-PLAN.md — Generation pipeline injection: buildSystemPrompt + generateContent modifications, learnings server actions
+- [ ] 09-03-PLAN.md — Learnings dashboard UI + golden examples page + brand detail nav links
 
 ### Phase 10: Learning Validation
 **Goal**: Each generated post records which learnings were active during its creation; A/B comparison reveals whether learnings actually lift engagement; ineffective learnings are automatically deactivated
@@ -159,7 +159,7 @@ Plans:
 | 5. Calendar + Scheduling | v1.0 | 3/3 | Complete | 2026-03-18 |
 | 6. Content Automation Pipeline | v1.0 | 4/4 | Complete | 2026-03-18 |
 | 7. Analytics + Dashboard + Polish | v1.0 | 3/3 | Complete | 2026-03-18 |
-| 8. Schema Foundation | 1/1 | Complete   | 2026-03-19 | - |
+| 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
 | 9. Learning Engine + Golden Examples | v2.0 | 0/3 | Not started | - |
 | 10. Learning Validation | v2.0 | 0/2 | Not started | - |
 | 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |
@@ -169,4 +169,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-19 after Phase 8 planning*
+*Last updated: 2026-03-19 after Phase 9 planning*
