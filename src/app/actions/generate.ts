@@ -10,6 +10,7 @@ import { sanitizeText } from '@/lib/sanitize'
 import { extractFromUrl, extractPdf } from '@/lib/extract'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { loadLearnings, loadGoldenExamples, type BrandLearning, type GoldenExample } from '@/lib/prompt-injector'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -76,7 +77,11 @@ function getAnthropic(): Anthropic {
 
 type BrandRow = typeof brands.$inferSelect
 
-function buildSystemPrompt(brand: BrandRow): string {
+function buildSystemPrompt(
+  brand: BrandRow,
+  learnings?: BrandLearning[],
+  goldenExamples?: GoldenExample[]
+): string {
   const parts: string[] = [
     `You are a social media content writer for the brand "${brand.name}".`,
     '',
@@ -104,6 +109,27 @@ function buildSystemPrompt(brand: BrandRow): string {
   }
   if (brand.bannedHashtags && brand.bannedHashtags.length > 0) {
     parts.push(`BANNED HASHTAGS (never use): ${brand.bannedHashtags.join(', ')}`)
+  }
+
+  // Inject golden examples as style references
+  if (goldenExamples && goldenExamples.length > 0) {
+    parts.push('')
+    parts.push('TOP PERFORMING POSTS — USE AS STYLE REFERENCE (do not copy, generalize the pattern):')
+    for (const ex of goldenExamples) {
+      parts.push(`[${ex.platform.toUpperCase()} — engagement score ${ex.engagementScore}]`)
+      parts.push(ex.content.slice(0, 300)) // cap at 300 chars to manage token budget
+      parts.push('---')
+    }
+  }
+
+  // Inject approved learnings
+  if (learnings && learnings.length > 0) {
+    parts.push('')
+    parts.push('LEARNINGS FROM YOUR TOP PERFORMERS (apply these):')
+    for (const l of learnings) {
+      const prefix = l.type === 'avoid_pattern' ? 'AVOID' : 'DO'
+      parts.push(`- [${prefix}] ${l.description}`)
+    }
   }
 
   parts.push('')
@@ -446,8 +472,14 @@ export async function generateContent(
       // If extraction failed, continue with URL-only prompt behavior (graceful degradation)
     }
 
+    // 3.5. Load learnings and golden examples for prompt injection
+    const learnings = brand.learningInjection
+      ? loadLearnings(brandId, platforms[0])
+      : []
+    const goldenExamples = loadGoldenExamples(brandId, platforms[0])
+
     // 4. Build prompts
-    const systemPrompt = buildSystemPrompt(brand)
+    const systemPrompt = buildSystemPrompt(brand, learnings, goldenExamples)
     const userPrompt = buildGenerationPrompt(platforms, cleanSourceText, sourceUrl, brand)
     const modelConfig = getModelConfig()
 
