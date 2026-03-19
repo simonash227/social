@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, ImageIcon, LayoutGrid, Rss, BarChart3 } from 'lucide-react'
+import { Sparkles, ImageIcon, LayoutGrid, Rss, BarChart3, Brain, Star } from 'lucide-react'
 import { DeleteBrandDialog } from './delete-dialog' // uses deleteBrand server action
 import { AccountsSection } from './accounts-section'
 
@@ -160,6 +160,14 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
           <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/analytics`} />}>
             <BarChart3 className="mr-2 h-4 w-4" />
             Analytics
+          </Button>
+          <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/learnings`} />}>
+            <Brain className="mr-2 h-4 w-4" />
+            Learnings
+          </Button>
+          <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/golden-examples`} />}>
+            <Star className="mr-2 h-4 w-4" />
+            Golden Examples
           </Button>
           <Button variant="outline" size="sm" render={<Link href={`/brands/${brand.id}/edit`} />}>
             Edit Brand
