@@ -47,10 +47,10 @@
   2. New columns on `posts` (recycledFromPostId, variantGroup, variantOf, repurposeChainId), `brands` (enableVariants, learningInjection, lastLearningRunAt), and `postAnalytics` (promptTemplateId, activeLearningIds) are present with nullable/default values so no existing rows break
   3. Existing automation pipeline (RSS → generate → schedule → publish) completes a full cycle without errors after migrations
   4. Drizzle studio shows all new tables and columns; schema.ts matches actual DB state
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 08-01: Schema migrations — new tables and columns
+- [ ] 08-01-PLAN.md — Add v2.0 tables (brandLearnings, promptTemplates, commentSuggestions) and columns on existing tables, generate migration, verify no regressions
 
 ### Phase 9: Learning Engine + Golden Examples
 **Goal**: The engine analyzes top and bottom performers weekly, extracts structured learnings, and automatically injects them (along with golden example posts) into future generation prompts — completing the self-improvement loop
@@ -169,4 +169,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-19 after v2.0 roadmap creation*
+*Last updated: 2026-03-19 after Phase 8 planning*
