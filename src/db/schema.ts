@@ -2,6 +2,7 @@ import {
   integer,
   text,
   sqliteTable,
+  type AnySQLiteColumn,
 } from 'drizzle-orm/sqlite-core'
 
 // ─── Sessions ────────────────────────────────────────────────────────────────
@@ -95,9 +96,9 @@ export const posts = sqliteTable('posts', {
   scheduledAt:  text('scheduled_at'),
   publishedAt:  text('published_at'),
   feedEntryId:        integer('feed_entry_id').references(() => feedEntries.id),
-  // v2.0 columns
-  recycledFromPostId: integer('recycled_from_post_id').references(() => posts.id),
-  variantOf:          integer('variant_of').references(() => posts.id),
+  // v2.0 columns — self-referential FKs use AnySQLiteColumn to avoid circular type inference
+  recycledFromPostId: integer('recycled_from_post_id').references((): AnySQLiteColumn => posts.id),
+  variantOf:          integer('variant_of').references((): AnySQLiteColumn => posts.id),
   variantGroup:       text('variant_group'),
   repurposeChainId:   text('repurpose_chain_id'),
   createdAt:    text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
