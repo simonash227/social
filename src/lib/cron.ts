@@ -108,5 +108,15 @@ export function initCron(): void {
     }
   })
 
-  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate, collect-analytics)')
+  // ── 6. Weekly learning analysis (Sunday 2:00 AM) ──────────────────────────
+  cron.schedule('0 2 * * 0', async () => {
+    try {
+      const { analyzeAllBrands } = await import('./learning-engine')
+      await analyzeAllBrands()
+    } catch (err) {
+      console.error('[cron] learning-engine failed:', err)
+    }
+  })
+
+  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate, collect-analytics, learning-engine)')
 }

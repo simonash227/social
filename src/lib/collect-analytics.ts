@@ -301,6 +301,26 @@ export async function collectAnalytics(): Promise<void> {
       }
     }
 
+    // ── Threshold-gated learning trigger ─────────────────────────────────────
+    // If a brand had 2+ platform cohorts reclassified, trigger learning analysis.
+    // analyzeForBrand() internally checks the 7-day gate and 30-post minimum.
+    const brandCohortCounts = new Map<number, number>()
+    for (const cohortKey of affectedCohorts) {
+      const brandId = parseInt(cohortKey.split(':')[0], 10)
+      brandCohortCounts.set(brandId, (brandCohortCounts.get(brandId) ?? 0) + 1)
+    }
+
+    for (const [brandId, count] of brandCohortCounts) {
+      if (count >= 2) {
+        try {
+          const { analyzeAllPlatformsForBrand } = await import('./learning-engine')
+          await analyzeAllPlatformsForBrand(brandId)
+        } catch (err) {
+          console.error(`[collect-analytics] learning trigger failed for brand ${brandId}:`, err)
+        }
+      }
+    }
+
     // ── Log summary ───────────────────────────────────────────────────────────
     await db.insert(activityLog).values({
       type: 'analytics',
