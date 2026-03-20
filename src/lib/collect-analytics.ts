@@ -1,6 +1,6 @@
 import { getDb } from '@/db'
 import { posts, postPlatforms, postAnalytics, activityLog } from '@/db/schema'
-import { eq, and, lte, isNotNull, sql } from 'drizzle-orm'
+import { eq, and, lte, isNotNull } from 'drizzle-orm'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -179,6 +179,11 @@ export async function collectAnalytics(): Promise<void> {
 
         const now = new Date().toISOString()
 
+        // Read relay column from posts table — use the IDs active at generation time, not now
+        const postRow = db.select({ postActiveLearningIds: posts.postActiveLearningIds })
+          .from(posts).where(eq(posts.id, ep.postId)).get()
+        const activeLearningIds = postRow?.postActiveLearningIds ?? null
+
         // Upsert: check if row exists first, then insert or update
         const existing = await db
           .select({ id: postAnalytics.id })
@@ -200,6 +205,7 @@ export async function collectAnalytics(): Promise<void> {
               comments: metrics.comments ?? null,
               shares: metrics.shares ?? null,
               engagementScore,
+              activeLearningIds,
               collectedAt: now,
             })
             .where(eq(postAnalytics.id, existing.id))
@@ -213,6 +219,7 @@ export async function collectAnalytics(): Promise<void> {
             comments: metrics.comments ?? null,
             shares: metrics.shares ?? null,
             engagementScore,
+            activeLearningIds,
             collectedAt: now,
             createdAt: now,
           }).run()

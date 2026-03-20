@@ -1,0 +1,1 @@
+ALTER TABLE `posts` ADD `post_active_learning_ids` text;

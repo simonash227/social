@@ -91,6 +91,7 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
   const [result, setResult] = useState<RefinedGenerationResult | null>(null)
   const [editedContent, setEditedContent] = useState<Record<string, string>>({})
   const [expandedHooks, setExpandedHooks] = useState<string | null>(null)
+  const [activeLearningIds, setActiveLearningIds] = useState<number[] | null>(null)
 
   // Loading states
   const [isPending, startTransition] = useTransition()
@@ -189,6 +190,7 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
 
       // Track generation cost separately
       setGenCost(genResult.totalCostUsd)
+      setActiveLearningIds(genResult.activeLearningIds ?? null)
 
       // Phase 2: Refine and quality gate
       setLoadingMessage('Refining...')
@@ -216,6 +218,7 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
     setEditedContent({})
     setExpandedHooks(null)
     setGenCost(0)
+    setActiveLearningIds(null)
     handleGenerate()
   }
 
@@ -239,7 +242,8 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
         editedContent,
         sourceText,
         sourceUrl,
-        Object.keys(qualityData).length > 0 ? qualityData : undefined
+        Object.keys(qualityData).length > 0 ? qualityData : undefined,
+        activeLearningIds
       )
       if (res?.error) {
         setError(res.error)

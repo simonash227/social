@@ -103,6 +103,8 @@ export const posts = sqliteTable('posts', {
   repurposeChainId:   text('repurpose_chain_id'),
   // v2.0 golden examples
   isGoldenPinned:     integer('is_golden_pinned').notNull().default(0),
+  // v2.0 learning attribution relay
+  postActiveLearningIds: text('post_active_learning_ids', { mode: 'json' }).$type<number[] | null>(),
   createdAt:    text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
 })
 

@@ -21,6 +21,7 @@ export interface GenerationResult {
     winningHook: string
   }>
   totalCostUsd: number
+  activeLearningIds?: number[]
   error?: string
 }
 
@@ -571,7 +572,10 @@ export async function generateContent(
       }
     }
 
-    return result
+    return {
+      ...result,
+      activeLearningIds: learnings.map(l => l.id),
+    }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error during generation'
 
@@ -743,7 +747,8 @@ export async function saveGeneratedPosts(
   platformContents: Record<string, string>,
   sourceText: string,
   sourceUrl: string,
-  qualityData?: Record<string, { score: number; details: QualityDetails }>
+  qualityData?: Record<string, { score: number; details: QualityDetails }>,
+  activeLearningIds?: number[] | null
 ): Promise<{ error?: string }> {
   try {
     const db = getDb()
@@ -765,6 +770,7 @@ export async function saveGeneratedPosts(
       status: 'draft',
       qualityScore: qualityData?.[platformKeys[0]]?.score ?? null,
       qualityDetails: qualityData?.[platformKeys[0]]?.details ?? null,
+      postActiveLearningIds: activeLearningIds ?? null,
     }).returning({ id: posts.id }).get()
 
     // Insert one postPlatform per platform

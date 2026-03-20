@@ -150,6 +150,7 @@ interface AutoPostInput {
   platformContents: Record<string, string>
   qualityData: Record<string, { score: number }>
   status: 'draft' | 'scheduled'
+  activeLearningIds?: number[] | null
 }
 
 interface AutoPostResult {
@@ -165,7 +166,7 @@ interface AutoPostResult {
  */
 function saveAsAutoPost(input: AutoPostInput): AutoPostResult {
   const db = getDb()
-  const { brandId, feedEntryId, sourceUrl, sourceText, platformContents, qualityData, status } = input
+  const { brandId, feedEntryId, sourceUrl, sourceText, platformContents, qualityData, status, activeLearningIds } = input
 
   const platformKeys = Object.keys(platformContents)
   if (platformKeys.length === 0) {
@@ -186,6 +187,7 @@ function saveAsAutoPost(input: AutoPostInput): AutoPostResult {
         status,
         qualityScore: qualityData[primaryPlatform]?.score ?? null,
         feedEntryId,
+        postActiveLearningIds: activeLearningIds ?? null,
         createdAt: new Date().toISOString(),
       })
       .returning({ id: posts.id })
@@ -480,6 +482,7 @@ async function processEntry(entry: EligibleEntry): Promise<void> {
       platformContents: toDraft,
       qualityData,
       status: 'draft',
+      activeLearningIds: generationResult.activeLearningIds ?? null,
     })
 
     if (draftResult.error) {
@@ -511,6 +514,7 @@ async function processEntry(entry: EligibleEntry): Promise<void> {
       platformContents: toSchedule,
       qualityData,
       status: 'draft', // Start as draft; update to scheduled per platform below
+      activeLearningIds: generationResult.activeLearningIds ?? null,
     })
 
     if (scheduleResult.error) {
