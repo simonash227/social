@@ -93,11 +93,11 @@ Plans:
   2. Brand settings page shows a multi-variant toggle (default off); enabling it displays an estimated cost-per-post increase before confirming
   3. Post detail page shows the winning variant's score alongside collapsed runner-up variants with their scores
   4. Multi-variant generation counts its full token cost against `MAX_DAILY_AI_SPEND`; when the limit is reached, generation falls back to single-variant rather than failing silently
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 11-01: generateVariants() function + brand toggle + cost tracking + fallback logic
-- [ ] 11-02: Variant winner/loser UI on post detail + brand settings toggle
+- [ ] 11-01-PLAN.md — variant-generator.ts with generateVariants(), auto-generate pipeline branching, brand toggle + updateBrand, cost guard with fallback
+- [ ] 11-02-PLAN.md — Post detail page with winning variant + runner-up display, recent posts links on brand detail page
 
 ### Phase 12: Advanced Analytics
 **Goal**: The analytics section shows time-series engagement charts, a posting-time heatmap, platform comparison, and learning impact trends; all views show "not enough data" guards when fewer than 30 posts exist
@@ -169,4 +169,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-20 after Phase 10 planning*
+*Last updated: 2026-03-20 after Phase 11 planning*
