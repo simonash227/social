@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 10-02-PLAN.md — learning effectiveness visualization complete
-last_updated: "2026-03-20T02:24:43.982Z"
+stopped_at: Completed 11-01-PLAN.md — multi-variant generation pipeline complete
+last_updated: "2026-03-20T03:44:50.654Z"
 progress:
   total_phases: 7
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 7
   percent: 14
 ---
 
@@ -66,6 +66,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase 10-02]: Auto-deactivated learnings use amber-600 badge (not red) to distinguish automated action from human rejection
 - [Phase 10-02]: hiddenLearnings toggle covers both rejected AND auto_deactivated under one unified hide/show group
 - [Phase 10-02]: Validated A/B confidence shown as primary; AI confidence shown in parentheses only when they differ
+- [Phase 11]: Variant winner bypasses refine-and-gate — runCritique scoring inside generateVariants is sufficient quality gate
+- [Phase 11]: Score on primary platform only (platforms[0]) for variant selection — avoids conflicting cross-platform scores
 
 ## Blockers
 
@@ -78,8 +80,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-20T02:19:01.799Z
-Stopped at: Completed 10-02-PLAN.md — learning effectiveness visualization complete
+Last session: 2026-03-20T03:44:50.648Z
+Stopped at: Completed 11-01-PLAN.md — multi-variant generation pipeline complete
 Resume file: None
 
 ---

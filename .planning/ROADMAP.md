@@ -93,7 +93,7 @@ Plans:
   2. Brand settings page shows a multi-variant toggle (default off); enabling it displays an estimated cost-per-post increase before confirming
   3. Post detail page shows the winning variant's score alongside collapsed runner-up variants with their scores
   4. Multi-variant generation counts its full token cost against `MAX_DAILY_AI_SPEND`; when the limit is reached, generation falls back to single-variant rather than failing silently
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 11-01-PLAN.md — variant-generator.ts with generateVariants(), auto-generate pipeline branching, brand toggle + updateBrand, cost guard with fallback
@@ -162,7 +162,7 @@ Plans:
 | 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
 | 9. Learning Engine + Golden Examples | 3/3 | Complete   | 2026-03-19 | - |
 | 10. Learning Validation | 2/2 | Complete    | 2026-03-20 | - |
-| 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |
+| 11. Multi-Variant Generation | 1/2 | In Progress|  | - |
 | 12. Advanced Analytics | v2.0 | 0/2 | Not started | - |
 | 13. Content Recycling + Repurposing | v2.0 | 0/2 | Not started | - |
 | 14. Engagement Helper | v2.0 | 0/2 | Not started | - |

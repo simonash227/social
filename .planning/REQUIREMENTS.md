@@ -30,10 +30,10 @@
 
 ### Multi-Variant Generation
 
-- [ ] **MVAR-01**: Generate 3 content variants per post using Haiku, quality gate (Sonnet) picks winner
-- [ ] **MVAR-02**: Per-brand toggle: enable/disable multi-variant generation (default off to control costs)
+- [x] **MVAR-01**: Generate 3 content variants per post using Haiku, quality gate (Sonnet) picks winner
+- [x] **MVAR-02**: Per-brand toggle: enable/disable multi-variant generation (default off to control costs)
 - [ ] **MVAR-03**: Store all variants with scores; show winning variant and runner-ups on post detail
-- [ ] **MVAR-04**: Cost guard: multi-variant respects daily AI spend limit (3x cost per post)
+- [x] **MVAR-04**: Cost guard: multi-variant respects daily AI spend limit (3x cost per post)
 
 ### Advanced Analytics
 
@@ -100,10 +100,10 @@
 | VALID-02 | Phase 10 | Complete |
 | VALID-03 | Phase 10 | Complete |
 | VALID-04 | Phase 10 | Complete |
-| MVAR-01 | Phase 11 | Pending |
-| MVAR-02 | Phase 11 | Pending |
+| MVAR-01 | Phase 11 | Complete |
+| MVAR-02 | Phase 11 | Complete |
 | MVAR-03 | Phase 11 | Pending |
-| MVAR-04 | Phase 11 | Pending |
+| MVAR-04 | Phase 11 | Complete |
 | CHART-01 | Phase 12 | Pending |
 | CHART-02 | Phase 12 | Pending |
 | CHART-03 | Phase 12 | Pending |
