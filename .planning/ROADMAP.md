@@ -78,11 +78,11 @@ Plans:
   2. Learning effectiveness dashboard shows per-learning A/B comparison: engagement averages for posts with vs without each learning, with post counts for each group
   3. A learning with no measurable engagement lift after N posts (configurable threshold, default 20) is automatically marked inactive with an "auto-deactivated" reason on the dashboard
   4. Each learning displays a confidence indicator (high/medium/low) derived from its supporting post count and engagement delta magnitude
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 10-01: Learning attribution tagging on post generation + A/B comparison queries + auto-deactivation cron
-- [ ] 10-02: Learning effectiveness UI — dashboard panel with confidence indicators
+- [ ] 10-01-PLAN.md — Attribution relay column, generation pipeline threading, learning-validator.ts with A/B stats and auto-deactivation cron
+- [ ] 10-02-PLAN.md — Learning effectiveness UI with A/B stats panel, confidence indicators, and active learning count on generate page
 
 ### Phase 11: Multi-Variant Generation
 **Goal**: Brands with multi-variant enabled generate 3 content variants per post; the quality gate scores all three and picks the winner; cost is bounded by the daily AI spend limit
@@ -169,4 +169,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-03-15*
-*Last updated: 2026-03-19 after Phase 9 planning*
+*Last updated: 2026-03-20 after Phase 10 planning*
