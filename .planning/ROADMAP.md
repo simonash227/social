@@ -30,7 +30,7 @@
 
 - [x] **Phase 8: Schema Foundation** — New tables and columns enabling all v2.0 features, zero regressions to v1.0 pipeline (completed 2026-03-19)
 - [x] **Phase 9: Learning Engine + Golden Examples** — Weekly self-improvement loop that extracts structured learnings from top/bottom performers and injects them into generation prompts alongside auto-curated golden examples (completed 2026-03-19)
-- [ ] **Phase 10: Learning Validation** — A/B attribution and effectiveness tracking that auto-deactivates learnings that fail to lift engagement
+- [x] **Phase 10: Learning Validation** — A/B attribution and effectiveness tracking that auto-deactivates learnings that fail to lift engagement (completed 2026-03-20)
 - [ ] **Phase 11: Multi-Variant Generation** — Per-brand 3-variant generation with quality gate winner selection and cost guardrails
 - [ ] **Phase 12: Advanced Analytics** — Time-series charts, posting-time heatmap, platform comparison, and learning impact visualization
 - [ ] **Phase 13: Content Recycling + Repurposing** — Evergreen recycling of top performers with fresh angles and multi-platform repurposing chains
@@ -78,7 +78,7 @@ Plans:
   2. Learning effectiveness dashboard shows per-learning A/B comparison: engagement averages for posts with vs without each learning, with post counts for each group
   3. A learning with no measurable engagement lift after N posts (configurable threshold, default 20) is automatically marked inactive with an "auto-deactivated" reason on the dashboard
   4. Each learning displays a confidence indicator (high/medium/low) derived from its supporting post count and engagement delta magnitude
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 10-01-PLAN.md — Attribution relay column, generation pipeline threading, learning-validator.ts with A/B stats and auto-deactivation cron
@@ -161,7 +161,7 @@ Plans:
 | 7. Analytics + Dashboard + Polish | v1.0 | 3/3 | Complete | 2026-03-18 |
 | 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
 | 9. Learning Engine + Golden Examples | 3/3 | Complete   | 2026-03-19 | - |
-| 10. Learning Validation | 1/2 | In Progress|  | - |
+| 10. Learning Validation | 2/2 | Complete   | 2026-03-20 | - |
 | 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |
 | 12. Advanced Analytics | v2.0 | 0/2 | Not started | - |
 | 13. Content Recycling + Repurposing | v2.0 | 0/2 | Not started | - |

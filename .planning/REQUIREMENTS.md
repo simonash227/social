@@ -26,7 +26,7 @@
 - [x] **VALID-01**: Tag each generated post with which learnings were active during generation
 - [x] **VALID-02**: A/B comparison: posts with learning vs posts without, per learning
 - [x] **VALID-03**: Auto-deactivate learnings that show no engagement lift after N posts (configurable threshold)
-- [ ] **VALID-04**: Learning effectiveness summary on dashboard with confidence indicators
+- [x] **VALID-04**: Learning effectiveness summary on dashboard with confidence indicators
 
 ### Multi-Variant Generation
 
@@ -99,7 +99,7 @@
 | VALID-01 | Phase 10 | Complete |
 | VALID-02 | Phase 10 | Complete |
 | VALID-03 | Phase 10 | Complete |
-| VALID-04 | Phase 10 | Pending |
+| VALID-04 | Phase 10 | Complete |
 | MVAR-01 | Phase 11 | Pending |
 | MVAR-02 | Phase 11 | Pending |
 | MVAR-03 | Phase 11 | Pending |

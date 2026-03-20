@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 10-01-PLAN.md — learning attribution pipeline and validator complete
-last_updated: "2026-03-20T02:10:03.520Z"
+stopped_at: Completed 10-02-PLAN.md — learning effectiveness visualization complete
+last_updated: "2026-03-20T02:19:01.807Z"
 progress:
   total_phases: 7
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 14
 ---
 
@@ -63,6 +63,9 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase Phase 10-01]: json_each used for JSON array membership — LIKE patterns would produce false positives on numeric IDs
 - [Phase Phase 10-01]: Relay column pattern: posts.postActiveLearningIds captures generation-time IDs; analytics collection copies them forward to prevent drift
 - [Phase Phase 10-01]: autoDeactivateLearnings is synchronous (better-sqlite3 is sync); cron wrapper is async for error handling only
+- [Phase 10-02]: Auto-deactivated learnings use amber-600 badge (not red) to distinguish automated action from human rejection
+- [Phase 10-02]: hiddenLearnings toggle covers both rejected AND auto_deactivated under one unified hide/show group
+- [Phase 10-02]: Validated A/B confidence shown as primary; AI confidence shown in parentheses only when they differ
 
 ## Blockers
 
@@ -75,8 +78,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-20T02:09:50.978Z
-Stopped at: Completed 10-01-PLAN.md — learning attribution pipeline and validator complete
+Last session: 2026-03-20T02:19:01.799Z
+Stopped at: Completed 10-02-PLAN.md — learning effectiveness visualization complete
 Resume file: None
 
 ---
