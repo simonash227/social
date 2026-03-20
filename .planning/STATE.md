@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 11-01-PLAN.md — multi-variant generation pipeline complete
-last_updated: "2026-03-20T03:44:50.654Z"
+stopped_at: Completed 11-02-PLAN.md — post detail page with variant visibility complete
+last_updated: "2026-03-20T03:50:18.631Z"
 progress:
   total_phases: 7
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 14
 ---
 
@@ -68,6 +68,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase 10-02]: Validated A/B confidence shown as primary; AI confidence shown in parentheses only when they differ
 - [Phase 11]: Variant winner bypasses refine-and-gate — runCritique scoring inside generateVariants is sufficient quality gate
 - [Phase 11]: Score on primary platform only (platforms[0]) for variant selection — avoids conflicting cross-platform scores
+- [Phase 11]: Used native <details>/<summary> for runner-up collapsible — no new component needed
+- [Phase 11]: isNull(posts.variantOf) filter on brand page keeps recent posts list showing only primary/winning posts
 
 ## Blockers
 
@@ -80,8 +82,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-20T03:44:50.648Z
-Stopped at: Completed 11-01-PLAN.md — multi-variant generation pipeline complete
+Last session: 2026-03-20T03:50:18.626Z
+Stopped at: Completed 11-02-PLAN.md — post detail page with variant visibility complete
 Resume file: None
 
 ---

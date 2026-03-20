@@ -31,7 +31,7 @@
 - [x] **Phase 8: Schema Foundation** — New tables and columns enabling all v2.0 features, zero regressions to v1.0 pipeline (completed 2026-03-19)
 - [x] **Phase 9: Learning Engine + Golden Examples** — Weekly self-improvement loop that extracts structured learnings from top/bottom performers and injects them into generation prompts alongside auto-curated golden examples (completed 2026-03-19)
 - [x] **Phase 10: Learning Validation** — A/B attribution and effectiveness tracking that auto-deactivates learnings that fail to lift engagement (completed 2026-03-20)
-- [ ] **Phase 11: Multi-Variant Generation** — Per-brand 3-variant generation with quality gate winner selection and cost guardrails
+- [x] **Phase 11: Multi-Variant Generation** — Per-brand 3-variant generation with quality gate winner selection and cost guardrails (completed 2026-03-20)
 - [ ] **Phase 12: Advanced Analytics** — Time-series charts, posting-time heatmap, platform comparison, and learning impact visualization
 - [ ] **Phase 13: Content Recycling + Repurposing** — Evergreen recycling of top performers with fresh angles and multi-platform repurposing chains
 - [ ] **Phase 14: Engagement Helper** — Surface unresponded comments with AI-drafted reply suggestions in brand voice
@@ -93,7 +93,7 @@ Plans:
   2. Brand settings page shows a multi-variant toggle (default off); enabling it displays an estimated cost-per-post increase before confirming
   3. Post detail page shows the winning variant's score alongside collapsed runner-up variants with their scores
   4. Multi-variant generation counts its full token cost against `MAX_DAILY_AI_SPEND`; when the limit is reached, generation falls back to single-variant rather than failing silently
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 11-01-PLAN.md — variant-generator.ts with generateVariants(), auto-generate pipeline branching, brand toggle + updateBrand, cost guard with fallback
@@ -162,7 +162,7 @@ Plans:
 | 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
 | 9. Learning Engine + Golden Examples | 3/3 | Complete   | 2026-03-19 | - |
 | 10. Learning Validation | 2/2 | Complete    | 2026-03-20 | - |
-| 11. Multi-Variant Generation | 1/2 | In Progress|  | - |
+| 11. Multi-Variant Generation | 2/2 | Complete   | 2026-03-20 | - |
 | 12. Advanced Analytics | v2.0 | 0/2 | Not started | - |
 | 13. Content Recycling + Repurposing | v2.0 | 0/2 | Not started | - |
 | 14. Engagement Helper | v2.0 | 0/2 | Not started | - |
