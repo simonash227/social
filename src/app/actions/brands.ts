@@ -95,6 +95,9 @@ export async function updateBrand(id: number, formData: FormData): Promise<void>
   const watermarkOpacityRaw = formData.get('watermarkOpacity') as string | null
   const watermarkOpacity = watermarkOpacityRaw ? parseInt(watermarkOpacityRaw, 10) : undefined
 
+  const enableVariantsRaw = formData.get('enableVariants') as string | null
+  const enableVariants = enableVariantsRaw === '1' ? 1 : 0
+
   const topics = parseLines(formData.get('topics') as string | null)
   const dosList = parseLines(formData.get('dosList') as string | null)
   const dontsList = parseLines(formData.get('dontsList') as string | null)
@@ -124,6 +127,7 @@ export async function updateBrand(id: number, formData: FormData): Promise<void>
       secondaryColor: secondaryColor || null,
       watermarkPosition: (watermarkPosition as 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined) || null,
       watermarkOpacity: watermarkOpacity ?? null,
+      enableVariants,
       topics: topics.length > 0 ? topics : null,
       dosList: dosList.length > 0 ? dosList : null,
       dontsList: dontsList.length > 0 ? dontsList : null,

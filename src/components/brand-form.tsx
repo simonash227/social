@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createBrand, updateBrand } from '@/app/actions/brands'
 import type { brands } from '@/db/schema'
@@ -25,6 +26,9 @@ export function BrandForm({ brand, action }: BrandFormProps) {
   )
   const [watermarkPosition, setWatermarkPosition] = useState(
     brand?.watermarkPosition ?? ''
+  )
+  const [enableVariants, setEnableVariants] = useState(
+    brand?.enableVariants === 1
   )
 
   const formAction = action === 'create'
@@ -353,6 +357,28 @@ export function BrandForm({ brand, action }: BrandFormProps) {
             <p className="text-xs text-muted-foreground">
               Date when posting began for new accounts (helps track account age).
             </p>
+          </div>
+
+          <Separator />
+
+          <input type="hidden" name="enableVariants" value={enableVariants ? '1' : '0'} />
+          <div className="flex items-center gap-3">
+            <Switch
+              id="enableVariants"
+              checked={enableVariants}
+              onCheckedChange={setEnableVariants}
+            />
+            <div>
+              <Label htmlFor="enableVariants">Multi-Variant Generation</Label>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Generate 3 content variants per post and pick the highest-scoring one.
+              </p>
+              {enableVariants && (
+                <p className="text-xs text-amber-600 mt-1">
+                  Approx 7-8x higher AI cost per post (~$0.015 vs ~$0.002) due to 3 generation + 3 scoring calls.
+                </p>
+              )}
+            </div>
           </div>
         </TabsContent>
       </Tabs>
