@@ -141,8 +141,8 @@ export function loadGoldenExamples(brandId: number, platform: string): GoldenExa
     }
   }
 
-  // Sort recent by publishedAt DESC (most recent first)
-  recentTop.sort((a, b) => b.engagementScore - a.engagementScore)
+  // Sort recent by collectedAt DESC (most recent first)
+  recentTop.sort((a, b) => b.collectedAt.localeCompare(a.collectedAt))
   // Sort historic by engagementScore DESC
   historicTop.sort((a, b) => b.engagementScore - a.engagementScore)
 
