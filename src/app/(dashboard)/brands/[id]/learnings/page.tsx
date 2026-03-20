@@ -3,6 +3,7 @@ import { getDb } from '@/db'
 import { brands, brandLearnings, posts, postAnalytics } from '@/db/schema'
 import { desc, eq, isNotNull, sql } from 'drizzle-orm'
 import { LearningsSection } from './learnings-section'
+import { getLearningEffectiveness } from '@/app/actions/learnings'
 
 interface LearningsPageProps {
   params: Promise<{ id: string }>
@@ -54,6 +55,8 @@ export default async function LearningsPage({ params }: LearningsPageProps) {
   const dataCount = engagementCountResult?.count ?? 0
   const hasEnoughData = dataCount >= 30
 
+  const effectiveness = await getLearningEffectiveness(brandId)
+
   return (
     <LearningsSection
       learnings={learnings}
@@ -61,6 +64,7 @@ export default async function LearningsPage({ params }: LearningsPageProps) {
       brandName={brand.name}
       hasEnoughData={hasEnoughData}
       dataCount={dataCount}
+      effectiveness={effectiveness}
     />
   )
 }

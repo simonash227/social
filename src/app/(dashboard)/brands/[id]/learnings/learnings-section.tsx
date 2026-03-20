@@ -12,6 +12,7 @@ import {
   toggleLearning,
   runManualAnalysis,
 } from '@/app/actions/learnings'
+import type { LearningStats } from '@/lib/learning-validator'
 
 interface Learning {
   id: number
@@ -31,6 +32,7 @@ interface LearningsSectionProps {
   brandName: string
   hasEnoughData: boolean
   dataCount: number
+  effectiveness: Record<number, LearningStats>
 }
 
 function formatRelativeDate(isoDate: string): string {
@@ -70,10 +72,12 @@ function ConfidenceBadge({ confidence }: { confidence: string }) {
 
 function LearningCard({
   learning,
+  stats,
   onAction,
   isPending,
 }: {
   learning: Learning
+  stats?: LearningStats
   onAction: (action: string, id: number, value?: boolean) => void
   isPending: boolean
 }) {
@@ -86,13 +90,20 @@ function LearningCard({
       ? 'border-red-200 bg-red-50/30 dark:bg-red-950/10 dark:border-red-800/50'
       : ''
 
+  // Use validated confidence from A/B data when available, falling back to AI-assigned
+  const displayConfidence = stats?.confidence ?? learning.confidence
+  const showAiConfidence = stats && stats.confidence !== learning.confidence
+
   return (
     <Card className={cardClass}>
       <CardContent className="pt-4 pb-4 space-y-3">
         {/* Top row: type, confidence, platform */}
         <div className="flex items-center flex-wrap gap-2">
           <TypeBadge type={learning.type} />
-          <ConfidenceBadge confidence={learning.confidence} />
+          <ConfidenceBadge confidence={displayConfidence} />
+          {showAiConfidence && (
+            <span className="text-[10px] text-muted-foreground">(AI: {learning.confidence})</span>
+          )}
           {learning.platform ? (
             <Badge variant="outline" className="text-xs capitalize">{learning.platform}</Badge>
           ) : (
@@ -108,6 +119,9 @@ function LearningCard({
           {learning.status === 'rejected' && (
             <Badge variant="destructive" className="text-xs ml-auto">Rejected</Badge>
           )}
+          {learning.status === 'auto_deactivated' && (
+            <Badge variant="destructive" className="text-xs ml-auto bg-amber-600 hover:bg-amber-700">Auto-deactivated</Badge>
+          )}
           {learning.status === 'pending' && (
             <Badge variant="outline" className="text-xs border-amber-400 text-amber-700 ml-auto">Pending Review</Badge>
           )}
@@ -115,6 +129,26 @@ function LearningCard({
 
         {/* Description */}
         <p className="text-sm leading-relaxed">{learning.description}</p>
+
+        {/* A/B effectiveness panel */}
+        {stats && (
+          <div className="rounded-md bg-muted/50 p-3 text-xs space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">With this learning:</span>
+              <span className="font-medium">{stats.withCount} posts, avg {stats.withAvgEngagement}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Without this learning:</span>
+              <span className="font-medium">{stats.withoutCount} posts, avg {stats.withoutAvgEngagement}</span>
+            </div>
+            <div className="flex items-center justify-between pt-1 border-t border-border">
+              <span className="text-muted-foreground">Engagement delta:</span>
+              <span className={`font-semibold ${stats.engagementDelta > 0 ? 'text-green-500' : stats.engagementDelta < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                {stats.engagementDelta > 0 ? '+' : ''}{stats.engagementDelta}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Footer row: metadata + actions */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -182,13 +216,18 @@ export function LearningsSection({
   brandName,
   hasEnoughData,
   dataCount,
+  effectiveness,
 }: LearningsSectionProps) {
   const [isPending, startTransition] = useTransition()
   const [analysisMessage, setAnalysisMessage] = useState<string | null>(null)
   const [showRejected, setShowRejected] = useState(false)
 
-  const activeLearnings = learnings.filter((l) => l.status !== 'rejected')
-  const rejectedLearnings = learnings.filter((l) => l.status === 'rejected')
+  const activeLearnings = learnings.filter(
+    (l) => l.status !== 'rejected' && l.status !== 'auto_deactivated'
+  )
+  const hiddenLearnings = learnings.filter(
+    (l) => l.status === 'rejected' || l.status === 'auto_deactivated'
+  )
 
   function handleAction(action: string, id: number, value?: boolean) {
     startTransition(async () => {
@@ -271,28 +310,30 @@ export function LearningsSection({
             <LearningCard
               key={learning.id}
               learning={learning}
+              stats={effectiveness[learning.id]}
               onAction={handleAction}
               isPending={isPending}
             />
           ))}
 
-          {/* Rejected learnings toggle */}
-          {rejectedLearnings.length > 0 && (
+          {/* Hidden learnings toggle (rejected + auto-deactivated) */}
+          {hiddenLearnings.length > 0 && (
             <div className="pt-2">
               <button
                 onClick={() => setShowRejected((prev) => !prev)}
                 className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
               >
                 {showRejected
-                  ? `Hide ${rejectedLearnings.length} rejected learning${rejectedLearnings.length !== 1 ? 's' : ''}`
-                  : `Show ${rejectedLearnings.length} rejected learning${rejectedLearnings.length !== 1 ? 's' : ''}`}
+                  ? `Hide ${hiddenLearnings.length} hidden learning${hiddenLearnings.length !== 1 ? 's' : ''}`
+                  : `Show ${hiddenLearnings.length} hidden learning${hiddenLearnings.length !== 1 ? 's' : ''}`}
               </button>
               {showRejected && (
                 <div className="mt-3 space-y-3">
-                  {rejectedLearnings.map((learning) => (
+                  {hiddenLearnings.map((learning) => (
                     <LearningCard
                       key={learning.id}
                       learning={learning}
+                      stats={effectiveness[learning.id]}
                       onAction={handleAction}
                       isPending={isPending}
                     />

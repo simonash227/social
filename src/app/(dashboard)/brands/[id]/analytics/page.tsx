@@ -40,6 +40,7 @@ export default async function BrandAnalyticsPage({ params }: AnalyticsPageProps)
       performerTier: postAnalytics.performerTier,
       collectedAt: postAnalytics.collectedAt,
       postContent: posts.content,
+      postActiveLearningIds: posts.postActiveLearningIds,
     })
     .from(postAnalytics)
     .innerJoin(posts, eq(postAnalytics.postId, posts.id))
@@ -218,6 +219,11 @@ export default async function BrandAnalyticsPage({ params }: AnalyticsPageProps)
                       </span>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <Badge variant="outline" className="text-xs capitalize">{a.platform}</Badge>
+                        {a.postActiveLearningIds && (a.postActiveLearningIds as number[]).length > 0 && (
+                          <Badge variant="outline" className="text-xs text-blue-600 border-blue-300">
+                            {(a.postActiveLearningIds as number[]).length} learning{(a.postActiveLearningIds as number[]).length !== 1 ? 's' : ''}
+                          </Badge>
+                        )}
                         <Badge variant={tierVariant(a.performerTier)} className="text-xs capitalize">
                           {a.performerTier ?? 'unknown'}
                         </Badge>
