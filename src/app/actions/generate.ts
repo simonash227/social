@@ -25,7 +25,7 @@ export interface GenerationResult {
   error?: string
 }
 
-interface CritiqueResult {
+export interface CritiqueResult {
   dimensions: QualityDetails
   overallScore: number
   weakestDimension: string
@@ -46,7 +46,7 @@ export interface RefinedGenerationResult {
   error?: string
 }
 
-interface GeneratedContent {
+export interface GeneratedContent {
   [platform: string]: { content: string }
 }
 
@@ -69,16 +69,16 @@ const PLATFORM_CONSTRAINTS: Record<string, { limit: number; hashtagNote: string 
 // ─── Lazy-initialized Anthropic client ───────────────────────────────────────
 
 let _anthropic: Anthropic | null = null
-function getAnthropic(): Anthropic {
+export function getAnthropic(): Anthropic {
   if (!_anthropic) _anthropic = new Anthropic()
   return _anthropic
 }
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 
-type BrandRow = typeof brands.$inferSelect
+export type BrandRow = typeof brands.$inferSelect
 
-function buildSystemPrompt(
+export function buildSystemPrompt(
   brand: BrandRow,
   learnings?: BrandLearning[],
   goldenExamples?: GoldenExample[]
@@ -144,7 +144,7 @@ function buildSystemPrompt(
   return parts.join('\n')
 }
 
-function buildGenerationPrompt(
+export function buildGenerationPrompt(
   platforms: string[],
   sourceText: string,
   sourceUrl: string,
@@ -214,7 +214,7 @@ function buildHookScoringPrompt(
   ].join('\n')
 }
 
-function parseJsonResponse<T>(text: string): T {
+export function parseJsonResponse<T>(text: string): T {
   // Strip markdown fences if present
   const cleaned = text
     .replace(/^```json\s*/i, '')
@@ -229,7 +229,7 @@ function parseJsonResponse<T>(text: string): T {
   }
 }
 
-function calculateCostUsd(model: string, inputTokens: number, outputTokens: number): string {
+export function calculateCostUsd(model: string, inputTokens: number, outputTokens: number): string {
   // Prices per million tokens
   const pricing: Record<string, { input: number; output: number }> = {
     'claude-sonnet-4-20250514': { input: 3.00,  output: 15.00 },
@@ -325,7 +325,7 @@ interface CritiqueDimensionsJson {
   dimensions: QualityDetails
 }
 
-async function runCritique(
+export async function runCritique(
   brandId: number,
   platform: string,
   content: string,

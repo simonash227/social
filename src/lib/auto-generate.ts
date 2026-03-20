@@ -151,6 +151,8 @@ interface AutoPostInput {
   qualityData: Record<string, { score: number }>
   status: 'draft' | 'scheduled'
   activeLearningIds?: number[] | null
+  variantGroup?: string | null
+  variantOf?: number | null
 }
 
 interface AutoPostResult {
@@ -166,7 +168,7 @@ interface AutoPostResult {
  */
 function saveAsAutoPost(input: AutoPostInput): AutoPostResult {
   const db = getDb()
-  const { brandId, feedEntryId, sourceUrl, sourceText, platformContents, qualityData, status, activeLearningIds } = input
+  const { brandId, feedEntryId, sourceUrl, sourceText, platformContents, qualityData, status, activeLearningIds, variantGroup, variantOf } = input
 
   const platformKeys = Object.keys(platformContents)
   if (platformKeys.length === 0) {
@@ -188,6 +190,8 @@ function saveAsAutoPost(input: AutoPostInput): AutoPostResult {
         qualityScore: qualityData[primaryPlatform]?.score ?? null,
         feedEntryId,
         postActiveLearningIds: activeLearningIds ?? null,
+        variantGroup: variantGroup ?? null,
+        variantOf: variantOf ?? null,
         createdAt: new Date().toISOString(),
       })
       .returning({ id: posts.id })
@@ -386,6 +390,133 @@ async function processEntry(entry: EligibleEntry): Promise<void> {
     return
   }
 
+  // ── d-variant. Multi-variant path ────────────────────────────────────────
+  {
+    const db = getDb()
+    const brand = db.select().from(brands).where(eq(brands.id, brandId)).get()
+
+    if (brand?.enableVariants === 1) {
+      const { checkAiSpend } = await import('@/lib/ai')
+      const underLimit = await checkAiSpend()
+
+      if (!underLimit) {
+        logActivity(brandId, 'warn', 'Multi-variant skipped: daily spend limit reached, falling back to single-variant', { entryId, url: entryUrl })
+        // Fall through to single-variant path below
+      } else {
+        const { generateVariants } = await import('@/lib/variant-generator')
+        const variantResult = await generateVariants(brandId, platforms, sourceText, entryUrl)
+
+        if (variantResult.error) {
+          logActivity(brandId, 'warn', `Multi-variant generation failed, falling back to single: ${variantResult.error}`, { entryId, url: entryUrl })
+          // Fall through to single-variant path below
+        } else {
+          const variantGroup = variantResult.variantGroup
+          const activeLearningIds = variantResult.activeLearningIds
+
+          // Apply hashtag enforcement to winner content
+          const winnerContents: Record<string, string> = {}
+          for (const [platform, content] of Object.entries(variantResult.winner.platformContents)) {
+            winnerContents[platform] = enforceHashtags(platform, content)
+          }
+
+          // Build winner quality data
+          const winnerQualityData: Record<string, { score: number }> = {}
+          for (const platform of Object.keys(winnerContents)) {
+            winnerQualityData[platform] = { score: variantResult.winner.qualityScore }
+          }
+
+          // Route winner through same automation-level logic
+          const level = automationLevel ?? 'semi'
+          const winnerQualityScore = variantResult.winner.qualityScore
+          let winnerStatus: 'draft' | 'scheduled' = 'draft'
+
+          if (level === 'full' && winnerQualityScore >= 5) {
+            winnerStatus = 'scheduled'
+          } else if (level === 'mostly' && winnerQualityScore >= 7) {
+            winnerStatus = 'scheduled'
+          }
+
+          // Save winner
+          const winnerResult = saveAsAutoPost({
+            brandId,
+            feedEntryId: entryId,
+            sourceUrl: entryUrl,
+            sourceText,
+            platformContents: winnerContents,
+            qualityData: winnerQualityData,
+            status: winnerStatus,
+            activeLearningIds: activeLearningIds.length > 0 ? activeLearningIds : null,
+            variantGroup,
+            variantOf: null,
+          })
+
+          if (winnerResult.error) {
+            logActivity(brandId, 'error', `Multi-variant winner save failed: ${winnerResult.error}`, { entryId, url: entryUrl })
+            return
+          }
+
+          const winnerId = winnerResult.postId
+
+          // If winner should be scheduled, run spam guard and schedule
+          if (winnerStatus === 'scheduled') {
+            const guard = await checkSpamGuard(brandId, platforms[0], entryUrl)
+            if (!guard.allowed) {
+              logActivity(brandId, 'warn', `Spam guard blocked auto-schedule for winner post: ${guard.reason}. Saved as draft.`, { entryId, postId: winnerId, url: entryUrl })
+            } else {
+              const slotResult = await scheduleToNextSlot(winnerId, brandId, platforms[0])
+              if (slotResult.error) {
+                logActivity(brandId, 'warn', `No scheduling slot for winner post: ${slotResult.error}`, { entryId, postId: winnerId, url: entryUrl })
+              } else {
+                logActivity(brandId, 'info', `Auto-scheduled variant winner post ${winnerId} at ${slotResult.scheduledAt}`, { entryId, postId: winnerId, url: entryUrl, scheduledAt: slotResult.scheduledAt })
+              }
+            }
+          }
+
+          logActivity(brandId, 'info', `Multi-variant winner post ${winnerId} created (score: ${winnerQualityScore}/10, temp: ${variantResult.winner.temperature})`, {
+            entryId,
+            postId: winnerId,
+            url: entryUrl,
+            qualityScore: winnerQualityScore,
+            temperature: variantResult.winner.temperature,
+            variantGroup,
+          })
+
+          // Save losers as drafts linked to winner
+          for (const loser of variantResult.losers) {
+            const loserContents: Record<string, string> = {}
+            for (const [platform, content] of Object.entries(loser.platformContents)) {
+              loserContents[platform] = enforceHashtags(platform, content)
+            }
+
+            const loserQualityData: Record<string, { score: number }> = {}
+            for (const platform of Object.keys(loserContents)) {
+              loserQualityData[platform] = { score: loser.qualityScore }
+            }
+
+            const loserResult = saveAsAutoPost({
+              brandId,
+              feedEntryId: entryId,
+              sourceUrl: entryUrl,
+              sourceText,
+              platformContents: loserContents,
+              qualityData: loserQualityData,
+              status: 'draft',
+              activeLearningIds: null,
+              variantGroup,
+              variantOf: winnerId,
+            })
+
+            if (loserResult.error) {
+              logActivity(brandId, 'warn', `Multi-variant loser save failed: ${loserResult.error}`, { entryId, url: entryUrl })
+            }
+          }
+
+          console.log(`[auto-generate] entry ${entryId} done (multi-variant) -- winner: ${winnerId}, losers: ${variantResult.losers.length}`)
+          return
+        }
+      }
+    }
+  }
   // ── d. Run quality pipeline ───────────────────────────────────────────────
   const generationResult = await generateContent(brandId, platforms, sourceText, entryUrl)
   if (generationResult.error) {
