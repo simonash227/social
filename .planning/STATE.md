@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
 stopped_at: Completed 11-02-PLAN.md — post detail page with variant visibility complete
-last_updated: "2026-03-20T03:50:18.631Z"
+last_updated: "2026-03-20T03:54:37.391Z"
 progress:
   total_phases: 7
   completed_phases: 4
