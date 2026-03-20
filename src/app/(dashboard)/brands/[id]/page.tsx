@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getDb } from '@/db'
 import { brands, socialAccounts, posts, postPlatforms, postAnalytics } from '@/db/schema'
-import { and, desc, eq, sql } from 'drizzle-orm'
+import { and, desc, eq, isNull, sql } from 'drizzle-orm'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -64,7 +64,7 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
   const avgEngagement = avgEngResult?.avg != null ? Math.round(avgEngResult.avg) : null
   const topTierCount = topTierCountResult?.count ?? 0
 
-  // Recent 5 posts with platform info
+  // Recent 5 posts with platform info — exclude runner-up variants (variantOf is not null)
   const recentPosts = await db
     .select({
       id: posts.id,
@@ -73,7 +73,10 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
       createdAt: posts.createdAt,
     })
     .from(posts)
-    .where(eq(posts.brandId, brandId))
+    .where(and(
+      eq(posts.brandId, brandId),
+      isNull(posts.variantOf),
+    ))
     .orderBy(desc(posts.createdAt))
     .limit(5)
     .all()
@@ -442,7 +445,11 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
               const platforms = platformsByPost.get(post.id) ?? []
               const engagement = topAnalyticsByPost.get(post.id) ?? null
               return (
-                <div key={post.id} className="flex items-start gap-3 rounded-md border px-4 py-3 text-sm">
+                <Link
+                  key={post.id}
+                  href={`/brands/${brand.id}/posts/${post.id}`}
+                  className="flex items-start gap-3 rounded-md border px-4 py-3 text-sm hover:bg-muted/50 transition-colors"
+                >
                   <span className="flex-1 text-sm leading-snug text-muted-foreground" title={post.content}>
                     {post.content.slice(0, 80)}{post.content.length > 80 ? '…' : ''}
                   </span>
@@ -462,7 +469,7 @@ export default async function BrandDetailPage({ params }: BrandDetailPageProps) 
                       {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </span>
                   </div>
-                </div>
+                </Link>
               )
             })}
           </div>
