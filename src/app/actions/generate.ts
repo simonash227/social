@@ -125,10 +125,15 @@ function buildSystemPrompt(
   // Inject approved learnings
   if (learnings && learnings.length > 0) {
     parts.push('')
-    parts.push('LEARNINGS FROM YOUR TOP PERFORMERS (apply these):')
+    parts.push('LEARNINGS FROM YOUR TOP PERFORMERS:')
     for (const l of learnings) {
       const prefix = l.type === 'avoid_pattern' ? 'AVOID' : 'DO'
-      parts.push(`- [${prefix}] ${l.description}`)
+      const decayNote = l.confidence === 'low' ? ' (weak signal)' : ''
+      parts.push(`- [${prefix}] ${l.description}${decayNote}`)
+    }
+    if (learnings.length >= 2) {
+      parts.push('')
+      parts.push('IMPORTANT: Apply learnings selectively — pick 1-2 that fit this specific topic. Do NOT force all learnings into every post. Vary your hooks, structure, and tone across posts.')
     }
   }
 

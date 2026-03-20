@@ -61,10 +61,19 @@ export function loadLearnings(brandId: number, platform: string): BrandLearning[
       END`,
       desc(brandLearnings.validatedAt)
     )
-    .limit(5)
+    .limit(3) // Cap at 3 to prevent over-optimization and content homogenization
     .all()
 
-  return rows as BrandLearning[]
+  // Apply confidence decay: learnings older than 30 days drop to 'low'
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  const decayed = (rows as BrandLearning[]).map(l => {
+    if (l.createdAt < thirtyDaysAgo && l.confidence !== 'low') {
+      return { ...l, confidence: 'low' as string }
+    }
+    return l
+  })
+
+  return decayed
 }
 
 // ─── loadGoldenExamples ───────────────────────────────────────────────────────
