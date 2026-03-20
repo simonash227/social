@@ -118,5 +118,16 @@ export function initCron(): void {
     }
   })
 
-  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate, collect-analytics, learning-engine)')
+  // ── 7. Weekly learning validation (Wednesday 3:00 AM) ─────────────────────
+  cron.schedule('0 3 * * 3', async () => {
+    try {
+      const { autoDeactivateLearnings } = await import('./learning-validator')
+      const count = autoDeactivateLearnings()
+      console.log(`[cron] learning-validator completed: ${count} learnings deactivated`)
+    } catch (err) {
+      console.error('[cron] learning-validator failed:', err)
+    }
+  })
+
+  console.log('[cron] Jobs registered (publish, backup, ai-spend-summary, feed-poll, auto-generate, collect-analytics, learning-engine, learning-validator)')
 }

@@ -4,6 +4,7 @@ import { getDb } from '@/db'
 import { brandLearnings, posts } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
+import type { LearningStats } from '@/lib/learning-validator'
 
 // ─── approveLearning ──────────────────────────────────────────────────────────
 
@@ -102,4 +103,25 @@ export async function unpinGoldenExample(postId: number, brandId: number): Promi
     const message = err instanceof Error ? err.message : 'Failed to unpin golden example'
     return { error: message }
   }
+}
+
+// ─── getLearningEffectiveness ─────────────────────────────────────────────────
+
+export async function getLearningEffectiveness(brandId: number): Promise<Record<number, LearningStats>> {
+  const db = getDb()
+  const { computeLearningStats } = await import('@/lib/learning-validator')
+
+  const learnings = db
+    .select({ id: brandLearnings.id, status: brandLearnings.status })
+    .from(brandLearnings)
+    .where(eq(brandLearnings.brandId, brandId))
+    .all()
+
+  const result: Record<number, LearningStats> = {}
+  for (const l of learnings) {
+    if (l.status === 'approved' || l.status === 'auto_deactivated') {
+      result[l.id] = computeLearningStats(brandId, l.id)
+    }
+  }
+  return result
 }
