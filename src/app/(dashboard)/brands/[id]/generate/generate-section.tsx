@@ -674,6 +674,15 @@ export function GenerateSection({ brandId, brandName, accounts }: GenerateSectio
             </Button>
           </div>
 
+          {/* Learning attribution indicator */}
+          {activeLearningIds && activeLearningIds.length > 0 && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-950/30 px-2 py-0.5 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                {activeLearningIds.length} learning{activeLearningIds.length !== 1 ? 's' : ''} active
+              </span>
+            </div>
+          )}
+
           {/* Combined Cost Display */}
           <p className="text-xs text-muted-foreground">
             AI cost: ${((genCost ?? 0) + (result?.totalCostUsd ?? 0)).toFixed(4)}
