@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Intelligence Layer
 status: unknown
-stopped_at: Completed 09-03-PLAN.md — learnings dashboard + golden examples UI complete
-last_updated: "2026-03-19T22:54:14.615Z"
+stopped_at: Completed 10-01-PLAN.md — learning attribution pipeline and validator complete
+last_updated: "2026-03-20T02:10:03.520Z"
 progress:
   total_phases: 7
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 6
+  completed_plans: 5
   percent: 14
 ---
 
@@ -60,6 +60,9 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 - [Phase 09-03]: Golden examples page queries all platforms (no platform filter) — shows brand-wide top performers
 - [Phase 09-03]: All p90+ posts shown in golden examples UI (not capped at 5) — first 5 marked as injected into prompts
 - [Phase 09-03]: Rejected learnings hidden by default with show/hide toggle to keep UI focused on actionable items
+- [Phase Phase 10-01]: json_each used for JSON array membership — LIKE patterns would produce false positives on numeric IDs
+- [Phase Phase 10-01]: Relay column pattern: posts.postActiveLearningIds captures generation-time IDs; analytics collection copies them forward to prevent drift
+- [Phase Phase 10-01]: autoDeactivateLearnings is synchronous (better-sqlite3 is sync); cron wrapper is async for error handling only
 
 ## Blockers
 
@@ -72,8 +75,8 @@ Progress: [█░░░░░░░░░] 14% of v2.0 (1/7 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-03-19T22:49:50.130Z
-Stopped at: Completed 09-03-PLAN.md — learnings dashboard + golden examples UI complete
+Last session: 2026-03-20T02:09:50.978Z
+Stopped at: Completed 10-01-PLAN.md — learning attribution pipeline and validator complete
 Resume file: None
 
 ---

@@ -78,7 +78,7 @@ Plans:
   2. Learning effectiveness dashboard shows per-learning A/B comparison: engagement averages for posts with vs without each learning, with post counts for each group
   3. A learning with no measurable engagement lift after N posts (configurable threshold, default 20) is automatically marked inactive with an "auto-deactivated" reason on the dashboard
   4. Each learning displays a confidence indicator (high/medium/low) derived from its supporting post count and engagement delta magnitude
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 10-01-PLAN.md — Attribution relay column, generation pipeline threading, learning-validator.ts with A/B stats and auto-deactivation cron
@@ -161,7 +161,7 @@ Plans:
 | 7. Analytics + Dashboard + Polish | v1.0 | 3/3 | Complete | 2026-03-18 |
 | 8. Schema Foundation | v2.0 | 1/1 | Complete | 2026-03-19 |
 | 9. Learning Engine + Golden Examples | 3/3 | Complete   | 2026-03-19 | - |
-| 10. Learning Validation | v2.0 | 0/2 | Not started | - |
+| 10. Learning Validation | 1/2 | In Progress|  | - |
 | 11. Multi-Variant Generation | v2.0 | 0/2 | Not started | - |
 | 12. Advanced Analytics | v2.0 | 0/2 | Not started | - |
 | 13. Content Recycling + Repurposing | v2.0 | 0/2 | Not started | - |
